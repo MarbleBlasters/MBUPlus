@@ -68,6 +68,7 @@
 #include "autosplitter/autosplitter.h"
 
 #include "discord/DiscordGame.h"
+#include "git/git_version.h"
 //#include "../discord/discordGameSDK.h"
 
 #ifdef MB_CLIENT_PHYSICS_EVERY_FRAME
@@ -114,7 +115,13 @@ ConsoleFunction(createCanvas, bool, 2, 2, "(string windowTitle)"
     #endif
     #endif
     */
-    Platform::initWindow(Point2I(800, 600), argv[1]);
+    //Platform::initWindow(Point2I(800, 600), argv[1]);
+    std::string gitHashTitle = kGitHash;
+    std::string gameName = argv[1];
+    gameName.append(" #");
+    std::string gameTitle = gameName + gitHashTitle;
+    const char* cTitle = gameTitle.c_str();
+    Platform::initWindow(Point2I(800, 600), cTitle);
 
     sgFormatManager::sgInit();
 
@@ -419,6 +426,9 @@ bool initGame(int argc, const char** argv)
     Con::setIntVariable("$TypeMasks::ForceObjectType", ForceObjectType);
     Con::setIntVariable("$TypeMasks::CastShadowOnShape", CastShadowOnShape);
 #endif
+
+    std::string gitHashTitle = kGitHash;
+    Con::setVariable("$Game::CodeHash", kGitHash);
 
     //
  /*

@@ -353,6 +353,7 @@ setModPaths($userMods);
 
 function initVideo()
 {
+   echo("Loading Build: #" @ $Game::CodeHash);
    $pref::Video::displayDevice = "D3D";
    $pref::Video::allowOpenGL = 1;
    $pref::Video::allowD3D = 1;
@@ -361,6 +362,7 @@ function initVideo()
    $pref::Video::VSync = 1;
    $pref::Video::monitorNum = 0;
    $pref::Video::fullScreen = "0";
+   $pref::Game::version = "1.17.4";
 
    if (!$vidAlreadySet)
    {
@@ -377,7 +379,7 @@ function initVideo()
          $pref::Video::FSAALevel = 0;
    }
 
-   $canvasCreated = createCanvas("Marble Blast Ultra! - 1.17.4");
+   $canvasCreated = createCanvas("Marble Blast Ultra! - " @ $pref::Game::version);
    
    // We need to set up Gamma Ramp here so that the splash screens are affected.
    
