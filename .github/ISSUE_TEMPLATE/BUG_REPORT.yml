@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in OpenMBU
+description: Report a bug in OpenMBU+
 title: "[BUG] "
 labels: ["bug"]
 body:
@@ -7,7 +7,7 @@ body:
   attributes:
     value: |
       If you have a question or need help, proceed here:
-      OpenMBU Discord (#help) - https://discord.gg/z6jJzRu
+      OpenMBU+ Discord (#help) - https://discord.gg/MxxMMwB3RN
       Otherwise make a bug report
       
       Try to create a very concise title that's straight to the point
@@ -25,24 +25,7 @@ body:
     description: What version are you running?
     multiple: false
     options:
-      - Beta 1.17
-      - Beta 1.16
-      - Beta 1.15
-      - Beta 1.14
-      - Beta 1.13
-      - Beta 1.12
-      - Beta 1.11
-      - Beta 1.10
-      - Beta 1.9
-      - Beta 1.8
-      - Beta 1.7
-      - Beta 1.6
-      - Beta 1.5
-      - Beta 1.4
-      - Beta 1.3
-      - Beta 1.2
-      - Beta 1.1
-      - Beta 1
+      - 1.0.0 Beta 1
       - Self-Compiled (please specify branch)
       - Other (please specify elsewhere)
   validations:
