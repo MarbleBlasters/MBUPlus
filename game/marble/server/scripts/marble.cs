@@ -605,3 +605,15 @@ function metricsMarble()
    Canvas.pushDialog(FrameOverlayGui, 1000);
    TextOverlayControl.setValue("$MarbleVelocity");
 }
+
+// function getMarbleTPS(){
+//    $marbleVelocityCheck = marbleVel();
+// 	%velx = mAbs(getWord($marbleVelocityCheck, 0));
+// 	%vely = mAbs(getWord($marbleVelocityCheck, 1));
+// 	%velz = mAbs(getWord($marbleVelocityCheck, 2));
+// 	//$marbleDisplayVelocity = mRound((%velx + %vely + %velz) / 2);
+//    $marbleDisplayVelocity = (%velx + %vely + %velz) / 2;
+
+//    return $marbleDisplayVelocity;
+
+// }

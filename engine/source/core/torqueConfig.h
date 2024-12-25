@@ -20,7 +20,7 @@
 
 /// Version number is major * 1000 + minor * 100 + revision * 10.
 /// Different engines (TGE, T2D, etc.) will have different version numbers.
-#define TORQUE_VERSION              907 // version 0.9
+#define TORQUE_VERSION              9901 // version 0.9
 #define TORQUE_PROTOCOL_VERSION     14  // increment this when we change the protocol
 
 /// What engine are we running? The presence and value of this define are
@@ -32,7 +32,7 @@
 #define TORQUE_SHADER_ENGINE        TORQUE_VERSION
 
 /// What's the name of your game? Used in a variety of places.
-#define TORQUE_GAME_NAME            "Marble Blast Ultra" //"Torque Shader Engine Demo"
+#define TORQUE_GAME_NAME            "OpenMBUPlus" //"Torque Shader Engine Demo"
 
 /// Human readable version string.
 #define TORQUE_GAME_VERSION_STRING  "1.0.0" //"Torque Demo 1.4 (TGE 1.4)"

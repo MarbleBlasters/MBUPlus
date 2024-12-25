@@ -44,7 +44,7 @@ StringTableEntry Platform::getPrefsPath(const char* file /* = NULL */)
     char buf[1024];
     const char* company = Con::getVariable("$Game::CompanyName");
     if (company == NULL || *company == 0)
-        company = "GarageGames";
+        company = "MarbleBlasters";
 
     const char* appName = Con::getVariable("$Game::GameName");
     if (appName == NULL || *appName == 0)

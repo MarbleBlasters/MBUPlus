@@ -362,7 +362,7 @@ function initVideo()
    $pref::Video::VSync = 1;
    $pref::Video::monitorNum = 0;
    $pref::Video::fullScreen = "0";
-   $GameClientVersion = "1.17.4";
+   $GameClientVersion = "1.0.0 Beta 1";
 
    if (!$vidAlreadySet)
    {
@@ -379,7 +379,7 @@ function initVideo()
          $pref::Video::FSAALevel = 0;
    }
 
-   $canvasCreated = createCanvas("Marble Blast Ultra! - " @ $GameClientVersion);
+   $canvasCreated = createCanvas("OpenMBU+ - " @ $GameClientVersion);
    
    // We need to set up Gamma Ramp here so that the splash screens are affected.
    
