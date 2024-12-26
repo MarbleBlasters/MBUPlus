@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/MarbleBlasters/OpenMBUPlus/refs/heads/master/assets/GitReadmeBanner.png">
+<img src="https://raw.githubusercontent.com/MarbleBlasters/OpenMBUPlus/refs/heads/master/assets/GitReadmeBanner.png"></img>
 <br>&nbsp;</br>
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/MarbleBlasters/OpenMBUPlus?include_prereleases&label=Release)](https://github.com/MarbleBlasters/OpenMBUPlus/releases)
 [![Github all releases](https://img.shields.io/github/downloads/MarbleBlasters/OpenMBUPlus/total?color=blue&label=Downloads)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/releases/)
@@ -11,9 +11,9 @@
 [![CMake on Linux](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-linux.yml/badge.svg)](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-linux.yml)
 [![CMake on MacOS](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-mac.yml/badge.svg)](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-mac.yml)
 
-![Discord](https://img.shields.io/discord/1309583632284909668?style=plastic&logo=Discord&label=Discord&color=%235865F2&link=https%3A%2F%2Fdiscord.com%2Finvite%2FMxxMMwB3RN)
-![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UChKE8krvicE1dwSIc87siUg?style=plastic&label=YouTube%20Subs&link=https%3A%2F%2Fwww.youtube.com%2F%40OpenMBU)
-![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UChKE8krvicE1dwSIc87siUg?style=plastic&label=YouTube%20Views&link=https%3A%2F%2Fyoutube.com%2F%40OpenMBU)
+[![Discord](https://img.shields.io/discord/1309583632284909668?style=plastic&logo=Discord&label=Discord&color=%235865F2&link=https%3A%2F%2Fdiscord.com%2Finvite%2FMxxMMwB3RN)](https://discord.com/invite/MxxMMwB3RN)
+[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UChKE8krvicE1dwSIc87siUg?style=plastic&label=YouTube%20Subs&link=https%3A%2F%2Fwww.youtube.com%2F%40OpenMBU)](https://youtube.com/@OpenMBU)
+[![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UChKE8krvicE1dwSIc87siUg?style=plastic&label=YouTube%20Views&link=https%3A%2F%2Fyoutube.com%2F%40OpenMBU)](https://youtube.com/@OpenMBU)
 
 
 
