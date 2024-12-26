@@ -1,3 +1,4 @@
+<img src="https://raw.githubusercontent.com/MarbleBlasters/OpenMBUPlus/refs/heads/master/assets/GitReadmeBanner.png">
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/MarbleBlasters/OpenMBUPlus?include_prereleases&label=Release)](https://github.com/MarbleBlasters/OpenMBUPlus/releases)
 [![Github all releases](https://img.shields.io/github/downloads/MarbleBlasters/OpenMBUPlus/total?color=blue&label=Downloads)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/releases/)
 [![GitHub forks](https://img.shields.io/github/forks/MarbleBlasters/OpenMBUPlus?label=Forks)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/network/)
