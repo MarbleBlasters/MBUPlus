@@ -114,6 +114,62 @@ datablock ItemData(GemItem_5pts: GemItem)
    referenceColor = "0 0 0.9";
 };
 
+datablock ItemData(GemItem_7pts: GemItem) 
+{
+   skin = "green";
+   points = 7;
+   referenceColor = "0 0.9 0";
+};
+
+datablock ItemData(GemItem_10pts: GemItem) 
+{
+   skin = "platinum";
+   points = 10;
+   referenceColor = "0.5 0.5 0.5";
+};
+
+datablock ItemData(GemItem_3pts: GemItem) 
+{
+   skin = "turquoise";
+   points = 3;
+   referenceColor = "0 0.9 0.4";
+};
+
+datablock ItemData(GemItem_4pts: GemItem) 
+{
+   skin = "pink";
+   points = 4;
+   referenceColor = "0.9 0.2 0";
+};
+
+datablock ItemData(GemItem_6pts: GemItem) 
+{
+   skin = "orange";
+   points = 6;
+   referenceColor = "0.5 0.5 0";
+};
+
+datablock ItemData(GemItem_8pts: GemItem) 
+{
+   skin = "purple";
+   points = 8;
+   referenceColor = "0.8 0 0.6";
+};
+
+datablock ItemData(GemItem_9pts: GemItem) 
+{
+   skin = "white";
+   points = 9;
+   referenceColor = "0.9 0.9 0.9";
+};
+
+datablock ItemData(GemItem_Negative1pts: GemItem) 
+{
+   skin = "black";
+   points = -1;
+   referenceColor = "0 0 0";
+};
+
 datablock ItemData(GemItemRespawn : GemItem)
 {
    noRespawn = false;

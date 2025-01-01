@@ -49,9 +49,17 @@ new GuiControl(RootGui) {
          position = "0 0";
          extent = "640 480";      
          verticalOffset = "0.5";
+         pointColor[-1] = "0.1 0.1 0.1 1";
          pointColor[1] = "1 0.4 0.4 1";
          pointColor[2] = "1 1 0.4 1";
+         pointColor[3] = "0 0.9 0.4 1";
+         pointColor[4] = "0.9 0.2 0 1";
          pointColor[5] = "0.4 0.4 1 1";
+         pointColor[6] = "1 0 0.6 1";
+         pointColor[7] = "0 0.8 0.2 1";
+         pointColor[8] = "1 0 0.4 1";
+         pointColor[0] = "0.9 0.9 0.9 1";
+         pointColor[10] = "0.4 0.4 0.4 1";
          velocity = 100;
          acceleration = -33;
          time = 3000;

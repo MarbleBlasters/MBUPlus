@@ -8,7 +8,7 @@
 // List of master servers to query, each one is tried in order
 // until one responds
 $Server::RegionMask = 2;
-$Server::Master[0] = "2:master.openmbu.com:28002"; //"2:master.garagegames.com:28002";
+$Server::Master[0] = "2:master.localhost:28009"; //"2:master.garagegames.com:28002";
 
 $Server::DisplayOnMaster = "Always"; //"Never"; // Xbox should not use GG master server
 // Information about the server
@@ -55,3 +55,6 @@ $Server::MaxGemsPerGroup = 4;
 $Server::BandwidthLimit[0] = "131072 6"; // at least 128kbps for 7+ players
 $Server::BandwidthLimit[1] = "98394 4"; // at least 96kbps for 5+ players
 $Server::NumBandwidthLimits = 2;
+
+//Misc Stat Stuff
+$Pref::Stats::OOBCount = 0;
