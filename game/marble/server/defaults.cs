@@ -8,7 +8,7 @@
 // List of master servers to query, each one is tried in order
 // until one responds
 $Server::RegionMask = 2;
-$Server::Master[0] = "2:master.localhost:28009"; //"2:master.garagegames.com:28002";
+$Server::Master[0] = "2:ultrarebirth.xyz:28002";//"2:master.localhost:28009"; //"2:master.garagegames.com:28002";
 
 $Server::DisplayOnMaster = "Always"; //"Never"; // Xbox should not use GG master server
 // Information about the server
