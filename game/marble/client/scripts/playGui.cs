@@ -102,6 +102,9 @@ function PlayGui::onWake(%this)
 	   UpsellGui.displayPDLCUpsell = %isFreeLevel ? false : !%hasLevel;
    }
 
+   autosplitterSetIsLoading(false);
+   autosplitterSetLevelStarted(false);	
+
    sendAutosplitterData("loading finished");
 }
 
@@ -514,6 +517,8 @@ function PlayGui::updateControls(%this)
    	TimeBox.animBitmap("timebackdrop");
    	%this.lastHundredth = %hundredth;
 	}
+   //RootGui.setCenterText(getMarbleTPS());
+   //echo(getMarbleTPS());
 }
 
 function PlayGui::scaleGemArrows(%this)

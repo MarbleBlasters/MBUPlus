@@ -167,7 +167,7 @@ function PC_XBLiveSearchForMatches(%gamemodefilter, %missionfilter, %maxplayersf
 
    %filterFlags |= 1 << 7; // Current version only
    
-   queryMasterServer(28000, 0, "OpenMBU", %mis, 0, %maxplayersfilter, 100, 2, 1000, 0, %filterFlags);
+   queryMasterServer(28000, 0, "UltraRebirth", %mis, 0, %maxplayersfilter, 100, 2, 1000, 0, %filterFlags);
 }
 
 // ----------------------------------------------------------------------------

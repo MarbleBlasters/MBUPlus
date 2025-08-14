@@ -79,5 +79,5 @@ jobs:
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: OpenMBU-${{ matrix.artifact_name }}
+        name: OpenMBU+-${{ matrix.artifact_name }}
         path: game

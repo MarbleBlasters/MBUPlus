@@ -90,6 +90,54 @@
             "custom": false,
             "mapTo": "blue.gem"
         },
+        "Material_GreenGem": {
+            "baseTex": ["marble/data/shapes/items/green.gem"],
+            "cubemap": "gemCubemap4",
+            "custom": false,
+            "mapTo": "green.gem"
+        },
+        "Material_TurquoiseGem": {
+            "baseTex": ["marble/data/shapes/items/turquoise.gem"],
+            "cubemap": "gemCubemap5",
+            "custom": false,
+            "mapTo": "turquoise.gem"
+        },
+        "Material_OrangeGem": {
+            "baseTex": ["marble/data/shapes/items/orange.gem"],
+            "cubemap": "gemCubemap10",
+            "custom": false,
+            "mapTo": "orange.gem"
+        },
+        "Material_PinkGem": {
+            "baseTex": ["marble/data/shapes/items/pink.gem"],
+            "cubemap": "gemCubemap11",
+            "custom": false,
+            "mapTo": "pink.gem"
+        },
+        "Material_PurpleGem": {
+            "baseTex": ["marble/data/shapes/items/purple.gem"],
+            "cubemap": "gemCubemap6",
+            "custom": false,
+            "mapTo": "purple.gem"
+        },
+        "Material_WhiteGem": {
+            "baseTex": ["marble/data/shapes/items/white.gem"],
+            "cubemap": "gemCubemap9",
+            "custom": false,
+            "mapTo": "white.gem"
+        },
+        "Material_BlackGem": {
+            "baseTex": ["marble/data/shapes/items/black.gem"],
+            "cubemap": "gemCubemap8",
+            "custom": false,
+            "mapTo": "black.gem"
+        },
+        "Material_PlatinumGem": {
+            "baseTex": ["marble/data/shapes/items/platinum.gem"],
+            "cubemap": "gemCubemap7",
+            "custom": false,
+            "mapTo": "platinum.gem"
+        },
         "Material_Bumper": {
             "baseTex": ["marble/data/shapes/bumpers/bumper"],
             "custom": false,
@@ -608,6 +656,70 @@
             "marble/data/skies/gemCubemapUp3",
             "marble/data/skies/gemCubemapUp3",
             "marble/data/skies/gemCubemapUp3"
+        ],
+        "gemCubemap4": [
+            "marble/data/skies/gemCubemapUp4",
+            "marble/data/skies/gemCubemapUp4",
+            "marble/data/skies/gemCubemapUp4",
+            "marble/data/skies/gemCubemapUp4",
+            "marble/data/skies/gemCubemapUp4",
+            "marble/data/skies/gemCubemapUp4"
+        ],
+        "gemCubemap5": [
+            "marble/data/skies/gemCubemapUp5",
+            "marble/data/skies/gemCubemapUp5",
+            "marble/data/skies/gemCubemapUp5",
+            "marble/data/skies/gemCubemapUp5",
+            "marble/data/skies/gemCubemapUp5",
+            "marble/data/skies/gemCubemapUp5"
+        ],
+        "gemCubemap6": [
+            "marble/data/skies/gemCubemapUp6",
+            "marble/data/skies/gemCubemapUp6",
+            "marble/data/skies/gemCubemapUp6",
+            "marble/data/skies/gemCubemapUp6",
+            "marble/data/skies/gemCubemapUp6",
+            "marble/data/skies/gemCubemapUp6"
+        ],
+        "gemCubemap7": [
+            "marble/data/skies/gemCubemapUp7",
+            "marble/data/skies/gemCubemapUp7",
+            "marble/data/skies/gemCubemapUp7",
+            "marble/data/skies/gemCubemapUp7",
+            "marble/data/skies/gemCubemapUp7",
+            "marble/data/skies/gemCubemapUp7"
+        ],
+        "gemCubemap8": [
+            "marble/data/skies/gemCubemapUp8",
+            "marble/data/skies/gemCubemapUp8",
+            "marble/data/skies/gemCubemapUp8",
+            "marble/data/skies/gemCubemapUp8",
+            "marble/data/skies/gemCubemapUp8",
+            "marble/data/skies/gemCubemapUp8"
+        ],
+        "gemCubemap9": [
+            "marble/data/skies/gemCubemapUp9",
+            "marble/data/skies/gemCubemapUp9",
+            "marble/data/skies/gemCubemapUp9",
+            "marble/data/skies/gemCubemapUp9",
+            "marble/data/skies/gemCubemapUp9",
+            "marble/data/skies/gemCubemapUp9"
+        ],
+        "gemCubemap10": [
+            "marble/data/skies/gemCubemapUp10",
+            "marble/data/skies/gemCubemapUp10",
+            "marble/data/skies/gemCubemapUp10",
+            "marble/data/skies/gemCubemapUp10",
+            "marble/data/skies/gemCubemapUp10",
+            "marble/data/skies/gemCubemapUp10"
+        ],
+        "gemCubemap11": [
+            "marble/data/skies/gemCubemapUp11",
+            "marble/data/skies/gemCubemapUp11",
+            "marble/data/skies/gemCubemapUp11",
+            "marble/data/skies/gemCubemapUp11",
+            "marble/data/skies/gemCubemapUp11",
+            "marble/data/skies/gemCubemapUp11"
         ]
     }
 }

@@ -485,6 +485,20 @@ datablock MarbleData(MarbleThirtySeven : DefaultMarble)
 {
    shapeFile = "~/data/shapes/balls/marble37.dts";
 };
+datablock MarbleData(MarbleThirtyEight : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble38.dts";
+};
+datablock MarbleData(MarbleThirtyNine : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble39.dts";
+};
+
+datablock MarbleData(MarbleFourty : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble40.dts";
+};
+
 
 //-----------------------------------------------------------------------------
 
@@ -605,3 +619,15 @@ function metricsMarble()
    Canvas.pushDialog(FrameOverlayGui, 1000);
    TextOverlayControl.setValue("$MarbleVelocity");
 }
+
+// function getMarbleTPS(){
+//    $marbleVelocityCheck = marbleVel();
+// 	%velx = mAbs(getWord($marbleVelocityCheck, 0));
+// 	%vely = mAbs(getWord($marbleVelocityCheck, 1));
+// 	%velz = mAbs(getWord($marbleVelocityCheck, 2));
+// 	//$marbleDisplayVelocity = mRound((%velx + %vely + %velz) / 2);
+//    $marbleDisplayVelocity = (%velx + %vely + %velz) / 2;
+
+//    return $marbleDisplayVelocity;
+
+// }

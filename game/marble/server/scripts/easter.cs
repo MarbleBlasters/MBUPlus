@@ -64,7 +64,8 @@ function clientCmdOnEasterEggPickup( %index )
       addHelpLine( $Text::FoundNewEgg, false );
       return;
    }
-   
+
+   autosplitterSetEggFound(true);
    sendAutosplitterData("egg" SPC %index);
    
    if( hasFoundEgg( %index ) )

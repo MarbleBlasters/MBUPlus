@@ -30,6 +30,8 @@ Point3F gMarbleSideDir;
 
 Point3D Marble::getVelocityD() const
 {
+    //Round
+    //Con::setVariable("$Game::CodeHash", mVelocity);
     return mVelocity;
 }
 

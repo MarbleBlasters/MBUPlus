@@ -420,6 +420,42 @@
             "specularPower": [12],
             "texture": ["marble/data/shapes/balls/marble.normal", "marble/data/shapes/balls/marble35.skin", "$dynamicCubemap"],
             "version": 2
+        },
+        "Material_Marble38": {
+            "baseTex": ["marble/data/shapes/balls/marble38.skin"],
+            "custom": true,
+            "dynamicCubemap": true,
+            "mapTo": "marble38.skin",
+            "renderBin": "Marble",
+            "shader": "ClassicMarb",
+            "specular": ["0.6 0.6 0.6 0.6"],
+            "specularPower": [12],
+            "texture": ["marble/data/shapes/balls/marblefx.normal", "marble/data/shapes/balls/marble38.skin", "$dynamicCubemap"],
+            "version": 2
+        },
+        "Material_Marble39": {
+            "baseTex": ["marble/data/shapes/balls/marble39.skin"],
+            "custom": true,
+            "dynamicCubemap": true,
+            "mapTo": "marble39.skin",
+            "renderBin": "Marble",
+            "shader": "ClassicMarb",
+            "specular": ["0.6 0.6 0.6 0.6"],
+            "specularPower": [12],
+            "texture": ["marble/data/shapes/balls/marblefx.normal", "marble/data/shapes/balls/marble39.skin", "$dynamicCubemap"],
+            "version": 2
+        },
+        "Material_Marble40": {
+            "baseTex": ["marble/data/shapes/balls/marble40.skin"],
+            "custom": true,
+            "dynamicCubemap": true,
+            "mapTo": "marble40.skin",
+            "renderBin": "Marble",
+            "shader": "ClassicMarb",
+            "specular": ["0.6 0.6 0.6 0.6"],
+            "specularPower": [12],
+            "texture": ["marble/data/shapes/balls/marblefx.normal", "marble/data/shapes/balls/marble40.skin", "$dynamicCubemap"],
+            "version": 2
         }
     },
     "shaders": {

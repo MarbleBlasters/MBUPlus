@@ -91,7 +91,7 @@ function onServerCreated()
 {
    // Server::GameType is sent to the master server.
    // This variable should uniquely identify your game and/or mod.
-   $Server::GameType = "OpenMBU";
+   $Server::GameType = "UltraRebirth";
 
    // Server::MissionType sent to the master server.  Clients can
    // filter servers based on mission type.
@@ -1676,6 +1676,12 @@ function GameConnection::getMarbleChoice( %this )
          return MarbleThirtySix;
       case 36:
          return MarbleThirtySeven;
+      case 37:
+         return MarbleThirtyEight;
+      case 38:
+         return MarbleThirtyNine;
+      case 39:
+         return MarbleFourty;
    }
    
    return MarbleOne;

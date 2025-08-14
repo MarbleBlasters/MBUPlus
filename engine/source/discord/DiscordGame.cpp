@@ -135,7 +135,7 @@ DiscordGame::DiscordGame()
     handlers.joinRequest = onJoinRequest;
 
     // Discord_Initialize(const char* applicationId, DiscordEventHandlers* handlers, int autoRegister, const char* optionalSteamId)
-    Discord_Initialize("846933806711046144", &handlers, 0, nullptr);
+    Discord_Initialize("1310759622939770930", &handlers, 0, nullptr);
 }
 
 DiscordGame::~DiscordGame()

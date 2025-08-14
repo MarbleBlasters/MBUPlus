@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/MarbleBlasters/OpenMBUPlus/refs/heads/master/assets/GitReadmeBanner.png"></img>
+<br>&nbsp;</br>
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/MarbleBlasters/OpenMBUPlus?include_prereleases&label=Release)](https://github.com/MarbleBlasters/OpenMBUPlus/releases)
 [![Github all releases](https://img.shields.io/github/downloads/MarbleBlasters/OpenMBUPlus/total?color=blue&label=Downloads)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/releases/)
 [![GitHub forks](https://img.shields.io/github/forks/MarbleBlasters/OpenMBUPlus?label=Forks)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/network/)
@@ -10,7 +12,6 @@
 
 UltreRebirth is a reverse-engineered version of Marble Blast Ultra based on Torque Shader Engine 0.9 (MS4). The game is a puzzle-platformer originally developed by GarageGames and released on January 25, 2006 for the Xbox 360 via Xbox Live Arcade.
 
-UltreRebirth is a reverse-engineered version of Marble Blast Ultra based on Torque Shader Engine 0.9 (MS4). The game is a puzzle-platformer originally developed by GarageGames and released on January 25, 2006 for the Xbox 360 via Xbox Live Arcade.
 
 Marble Blast Ultra was one of XBLA’s breakout titles, selling over 24,000 copies within the first four days of its launch. It quickly rolled into the [Top Played Xbox Live Games list](https://news.xbox.com/en-us/2006/02/11/marble-blast-rolls-into-the-top-xbox-live-games-list/), sharing the limelight with Halo 2, Call of Duty 2, and Dead or Alive 4.
 
@@ -35,11 +36,6 @@ We’re looking for passionate developers to help us grow UltreRebirth. If you f
 <img src="https://cdn.discordapp.com/emojis/1310743158900002928.webp?size=160&quality=lossless" alt="drawing" width="20"/> [NeoTheLynx](https://github.com/NeoTheLynx) - Community Manager<br>
 
 <!--- [OpenMBU Discord Server](https://discord.gg/SBqT5AxBaY)-->
-- [MBHaxe Port](https://github.com/RandomityGuy/MBHaxe/)
-
-# Links
-- [OpenMBU.com](https://openmbu.com)
-- [MarbleBlastUltra.com](https://marbleblastultra.com)
 - [MBHaxe Port](https://github.com/RandomityGuy/MBHaxe/)
 
 # License

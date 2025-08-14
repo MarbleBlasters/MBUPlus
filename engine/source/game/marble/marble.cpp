@@ -1098,6 +1098,8 @@ Point3F Marble::getVelocity() const
     return mSinglePrecision.mVelocity;
 }
 
+//
+
 Point3F Marble::getShadowScale() const
 {
 #ifdef MB_FORCE_MARBLE_SIZE
