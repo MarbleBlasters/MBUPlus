@@ -36,7 +36,7 @@ new GuiControl(AchievementsGui) {
       minSize = "50 50";
 
        new GuiScrollCtrl(AchievScroll) {
-			profile = "GameScrollProfile";
+			profile = "GuiScrollProfile";
 			horizSizing = "width";
 			vertSizing = "height";
 			position = "50 15";
@@ -171,10 +171,10 @@ function AchievementsGui::show(%this, %backgui)
 		}
       %this.addAchievement(1, %i, %isUnlocked, %achTitles[%i], %achDescs[%i], %achPoints[%i]);
    }
+
    AchievScroll.setProfile("GameScrollProfile");
    AchievScroll.setTop(14);
    AchievScroll.setTop(15);
-
 }
 
 function AchievementsGui::hide(%this)
