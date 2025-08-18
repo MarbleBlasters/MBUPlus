@@ -83,7 +83,7 @@ function mainMenuGui::onA(%this)
 //            showGui(LeaderboardGui, $Stats::BattlemodeIndex, %this, true);
          RootGui.setContent(lbMenuGui, MainMenuGui);
       case 3:
-         XBLiveShowAchievementsUI();
+         XBLiveShowAchievementsUINew();
       case 4:
          RootGui.setContent(HelpAndOptionsGui, MainMenuGui);
       case 5: // upsell
@@ -96,8 +96,6 @@ function mainMenuGui::onA(%this)
          }
       case 6: // exit game in demo
          %this.exitGame();
-      case 7: // exit game in demo
-         XBLiveShowAchievementsUINew();
    }
       
    return true;
@@ -189,8 +187,7 @@ function MainMenuGui::show(%this)
       MainMenu.addRow("Abandon Clowns", "", 0, 10);
    else
       MainMenu.addRow($Text::RTArcadeMenu, "", 0, 10);
-   
-   MainMenu.addRow($Text::Achievements, "", 0, 8);
+
 
    // disable some stuff
    //MainMenu.setRowEnabled(4,false);

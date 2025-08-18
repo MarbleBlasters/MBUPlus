@@ -179,7 +179,7 @@ function AchievementsGui::show(%this, %backgui)
 
    AchievScroll.setProfile("GameScrollProfile");
    AchievScroll.setTop(14);
-   AchievScroll.setTop(15);
+   AchievScroll.setTop(16);
 }
 
 function AchievementsGui::hide(%this)
