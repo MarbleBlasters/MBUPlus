@@ -96,22 +96,21 @@ function AchievementsGui::show(%this, %backgui)
    
    %num = 0;
    
-   //for (%i = 1; %i < $totalAchievements + 1; %i++)
-   //{
-	//	if ($UserAchievementsGot::achieved[%i] == 1)
-	//	{
-	//		%ach[%i] = %has;
-   //      echo("has ach");
-	//		%num++;
-	//	} else {
-	//		%ach[%i] = %noHas;
-   //      echo("no has ach");
-	//	}
-   //}
+   for (%i = 1; %i < $totalAchievements + 1; %i++)
+   {
+		if ($UserAchievementsGot::achieved[%i] == 1)
+		{
+			%num++;
+		} else {
+         echo("Whomp Whomp Whomp");
+		}
+   }
    
    //AchievementCountText.setText(%num @ "/14 Total Achievements Unlocked");
    
    RootGui.setTitle($Text::AchievementsScreen);
+   RootGui.setB($Text::Back);
+   RootGui.setX(%num @ "/14");
 
    %achTitles[1] = $Text::AchievementName01;
    %achTitles[2] = $Text::AchievementName02;
