@@ -119,6 +119,13 @@ function NMH_Type::Send(%this)
 		%par5	= getWord(%newText, 4);
 		%par6	= getWord(%newText, 4);
 		commandToServer(addTaggedString(%command), %par1, %par2, %par3, %par4, %par5, %par6);
+
+		//Taunts by Connie
+		if (getSubStr(%text, 1, 1) $= "v")
+		{
+			%tauntvar = getSubStr(%text, 2, 3);
+			playTaunt(%tauntvar);
+		}
 	}
 	else
 	{	
@@ -136,4 +143,69 @@ function NMH_Type::Send(%this)
 	canvas.popDialog(newMessageHud);
 }
 
+//Taunts by Connie
+function playTaunt(%tauntnum)
+{
+	if ($Client::connectedMultiplayer) {
+		switch (%tauntnum)
+		{
+			case 0:
+			commandToServer('messageSent', "Gashfdklafaashn.zx,cbvz.e");
+			break;
+			
+			case 1:
+			commandToServer('messageSent', "Good game!");
+			break;
 
+			case 2:
+			commandToServer('messageSent', "They see me rollin\'");
+			break;
+
+			case 3:
+			commandToServer('messageSent', "y u no gimme gem");
+			break;
+
+			case 4:
+			commandToServer('messageSent', "Wooohooooo");
+			break;
+
+			case 5:
+			commandToServer('messageSent', "Ahhhhhh!");
+			break;
+		}
+
+		commandtoServer('playTauntSound', %tauntnum);
+	}
+}
+
+function serverCmdplayTauntSound(%this, %tauntnum)
+{
+	if ($Client::connectedMultiplayer) {
+		switch (%tauntnum)
+		{
+			case 0:
+			serverplay2d("GibberishTauntSfx");
+			break;
+			
+			case 1:
+			serverplay2d("GoodGameTauntSfx");
+			break;
+
+			case 2:
+			serverplay2d("SeeMeTauntSfx");
+			break;
+
+			case 3:
+			serverplay2d("WhyNoGemTauntSfx");
+			break;
+
+			case 4:
+			serverplay2d("WoohooTauntSfx");
+			break;
+
+			case 5:
+			serverplay2d("ScreamTauntSfx");
+         break;
+		}
+	}
+}

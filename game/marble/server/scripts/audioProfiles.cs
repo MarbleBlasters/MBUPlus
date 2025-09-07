@@ -269,6 +269,49 @@ datablock SFXProfile(PlayerDropSfx)
    preload = true;
 };
 
+//Taunts by Connie
+datablock SFXProfile(GibberishTauntSfx)
+{
+   filename    = "~/data/sound/taunts/Asdfasdf.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock SFXProfile(GoodGameTauntSfx)
+{
+   filename    = "~/data/sound/taunts/GoodGame.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock SFXProfile(SeeMeTauntSfx)
+{
+   filename    = "~/data/sound/taunts/taunt3.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock SFXProfile(WhyNoGemTauntSfx)
+{
+   filename    = "~/data/sound/taunts/taunt2.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock SFXProfile(WoohooTauntSfx)
+{
+   filename    = "~/data/sound/taunts/woohoo.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock SFXProfile(ScreamTauntSfx)
+{
+   filename    = "~/data/sound/taunts/deanscream.wav";
+   description = Audio2D;
+   preload = true;
+};
+
 //-----------------------------------------------------------------------------
 // Misc
 
