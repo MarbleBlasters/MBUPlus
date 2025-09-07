@@ -22,6 +22,8 @@ $Text::Start = "Start";
 $Text::PressAToStart = "Press A to start.";
 $Text::ClickToContinue = "Click to continue";
 $Text::Chat = "Chat";
+$Text::Save = "Save";
+$Text::ExitNoSave = "Exit without saving?";
 
 ;-------------------------------------------------------------------------------
 ; Live
@@ -200,7 +202,6 @@ $Text::MultiplayerMenu = "MULTIPLAYER GAME";
 $Text::OptimatchTitle = "CUSTOM GAME";
 $Text::AboutMenu = "ABOUT MARBLE BLAST";
 $Text::SelectLeaderboard = "SELECT LEADERBOARD";
-$Text::AchievementsScreen = "ACHIEVEMENTS";
 
 ;-------------------------------------------------------------------------------
 ; Menu Options
@@ -256,12 +257,14 @@ $Text::FGG_NumPlayers = "Num Players";
 $Text::FGG_Players = "Players";
 
 ;-------------------------------------------------------------------------------
-; Create Game Gui
+; Create Game Gui & Server Settings
 ;-------------------------------------------------------------------------------
 $Text::Mission = "Level";
 $Text::MaxPlayers = "Max Players";
 $Text::PrivateSlots = "Private Slots";
 $Text::IsPrivate = "Private Game";
+$Text::InviteVisibility = "Invite Visibility";
+$Text::ForceSpectators = "Force Spectators";
 
 ;-------------------------------------------------------------------------------
 ; Leaderboard Select Menu
@@ -277,7 +280,6 @@ $Text::LobbyHostLevel = "Level:";
 $Text::LobbyHostPrivateSlots = "Private Slots"; 
 $Text::LobbyHostPublicSlots = "Public Slots"; 
 $Text::LobbyHostInviteCode = "Invite Code";
-$Text::LobbyHostInviteVisibility = "Invite Visibility";
 $Text::LobbyHostStreamerMode = "Streamer";
 
 ; separators
@@ -295,6 +297,10 @@ $Text::SendFriendRequest = "Send Friend Request";
 $Text::NoOptionsAvailable  = "No options available.";
 $Text::SelectPlayer = "Select Player";
 $Text::Player = "Player:";
+
+$Text::LobbyHostServerSettings = "Lobby Settings";
+$Text::Spectate = "Spectate";
+$Text::InviteVisibilityOptions = "Off\tHost Only\tAll";
 
 ;-------------------------------------------------------------------------------
 ; Pause Menu
@@ -345,8 +351,6 @@ $Text::FSAALevelOptions = "0 (None)\t2\t4\t8";
 $Text::MarbleSkin = "Marble Type";
 $Text::UIStyle = "UI Style";
 $Text::UIStyleOptions = "Mouse/Keyboard\tXbox 360";
-$Text::InviteVisibility = "Invite Code";
-$Text::InviteVisibilityOptions = "Hidden\tVisible";
 $Text::StreamerModeOptions = "No\tYes";
 
 ;This string is no longer used $Text::MarbleOptions = "one\ttwo\tthree\tfour\tfive\tsix\tseven\teight\tnine\tten\televen\ttwelve\tthirteen\tfourteen\tfifteen\tsixteen\tseventeen\teighteen\tnineteen\ttwenty";
@@ -432,7 +436,6 @@ $Text::HOMarble = "Marble Appearance";
 $Text::HOOptions = "Input and Sound Options";
 $Text::HOVideoOptions = "Video Options";
 $Text::HOMiscOptions = "Misc Options";
-$Text::HORebindOptions = "Rebind Controls";
 $Text::HOInstructions = "How to Play";
 $Text::HOCredits = "Credits";
 

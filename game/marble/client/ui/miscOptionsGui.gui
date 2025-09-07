@@ -56,8 +56,8 @@ function miscOptionsGui::show(%this, %backGui)
 
    miscOptionsList.setOptionIndex(0, %langIndex);
    miscOptionsList.setOptionIndex(1, $pref::UI::LegacyUI);
-   miscOptionsList.setOptionIndex(2, $pref::Lobby::InviteVisibility);
-   miscOptionsList.setOptionIndex(3, $pref::Lobby::StreamerMode);
+   miscOptionsList.setOptionIndex(2, $pref::Server::InviteVisibility);
+   miscOptionsList.setOptionIndex(3, $pref::Server::StreamerMode);
 }
 
 function miscOptionsList::onOptionChange(%this, %increase)
@@ -78,11 +78,11 @@ function miscOptionsList::onOptionChange(%this, %increase)
          $pref::UI::LegacyUI = %val;
          echo("UIStyle = " @ $pref::UI::LegacyUI);
       case 2:
-         $pref::Lobby::InviteVisibility = %val;
-         echo("InviteVisibility = " @ $pref::Lobby::InviteVisibility);
+         $pref::Server::InviteVisibility = %val;
+         echo("InviteVisibility = " @ $pref::Server::InviteVisibility);
       case 3:
-         $pref::Lobby::StreamerMode = %val;
-         echo("StreamerMode = " @ $pref::Lobby::StreamerMode);
+         $pref::Server::StreamerMode = %val;
+         echo("StreamerMode = " @ $pref::Server::StreamerMode);
    }  
 }
 

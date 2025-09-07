@@ -72,7 +72,7 @@ function JoinGameInviteDlg::show(%userId, %username, %avatar)
         Canvas.pushDialog(JoinGameInviteDlg);
         JoinGameInviteDlg.isShowing = true;
     }
-    if ($pref::Lobby::StreamerMode)
+    if ($pref::Server::StreamerMode)
     {
         %username = getSubStr(%username, 0, 1) @ "...";
     }
@@ -168,7 +168,7 @@ function DiscordIUsernameRequest::onLine(%this, %line)
         %username = %resp.realname;
         if (%username !$= "")
         {
-            if ($pref::Lobby::StreamerMode)
+            if ($pref::Server::StreamerMode)
             {
                 %username = getSubStr(%username, 0, 1) @ "...";
             }

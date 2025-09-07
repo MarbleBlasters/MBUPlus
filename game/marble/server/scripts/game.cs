@@ -91,7 +91,7 @@ function onServerCreated()
 {
    // Server::GameType is sent to the master server.
    // This variable should uniquely identify your game and/or mod.
-   $Server::GameType = "UltraRebirth";
+   $Server::GameType = "OpenMBU";
 
    // Server::MissionType sent to the master server.  Clients can
    // filter servers based on mission type.
@@ -320,9 +320,6 @@ function pauseGame()
             $saveTimescale = $timescale;
 
          $timescale = $pauseTimescale;
-
-		 //Stop the Discord Timer since the actual in-game Timer isn't running. ~Connie
-         XBLivePresenceStopTimer();
       }
    }
 }
@@ -345,12 +342,6 @@ function resumeGame()
          $saveTimescale = 1.0;
       $timescale = $saveTimescale;
    }
-
-	//Resume the Discord Timer if it's a Singleplayer game. ~Connie
-   if ($Server::ServerType $= "SinglePlayer" && $Game::Running && serverGetGameMode() $= "scrum" && ($Game::State $= "play" || $Game::State $= "go")) {
-      XBLivePresenceStartTimer(($Game::Duration - PlayGui.elapsedTime) / 1000);
-   }
-	
 }
 
 function destroyGame()
@@ -1296,6 +1287,9 @@ function GameConnection::onOutOfBounds(%this)
    if ($Game::State $= "End" || $Game::State $= "wait")
       return;
 
+   if (%this.isspectating)
+      return;
+
    // Lose a gem if you fall off in Sumo
 //   if (MissionInfo.gameMode $= "Sumo" || MissionInfo.gameMode $= "Scrum")
 //   {
@@ -1685,12 +1679,6 @@ function GameConnection::getMarbleChoice( %this )
          return MarbleThirtySix;
       case 36:
          return MarbleThirtySeven;
-      case 37:
-         return MarbleThirtyEight;
-      case 38:
-         return MarbleThirtyNine;
-      case 39:
-         return MarbleFourty;
    }
    
    return MarbleOne;

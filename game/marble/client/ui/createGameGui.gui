@@ -66,8 +66,6 @@ function CreateGameGui::show(%this,%backGui)
    
    GameMissionInfo.setMode(GameMissionInfo.MPMode);
    GameMissionInfo.setDefaultMission();
-   
-   CreateGameGui.maxPlayersMin = 2; // minimum number of players allowed on max players option
      
    CreateGameOptionList.clear();
    // if you add remove/rows, be sure to update these indexes
@@ -76,7 +74,7 @@ function CreateGameGui::show(%this,%backGui)
    %this.privateSlotsIndex = 2;
    %this.privateGameIndex = 3;
    CreateGameOptionList.addRow($Text::Mission, GameMissionInfo.getMissionDisplayNameList(), 18);
-   CreateGameOptionList.addRow($Text::MaxPlayers, GetOptionListRangeText(%this.maxPlayersMin, $Server::AbsMaxPlayers), 8);
+   CreateGameOptionList.addRow($Text::MaxPlayers, GetOptionListRangeText($Server::AbsMinPlayers, $Server::AbsMaxPlayers), 8);
    
    if( allowPrivateSlots() )
       CreateGameOptionList.addRow($Text::PrivateSlots, $Text::None TAB GetOptionListRangeText(1, $Server::AbsMaxPlayers), 8);
@@ -160,7 +158,7 @@ function CreateGameGui::updateMaxPlayers(%this)
    if ($pref::Server::PrivateSlots > $pref::Server::MaxPlayers - 1)
       $pref::Server::PrivateSlots = $pref::Server::MaxPlayers - 1;
 
-   CreateGameOptionList.setOptionIndex(%this.maxPlayersIndex, $pref::Server::MaxPlayers - CreateGameGui.maxPlayersMin);
+   CreateGameOptionList.setOptionIndex(%this.maxPlayersIndex, $pref::Server::MaxPlayers - $Server::AbsMinPlayers);
    
    if( allowPrivateSlots() )
       CreateGameOptionList.setOptionIndex(%this.privateSlotsIndex, $pref::Server::PrivateSlots);
@@ -240,7 +238,7 @@ function CreateGameOptionList::onOptionChange(%this, %increase)
 {
    %row = %this.getSelectedIndex();
    %maxPlayers = %this.getOptionIndex(CreateGameGui.maxPlayersIndex); 
-   %maxPlayers = %maxPlayers + CreateGameGui.maxPlayersMin;
+   %maxPlayers = %maxPlayers + $Server::AbsMinPlayers;
    
    if( allowPrivateSlots() )
       %privateSlots = %this.getOptionIndex(CreateGameGui.privateSlotsIndex);
@@ -323,7 +321,7 @@ function CreateGameGui::createGame(%this)
    // $Server::MissionId and $Server::GameModeId should be set already
    
    $pref::Server::missionId = $Server::MissionId;
-   $pref::Server::MaxPlayers = CreateGameOptionList.getOptionIndex(%this.maxPlayersIndex) + CreateGameGui.maxPlayersMin;
+   $pref::Server::MaxPlayers = CreateGameOptionList.getOptionIndex(%this.maxPlayersIndex) + $Server::AbsMinPlayers;
    $Server::IsPrivate = CreateGameOptionList.getOptionIndex(%this.privateGameIndex);
    
    $Server::InviteCode = generateInviteCode();

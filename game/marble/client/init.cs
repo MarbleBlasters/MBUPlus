@@ -45,7 +45,7 @@ function initClient()
    // Make sure this variable reflects the correct state.
    $Server::Dedicated = false;
    // Game information used to query the master server
-   $Client::GameTypeQuery = "UltraRebirth";
+   $Client::GameTypeQuery = "OpenMBU";
    $Client::MissionTypeQuery = "Any";
    // Default level qualification
    if (!$pref::QualifiedLevel["Beginner"])
@@ -123,6 +123,7 @@ function initClient()
    exec("./ui/CreateGameGui.gui");
    exec("./ui/LobbyGui.gui");
    exec("./ui/LobbyPopupDlg.gui");
+   exec("./ui/ServerSettingsGui.gui");
    exec("./ui/lbMenuGui.gui");
    exec("./ui/LevelPreviewGui.gui");
    exec("./ui/LevelScoresGui.gui");
@@ -175,7 +176,6 @@ function initClient()
    
    exec("./ui/AchievementDlg.gui");
    exec("./ui/AchievementListGui.gui");
-   exec("./ui/AchievementsGui.gui");
    exec("./ui/JoinGameInviteDlg.gui");
 
    exec("./scripts/xbLive.cs");
@@ -186,16 +186,6 @@ function initClient()
    exec("./scripts/default.bind.cs");
    exec("./scripts/xbControler.cs");
    
-   // Key Remapping GUI.
-   exec("./ui/RemapOptionsGui.gui");
-   exec("./ui/RemapInputGui.gui");
-
-   // File containing configs.
-   if (isFile("marble/client/config.cs"))
-   {
-      exec("marble/client/config.cs");
-   }
-
    exec("./scripts/interiorTest.cs");
 
    if (isPCBuild())

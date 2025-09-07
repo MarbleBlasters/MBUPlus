@@ -80,7 +80,7 @@ function GamePauseGui::onWake(%this)
    
    RootGui.setTitle($Text::Paused);
 
-   if ($Server::Hosting && $pref::Lobby::InviteVisibility)
+   if (checkInviteVisibility())
       LevelTitle.setText($Text::LobbyHostInviteCode @ $Text::Colon SPC $Server::InviteCode);
       
    if ($pref::UI::LegacyUI)
@@ -108,6 +108,12 @@ function GamePauseGui::onSleep(%this)
    
    if (%this.resumingGame)
       moveMap.push();
+
+   // For Spectator Mode ~ Connie
+   if (%this.resumingGame && $Client::connectedMultiplayer)
+   {
+      SpectatorHudTog($Client::isspectating);
+   }
 }
 
 function GamePauseGui::onA()

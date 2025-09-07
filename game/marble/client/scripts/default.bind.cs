@@ -105,9 +105,7 @@ function pauseToggle(%defaultItem)
 function escapeFromGame(%forcePreviewMode) // its ok for this to be empty, default is don't force preview mode
 {  
    $Client::willfullDisconnect = true;
-
-   autosplitterSetQuitToMenu(true);
-
+   
    %killMission = MissionLoadingGui.isAwake();
    // if we are hosting a multiplayer server, we just re-enter preview mode
    // without disconnecting
@@ -191,12 +189,20 @@ function setSpeed(%speed)
 
 function moveleft(%val)
 {
+   if ($Client::isorbiting && %val) {
+      commandToServer('PrevSpecPlayer');
+      return;
+   }
    setMvExtras();
    $mvLeftAction = %val;
 }
 
 function moveright(%val)
 {
+   if ($Client::isorbiting && %val) {
+      commandToServer('NextSpecPlayer');
+      return;
+   }
    setMvExtras();
    $mvRightAction = %val;
 }
@@ -464,8 +470,30 @@ function toggleFirstPerson(%val)
 function toggleCamera(%val)
 {
    setMvExtras();
-   if (%val && $testCheats)
-      commandToServer('ToggleCamera');
+   if (%val)
+   {
+      if ($testcheats && !$Client::connectedMultiplayer) 
+      {
+         commandToServer('ToggleCamera');
+      }
+
+      if ($Client::connectedMultiplayer)
+      {
+         commandToServer('ToggleSpecMode');
+      }
+   }
+}
+
+function toggleplayerSpec(%val)
+{
+   setMvExtras();
+   if (%val) 
+   {
+      if ($Client::connectedMultiplayer)
+      {
+         commandtoServer('ToggleOrbitMode');
+      }
+   }
 }
 
 function toggleFPSDisplay(%val)
@@ -662,6 +690,7 @@ moveMap.bind( keyboard, w, moveforward );
 moveMap.bind( keyboard, s, movebackward );
 moveMap.bind( keyboard, space, jumpOrStart );
 moveMap.bind(keyboard, "alt c", toggleCamera);
+moveMap.bind(keyboard, c, toggleplayerSpec);
 //moveMap.bind( keyboard, F3, startRecordingDemo );
 //moveMap.bind( keyboard, F4, stopRecordingDemo );
 //moveMap.bindCmd( keyboard, o, "", "pauseToggle(0);" );
@@ -669,15 +698,13 @@ moveMap.bind(keyboard, "alt c", toggleCamera);
 moveMap.bindCmd( keyboard, y, "togglePlayerListLength();", "" );
 
 moveMap.bind(keyboard, "t", GlobalChat);
-// With my thing, people could just rebind GlobalChat to enter if they want, so I don't think this extra bind is needed anymore. ~Connie
-//moveMap.bind(keyboard, "ENTER", GlobalChat);
+moveMap.bind(keyboard, "ENTER", GlobalChat);
 //moveMap.bind(keyboard, "y", TeamChat);
 
 // Extra binds
 // ------------
-// Ditto from me commenting out the "ENTER" bind to GlobalChat up above. ~Connie
-//moveMap.bind( keyboard, q, mouseFire );
-//moveMap.bind( keyboard, e, altTrigger );
+moveMap.bind( keyboard, q, mouseFire );
+moveMap.bind( keyboard, e, altTrigger );
 
 moveMap.bind( keyboard, left, turnLeft );
 moveMap.bind( keyboard, right, turnRight );

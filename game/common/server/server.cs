@@ -99,7 +99,10 @@ function stopMultiplayerMode()
    cancel($Server::ArbSched);
    
    if (isObject(ServerConnection))
-      ServerConnection.ready = false;
+   {
+      ServerConnection.ready    = false;
+      ServerConnection.spectate = false;
+   }
    
    $Client::connectedMultiplayer = false;
 }

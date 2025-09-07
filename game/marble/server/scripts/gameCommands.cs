@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
 // server command handlers
 //-----------------------------------------------------------------------------
-function serverCmdSetReadyStatus(%client, %ready)
+function serverCmdSetReadyStatus(%client, %ready, %spectate)
 {
-   serverSetClientReadyStatus(%client, %ready);
+   serverSetClientReadyStatus(%client, %ready, %spectate);
 }
 
 function serverCmdSetUserRating(%client, %levelRating, %overallRating)
@@ -57,21 +57,20 @@ function serverIsInLobby()
    return $Server::ServerType $= "MultiPlayer" && !$Game::Running;
 }
 
-function serverSetClientReadyStatus(%client, %ready)
+function serverSetClientReadyStatus(%client, %ready, %spectate)
 {
    if (!isObject(%client))
    {
       error("Server: client doesn't exist, can't set ready status");
       return;
    }
-      
-   %changed = %client.ready != %ready;
    
-   if (%changed)
+   if ((%client.ready != %ready) || (%client.spectate != %spectate))
    {
-      %client.ready = %ready;
-      messageAllExcept(%client, -1, 'MsgClientReadyStatusChanged', "", %client, 0, %client.ready);
-      messageClient(%client, 'MsgClientReadyStatusChanged', "", %client, 1, %client.ready);
+      %client.ready    = %ready;
+      %client.spectate = %spectate;
+      messageAllExcept(%client, -1, 'MsgClientReadyStatusChanged', "", %client, 0, %client.ready, %client.spectate);
+      messageClient(%client, 'MsgClientReadyStatusChanged', "", %client, 1, %client.ready, %client.spectate);
    }
    
    %canPlay = !XBLiveIsRanked() || ClientGroup.getCount() > 1;
@@ -381,6 +380,6 @@ function serverCmdSetVoiceStatus(%client, %status)
 function serverCmdDemoOutOfTime(%client)
 {
    %client.demoOutOfTime = true;
-   messageAllExcept(%client, -1, 'MsgClientReadyStatusChanged', "", %client, 0, %client.ready, %client.demoOutOfTime);
-   messageClient(%client, 'MsgClientReadyStatusChanged', "", %client, 1, %client.ready, %client.demoOutOfTime);
+   messageAllExcept(%client, -1, 'MsgClientReadyStatusChanged', "", %client, 0, %client.ready, %client.spectate, %client.demoOutOfTime);
+   messageClient(%client, 'MsgClientReadyStatusChanged', "", %client, 1, %client.ready, %client.spectate, %client.demoOutOfTime);
 }

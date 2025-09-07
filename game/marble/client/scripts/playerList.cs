@@ -9,23 +9,23 @@
 // and scoreboard.
 //-----------------------------------------------------------------------------
 
-addMessageCallback('MsgClientJoin', handleClientJoin);
-addMessageCallback('MsgClientDrop', handleClientDrop);
-addMessageCallback('MsgClientScoreChanged', handleClientScoreChanged);
-addMessageCallback('MsgClientSetServerParams', handleClientSetServerParams);
-addMessageCallback('MsgClientVoiceStatus', handleVoiceStatus);
-addMessageCallback('MsgClientUserRatingUpdated', handleUserRatingUpdated);
-addMessageCallback('MsgClientSettingsChanged', handleSettingsChanged);
+addMessageCallback('MsgClientJoin',               handleClientJoin);
+addMessageCallback('MsgClientDrop',               handleClientDrop);
+addMessageCallback('MsgClientScoreChanged',       handleClientScoreChanged);
+addMessageCallback('MsgClientSetServerParams',    handleClientSetServerParams);
+addMessageCallback('MsgClientVoiceStatus',        handleVoiceStatus);
+addMessageCallback('MsgClientUserRatingUpdated',  handleUserRatingUpdated);
+addMessageCallback('MsgClientSettingsChanged',    handleSettingsChanged);
 addMessageCallback('MsgClientReadyStatusChanged', handleReadyStatusChanged);
-addMessageCallback('MsgAdminForce', handleAdminForce);
-addMessageCallback('MsgClientKilled', handleClientKilled);
-addMessageCallback('MsgClientAllClientsReady', handleAllClientsReady);
-addMessageCallback('MsgClientUpdateLobbyStatus', handleUpdateLobbyStatus);
-addMessageCallback('MsgArbRegStart', handleArbRegStart);
-addMessageCallback('MsgArbReg', handleArbReg);
-addMessageCallback('MsgArbPlayerList', handleArbPlayerList);
-addMessageCallback('MsgClientVoiceStatus', handleVoiceStatus);
-addMessageCallback('MsgMPGameOver', handleMPGameOver);
+addMessageCallback('MsgAdminForce',               handleAdminForce);
+addMessageCallback('MsgClientKilled',             handleClientKilled);
+addMessageCallback('MsgClientAllClientsReady',    handleAllClientsReady);
+addMessageCallback('MsgClientUpdateLobbyStatus',  handleUpdateLobbyStatus);
+addMessageCallback('MsgArbRegStart',              handleArbRegStart);
+addMessageCallback('MsgArbReg',                   handleArbReg);
+addMessageCallback('MsgArbPlayerList',            handleArbPlayerList);
+addMessageCallback('MsgClientVoiceStatus',        handleVoiceStatus);
+addMessageCallback('MsgMPGameOver',               handleMPGameOver);
 
 //-----------------------------------------------------------------------------
 // This message is sent by the server to inform the client of global server 
@@ -49,18 +49,21 @@ function handleClientSetServerParams(%msgType, %msgString, %message)
    if (isObject(ServerConnection))
    {
       // unpack server params data
-      ServerConnection.hostName = getRecord(%message, 0);
-      ServerConnection.isMultiplayer = %isMultiplayer;
-      ServerConnection.gameModeId = getRecord(%message, 2);
-      ServerConnection.missionId = getRecord(%message, 3);
-      ServerConnection.gameCounts = getRecord(%message, 4);
-      ServerConnection.pubSlotsFree = getRecord(%message, 5);
-      ServerConnection.pubSlotsUsed = getRecord(%message, 6);
-      ServerConnection.priSlotsFree = getRecord(%message, 7);
-      ServerConnection.priSlotsUsed = getRecord(%message, 8);
-      ServerConnection.isRanked = getRecord(%message, 9);
-      ServerConnection.guid = getRecord(%message, 10);
-      ServerConnection.missionName = getRecord(%message, 11);
+      ServerConnection.hostName         = getRecord(%message, 0);
+      ServerConnection.isMultiplayer    = %isMultiplayer;
+      ServerConnection.gameModeId       = getRecord(%message, 2);
+      ServerConnection.missionId        = getRecord(%message, 3);
+      ServerConnection.gameCounts       = getRecord(%message, 4);
+      ServerConnection.pubSlotsFree     = getRecord(%message, 5);
+      ServerConnection.pubSlotsUsed     = getRecord(%message, 6);
+      ServerConnection.priSlotsFree     = getRecord(%message, 7);
+      ServerConnection.priSlotsUsed     = getRecord(%message, 8);
+      ServerConnection.isRanked         = getRecord(%message, 9);
+      ServerConnection.guid             = getRecord(%message, 10);
+      ServerConnection.missionName      = getRecord(%message, 11);
+      ServerConnection.inviteCode       = getRecord(%message, 12);
+      ServerConnection.inviteVisibility = getRecord(%message, 13);
+      ServerConnection.forceSpectators  = getRecord(%message, 14);
             
       // set flag indicating that server params are present
       ServerConnection.hasParams = true;
@@ -94,6 +97,7 @@ function handleClientJoin(%msgType, %msgString, %clientName, %joinData, %isMe)
    %address = getRecord(%joinData, %recordIndex++);
    %rating = getRecord(%joinData, %recordIndex++);
    %ready = getRecord(%joinData, %recordIndex++);
+   %spectate = getRecord(%joinData, %recordIndex++);
    %score = getRecord(%joinData, %recordIndex++);
    %invited = getRecord(%joinData, %recordIndex++);
    %demoOutOfTime = getRecord(%joinData, %recordIndex++);
@@ -122,8 +126,7 @@ function handleClientJoin(%msgType, %msgString, %clientName, %joinData, %isMe)
    
    if (!%isAI)
    {
-      LobbyGui.update(%clientId,detag(%clientName),%xbLiveId,%xbLiveSkill,
-         %xbLiveVoice,%address,%rating,%ready,%invited,%demoOutOfTime);
+      LobbyGui.update(%clientId,detag(%clientName),%xbLiveId,%xbLiveSkill,%xbLiveVoice,%address,%rating,%ready,%spectate,%invited,%demoOutOfTime);
    }
    
    if (ServerConnection.isMultiplayer && %joinInProgress)
@@ -135,7 +138,7 @@ function handleClientJoin(%msgType, %msgString, %clientName, %joinData, %isMe)
       echo(detag(%clientName) SPC "joined the game");
       sfxPlay(PlayerJoinSfx);
       %displayName = detag(%clientName);
-      if ($pref::Lobby::StreamerMode)
+      if ($pref::Server::StreamerMode)
       {
           %displayName = getSubStr(%displayName, 0, 1) @ "...";
       }
@@ -178,7 +181,7 @@ function handleClientDrop(%msgType, %msgString, %clientName, %clientId, %xbLiveI
       echo(detag(%clientName) SPC "left the game");
       sfxPlay(PlayerDropSfx);
       %displayName = detag(%clientName);
-      if ($pref::Lobby::StreamerMode)
+      if ($pref::Server::StreamerMode)
       {
           %displayName = getSubStr(%displayName, 0, 1) @ "...";
       }
@@ -191,7 +194,7 @@ function handleClientDrop(%msgType, %msgString, %clientName, %clientId, %xbLiveI
 function handleMPGameOver(%msgType, %msgString, %tied, %leaderName, %leaderPoints)
 {
    %name = detag(%leaderName);
-   if ($pref::Lobby::StreamerMode)
+   if ($pref::Server::StreamerMode)
    {
        %name = getSubStr(%name, 0, 1) @ "...";
    }
@@ -249,15 +252,16 @@ function handleSettingsChanged(%msgType, %msgString, %client, %isMe, %team, %tan
       setLocalPlayerTeam(%team);
 }
 
-function handleReadyStatusChanged(%msgType, %msgString, %client, %isMe, %ready, %demoOutOfTime)
+function handleReadyStatusChanged(%msgType, %msgString, %client, %isMe, %ready, %spectate, %demoOutOfTime)
 {
    if (%isMe)
    {
       ServerConnection.ready = %ready;
+      ServerConnection.spectate = %spectate;
       ServerConnection.demoOutOfTime = %demoOutOfTime;
    }
       
-   LobbyGui.updateReadyStatus(%client, %isMe, %ready, %demoOutOfTime);
+   LobbyGui.updateReadyStatus(%client, %ready, %spectate, %demoOutOfTime);
 }
 
 function handleAdminForce(%msgType, %msgString, %action, %clientName)
@@ -297,11 +301,13 @@ function handleUpdateLobbyStatus(%msgType, %msgString, %inLobby)
    // if we aren't all ready in the lobby, clear our ready status
    if (ServerConnection.inLobby)
    {
-      // clear ready status when entering the Lobby for the first time
-      if (!%wasInLobby && clientIsReady())
+      // clear ready and spectate status when entering the Lobby for the first time
+      if (!%wasInLobby && (clientIsReady() || clientIsSpectate()))
+      {
          // now we aren't
-         clientSetReadyStatus(false);
-         
+         clientSetReadyStatus(false, false);
+      }
+  
       if (!LobbyGui.isAwake() && !EndGameGui.isAwake())
          RootGui.setContent(LobbyGui);
    }

@@ -147,7 +147,6 @@ new GuiControl(LobbyPopupDlg) {
 			};
 		};
 	};
-
 };
 //--- OBJECT WRITE END ---
 
@@ -193,7 +192,7 @@ function LobbyPopupDlg::show(%this, %clientName, %clientId, %showPlayerReview,%s
    
    if (!%this.isAwake())
    {
-      clientSetReadyStatus(false);
+      clientSetReadyStatus(false, false);
       
       Canvas.pushDialog(LobbyPopupDlg, 0);   
       
@@ -201,6 +200,8 @@ function LobbyPopupDlg::show(%this, %clientName, %clientId, %showPlayerReview,%s
 	   //LobbyPopupBGFrame.animateAlpha(0.7, 75, 100);
    }
 }
+
+// ---------------------------------------------------------------
 
 function LobbyPopupDlg::hide(%this)
 {

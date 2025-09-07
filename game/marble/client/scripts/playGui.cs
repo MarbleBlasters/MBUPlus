@@ -102,10 +102,14 @@ function PlayGui::onWake(%this)
 	   UpsellGui.displayPDLCUpsell = %isFreeLevel ? false : !%hasLevel;
    }
 
-   autosplitterSetIsLoading(false);
-   autosplitterSetLevelStarted(false);	
-
    sendAutosplitterData("loading finished");
+
+   // Part of Spectator Mode
+   // When a Control Object is changed, PlayGui::onWake is called. This is why this is here. ~Connie
+   if ($Client::connectedMultiplayer)
+   {
+      SpectatorHudTog($Client::isspectating);
+   }
 }
 
 function PlayGui::show(%this)
@@ -517,8 +521,6 @@ function PlayGui::updateControls(%this)
    	TimeBox.animBitmap("timebackdrop");
    	%this.lastHundredth = %hundredth;
 	}
-   //RootGui.setCenterText(getMarbleTPS());
-   //echo(getMarbleTPS());
 }
 
 function PlayGui::scaleGemArrows(%this)

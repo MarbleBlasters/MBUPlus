@@ -51,18 +51,26 @@ function clientCmdSetPartyId(%partyId)
 //----------------------------------------------------------------------------
 // Various client support functions
 //----------------------------------------------------------------------------
-function clientSetReadyStatus(%ready)
+//Possibly unnecessary as handleReadyStatusChanged() also changes these values, which is eventually run anyway by this very function
+function clientSetReadyStatus(%ready, %spectate)
 {
    if ($Client::ConnectedMultiplayer && isObject(ServerConnection))
    {
-      ServerConnection.ready = %ready;
-      commandToServer('SetReadyStatus', %ready); 
+      ServerConnection.ready    = %ready;
+      ServerConnection.spectate = %spectate;
+      commandToServer('SetReadyStatus', %ready, %spectate); 
+      echo("Client set ready status to " @ %ready @ ", " @ %spectate);
    }
 }
 
 function clientIsReady()
 {
    return ServerConnection.ready;
+}
+
+function clientIsSpectate()
+{
+   return ServerConnection.spectate;
 }
 
 //----------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 // List of master servers to query, each one is tried in order
 // until one responds
 $Server::RegionMask = 2;
-$Server::Master[0] = "2:ultrarebirth.xyz:28002";//"2:master.localhost:28009"; //"2:master.garagegames.com:28002";
+$Server::Master[0] = "2:master.openmbu.com:28002"; //"2:master.garagegames.com:28002";
 
 $Server::DisplayOnMaster = "Always"; //"Never"; // Xbox should not use GG master server
 // Information about the server
@@ -43,11 +43,14 @@ $Pref::Server::FloodProtectionEnabled = 1;
 $Pref::Server::MaxChatLen = 120;
 
 
+$Server::AbsMinPlayers = 2;
 $Server::AbsMaxPlayers = 8;
 $Server::HighBandwidthMin = 100000; // minimum kilo bits per second up and down required for "high bandwidth" (5,6 players with no warning)
 $Server::MaxPlayers_LowBandwidth = 5;
 $Server::MaxPlayers_HighBandwidth = $Server::AbsMaxPlayers;
 $Pref::Server::MaxPlayers = 5; //$Server::MaxPlayers_HighBandwidth; // CHANGED FOR PATCH!!
+$Pref::Server::InviteVisibility = 1;
+$Pref::Server::ForceSpectators = false;
 
 $Server::GemGroupRadius = 20;
 $Server::MaxGemsPerGroup = 4;
@@ -55,6 +58,3 @@ $Server::MaxGemsPerGroup = 4;
 $Server::BandwidthLimit[0] = "131072 6"; // at least 128kbps for 7+ players
 $Server::BandwidthLimit[1] = "98394 4"; // at least 96kbps for 5+ players
 $Server::NumBandwidthLimits = 2;
-
-//Misc Stat Stuff
-$Pref::Stats::OOBCount = 0;

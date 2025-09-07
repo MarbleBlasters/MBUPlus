@@ -799,7 +799,6 @@ function clientCmdSetGameState(%state, %data)
 
       // Tell autosplitter we finished the level
       XBLivePresenceStopTimer();
-      autosplitterSetLevelFinished(true);
       sendAutosplitterData("finish" SPC GameMissionInfo.getCurrentMission().level);
    }
    else
@@ -861,8 +860,6 @@ function clientCmdSetGameState(%state, %data)
          // read the pair of leaderboards
          XBLiveReadStats($Leaderboard::SPOverall, %mission.level, "", true, true);
       }
-      autosplitterSetLevelFinished(false);
-      autosplitterSetEggFound(false);
    }
    
    // Check here to see if we need to pop the upsell
@@ -998,6 +995,9 @@ function clientCmdSetGameState(%state, %data)
       // handle multiplayer stats stuff      
       if (%state $= "ready")
       {
+         // Part of Spectator Mode ~ Connie
+         StartStateSetSpectate();
+
          // clear any JoinInProgress users from prior sessions
          if (isObject(StatsJoinInProgressClients))
             StatsJoinInProgressClients.clear();

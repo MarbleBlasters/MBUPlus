@@ -1,0 +1,114 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(ServerSettingsGui) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "right";
+   vertSizing = "bottom";
+   position = "0 0";
+   extent = "640 480";
+   minExtent = "8 2";
+   visible = "1";
+
+   new GuiXboxOptionListCtrl(ServerSettingsList) {
+      profile = isWidescreen()? "TextOptionListProfile" : "TextOptionListSmallProfile";
+      position = isWidescreen()? "380 211" : "132 100";
+      extent = isWidescreen()? "815 400" : "510 250";
+      horizSizing = isWidescreen()? "right" : "left";
+      vertSizing = "center";
+      // there can only be two columns; these values are percentages of total extent
+      columns = isWidescreen()? "35 65" : "45 55";
+      // each column can have a left and right margin, specified here.  order is 
+      // C1L C1R C2L C2R.  amount is in pixels
+      columnMargins = isWidescreen()? "0 20 5 50" : "0 0 2 30";
+      // for debugging, show the region update rect and column rects (with margins)
+      showRects = 0;
+      // data is dynamically added to this option list in the show() function
+   };
+};
+//--- OBJECT WRITE END ---
+
+//Note down the menu we're coming from, set the GUI title and button input text, and create the option rows
+function ServerSettingsGui::show(%this, %backGui)
+{
+    if (%backGui !$= "")
+        %this.backGui = %backGui;
+    if (%this.backGui $= "")
+        %this.backGui = lobbyGui;
+    ServerSettingsList.clear();
+
+    RootGui.setTitle( strupr($Text::LobbyHostServerSettings) );
+    RootGui.setA( $Text::Save );
+    RootGui.setB( $Text::Cancel );
+
+                            ServerSettingsList.addRow($Text::MaxPlayers,       GetOptionListRangeText($Server::AbsMinPlayers, $Server::AbsMaxPlayers), 8);
+    if(allowPrivateSlots()) ServerSettingsList.addRow($Text::PrivateSlots,     $Text::None TAB GetOptionListRangeText(1, $Server::AbsMaxPlayers - 1),  8);
+                            ServerSettingsList.addRow($Text::IsPrivate,        $Text::No TAB $Text::Yes,                                               8);
+                            ServerSettingsList.addRow($Text::InviteVisibility, $Text::InviteVisibilityOptions,                                         8);
+                            ServerSettingsList.addRow($Text::ForceSpectators,  $Text::OptionOffOn,                                                     8);
+
+    //Set indices of each option row here to be referred to by other things
+    %this.maxPlayersIndex       = 0;
+    %this.privateSlotsIndex     = 1;
+    %this.privateGameIndex      = 2;
+    %this.inviteVisibilityIndex = 3;
+    %this.forceSpectatorsIndex  = 4;
+
+    //Max Players and Private Slots shouldn't wrap around from highest to lowest or vice versa
+    ServerSettingsList.setOptionWrap(%this.maxPlayersIndex,   false);
+    ServerSettingsList.setOptionWrap(%this.privateSlotsIndex, false);
+
+    //Set each option row to start with the current pref selected
+                            ServerSettingsList.setOptionIndex(%this.maxPlayersIndex,       $pref::Server::MaxPlayers - $Server::AbsMinPlayers);
+    if(allowPrivateSlots()) ServerSettingsList.setOptionIndex(%this.privateSlotsIndex,     $pref::Server::PrivateSlots);
+                            ServerSettingsList.setOptionIndex(%this.privateGameIndex,      $Server::IsPrivate);
+                            ServerSettingsList.setOptionIndex(%this.inviteVisibilityIndex, $pref::Server::InviteVisibility);
+                            ServerSettingsList.setOptionIndex(%this.forceSpectatorsIndex,  $pref::Server::ForceSpectators);
+}
+
+//This GUI only saves when pressing the Save button, but there are still some things to do on option change, like making sure private slots < max players
+function ServerSettingsList::onOptionChange(%this, %increase)
+{
+    if(allowPrivateSlots())
+    {
+        %maxPlayers   = %this.getOptionIndex(ServerSettingsGui.maxPlayersIndex) + $Server::AbsMinPlayers;
+        %privateSlots = %this.getOptionIndex(ServerSettingsGui.privateSlotsIndex);
+        echo("Server settings option changed! " @ %maxplayers SPC %privateSlots);
+        
+        if(%privateSlots >= %maxPlayers)
+        {
+            echo("Private slots too high!");
+            %privateSlots = %maxPlayers - 1;
+            %this.setOptionIndex(ServerSettingsGui.privateSlotsIndex, %privateSlots);
+        }
+    }
+}
+
+//Save prefs and return to the previous menu (saved as backGui)
+function ServerSettingsGui::onA(%this)
+{
+    sfxPlay(AudioButtonDown);
+
+    $pref::Server::MaxPlayers       = ServerSettingsList.getOptionIndex(%this.maxPlayersIndex) + $Server::AbsMinPlayers;
+    $pref::Server::PrivateSlots     = ServerSettingsList.getOptionIndex(%this.privateSlotsIndex);
+    $Server::IsPrivate              = ServerSettingsList.getOptionIndex(%this.privateGameIndex);
+    $pref::Server::InviteVisibility = ServerSettingsList.getOptionIndex(%this.inviteVisibilityIndex);
+    $pref::Server::ForceSpectators  = ServerSettingsList.getOptionIndex(%this.forceSpectatorsIndex);
+
+    if(!allowPrivateSlots())
+        $pref::Server::PrivateSlots = 0;
+
+    echo($Text::MaxPlayers       @ " = " @ $pref::Server::MaxPlayers);
+    echo($Text::PrivateSlots     @ " = " @ $pref::Server::PrivateSlots);
+    echo($Text::IsPrivate        @ " = " @ $Server::IsPrivate);
+    echo($Text::InviteVisibility @ " = " @ $pref::Server::InviteVisibility);
+    echo($Text::ForceSpectators  @ " = " @ $pref::Server::ForceSpectators);
+    
+    updateServerParams(); //Update player count (and probably whatever else later)
+    RootGui.setContent(%this.backGui);
+}
+
+//Bring up a confirmation box, then either do nothing or go to backGui
+function ServerSettingsGui::onB(%this)
+{
+    sfxPlay(AudioButtonDown);
+    XMessagePopupDlg.show(0, $Text::ExitNoSave, $Text::Yes, "RootGui.setContent(ServerSettingsGui.backGui);", $Text::No);
+}

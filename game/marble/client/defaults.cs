@@ -62,8 +62,7 @@ $pref::OpenGL::force16BitTexture = "0";
 $pref::OpenGL::forcePalettedTexture = "0";
 $pref::OpenGL::maxHardwareLights = 3;
 $pref::VisibleDistanceMod = 1.0;
-$pref::Lobby::InviteVisibility = true;
-$pref::Lobby::StreamerMode = false;
+$pref::Server::StreamerMode = false;
 $pref::Player::UsingCustomName = false;
 
 /// The sound provider to select at startup.  Typically

@@ -73,6 +73,7 @@ new GuiControl(LobbyGui)
 	      iconPath = "marble/client/ui/xbox/";
 	      hostIcon = "BrainIcon";
 	      readyIcon = "Ready";
+         spectateIcon = "Spectate";
 	      demoOutOfTimeIcon = "DemoOutOfTimeIcon";
 	      skill1Icon = "stars_1";
 	      skill2Icon = "stars_2";
@@ -161,7 +162,7 @@ function LobbyGui::show(%this)
    else
       RootGui.setA($Text::Ready);
    RootGui.setB($Text::ExitGame);
-   RootGui.setY($Text::SelectPlayer);
+   RootGui.setY($Text::Spectate);
 
    %this.hosting = false;
 
@@ -219,7 +220,7 @@ function LobbyGui::checkDemoTime(%this)
       $Demo::TimeRemaining = 0;
       
       // we are not ready
-      clientSetReadyStatus(false);   
+      clientSetReadyStatus(false, false);
       
       // tell server we are out of time
       commandToServer('DemoOutOfTime'); 
@@ -310,24 +311,27 @@ function LobbyGui::updateHostingStatus(%this)
 	   //}
 	   
 	   if (%this.hosting && !isDemoLaunch() && !XBLiveIsRanked()) {
-	      RootGui.setLS($Text::ChangeLevels);
-          RootGui.setX($Text::LobbyHostInviteVisibility);
-       }
+	      //RootGui.setLS($Text::ChangeLevels);
+         RootGui.setX($Text::LobbyHostServerSettings);
+      }
    }
 }
 
-function LobbyGui::getReadyIcon(%this, %ready, %demoOutOfTime)
+function LobbyGui::getReadyIcon(%this, %ready, %spectate, %demoOutOfTime)
 {
    // if we are out of time, use the "out of time" icon for ready status
    if (%demoOutOfTime)
-      return LobbyGuiPlayerList.iconPath @ LobbyGuiPlayerList.demoOutOfTimeIcon;
+      return    LobbyGuiPlayerList.iconPath @ LobbyGuiPlayerList.demoOutOfTimeIcon;
    else if (%ready)
-      return LobbyGuiPlayerList.iconPath @ LobbyGuiPlayerList.readyIcon;
+      if (%spectate)
+         return LobbyGuiPlayerList.iconPath @ LobbyGuiPlayerList.spectateIcon;
+      else
+         return LobbyGuiPlayerList.iconPath @ LobbyGuiPlayerList.readyIcon;
    else
       return "";
 }
 
-function LobbyGui::update(%this,%clientId,%name,%xbLiveId,%xbLiveSkill,%xbLiveVoice,%address,%rating,%ready,%invited,%demoOutOfTime)
+function LobbyGui::update(%this,%clientId,%name,%xbLiveId,%xbLiveSkill,%xbLiveVoice,%address,%rating,%ready,%spectate,%invited,%demoOutOfTime)
 {
    if (!$Client::connectedMultiplayer)
       return;
@@ -341,12 +345,12 @@ function LobbyGui::update(%this,%clientId,%name,%xbLiveId,%xbLiveSkill,%xbLiveVo
 	// this is set by updateVoiceStatus
 	%voiceIcon = LobbyGuiPlayerList.iconPath @ LobbyGuiPlayerList.voidIcon;
 	   
-	%readyIcon = %this.getReadyIcon(%ready,%demoOutOfTime);
+	%readyIcon = %this.getReadyIcon(%ready,%spectate,%demoOutOfTime);
 	   
  	if (isPCBuild()) %xbLiveVoice = getRandom(1) + 1; 
 	
     %sanitizedText = %name;
-    if ($pref::Lobby::StreamerMode)
+    if ($pref::Server::StreamerMode)
     {
        %sanitizedText = getSubStr(%name, 0, 1) @ "...";
     }
@@ -437,7 +441,7 @@ function LobbyGui::resetSelectedRow(%this)
    LobbyGuiPlayerList.onSelect( LobbyGuiPlayerList.getSelectedId() ); // This will update the Y button just in case -pw
 }
 
-function LobbyGui::updateReadyStatus(%this, %client, %isMe, %ready, %demoOutOfTime)
+function LobbyGui::updateReadyStatus(%this, %client, %ready, %spectate, %demoOutOfTime)
 {
    if (!$Client::connectedMultiplayer)
       return;
@@ -450,19 +454,19 @@ function LobbyGui::updateReadyStatus(%this, %client, %isMe, %ready, %demoOutOfTi
    %rowText = LobbyGuiPlayerList.getRowText(%rowIdx);
    if (%rowText !$= "")
    {
-      %readyIcon = %this.getReadyIcon(%ready,%demoOutOfTime);
+      %readyIcon = %this.getReadyIcon(%ready,%spectate,%demoOutOfTime);
       
       %rowText = setField(%rowText, 0, %readyIcon);
       LobbyGuiPlayerList.setRowById(%client, %rowText);
       
-      if (%isMe && %this.isAwake())
-      {
-         // %JMQ: animation
-         //if (%ready)
-         //   clientStopPulseAnim();
-         //else
-         //   clientStartPulseAnim(NavControlsGui_AText, 0, -1);
-      }
+      // if (%isMe && %this.isAwake())
+      // {
+      //    %JMQ: animation
+      //    if (%ready)
+      //      clientStopPulseAnim();
+      //    else
+      //      clientStartPulseAnim(NavControlsGui_AText, 0, -1);
+      // }
    }
 }
 
@@ -707,7 +711,7 @@ function LobbyGui::updateHostInfo(%this)
    %missionName = ServerConnection.missionName; //GameMissionInfo.getMissionDisplayName(ServerConnection.missionId);
 
    %sanitizedText = ServerConnection.hostName;
-   if ($pref::Lobby::StreamerMode)
+   if ($pref::Server::StreamerMode)
    {
       %sanitizedText = getSubStr(ServerConnection.hostName, 0, 1) @ "...";
    }
@@ -736,12 +740,11 @@ function LobbyGui::setHostInfo(%this, %hostName, %gameMode, %mapname, %priSlotsU
    			$Text::Comma SPC $Text::LobbyHostPublicSlots @ $Text::Colon SPC 
    			%pubSlotsUsed @ $Text::Slash @ %pubSlotsFree + %pubSlotsUsed;
             
-   if ($pref::Lobby::InviteVisibility)
-       LobbyGuiHostGameInfo.setText(LobbyGuiHostGameInfo.beforeText @ 
-                ($Server::Hosting ? ($Text::Comma SPC $Text::LobbyHostInviteCode @ $Text::Colon SPC
-                $Server::InviteCode @ "<font:Arial Bold:20> ") : ""));
+   if (checkInviteVisibility())
+      LobbyGuiHostGameInfo.setText(LobbyGuiHostGameInfo.beforeText @
+         ($Text::Comma SPC $Text::LobbyHostInviteCode @ $Text::Colon SPC ServerConnection.inviteCode @ "<font:Arial Bold:20> "));
    else
-   	   LobbyGuiHostGameInfo.setText(LobbyGuiHostGameInfo.beforeText);
+   	LobbyGuiHostGameInfo.setText(LobbyGuiHostGameInfo.beforeText);
   
    LobbyGuiSelection.clear();
    LobbyGuiSelection.setButtonsEnabled(%this.hosting);
@@ -861,9 +864,10 @@ function LobbyGui::onA(%this)
       XMessagePopupDlg.show(0, $Text::DemoUpsellMP7, $Text::OK);
       return;
    }   
-      
-   clientSetReadyStatus(!ServerConnection.ready);   
+
+   clientSetReadyStatus(!ServerConnection.ready, ServerConnection.spectate);
    
+   //Don't allow ranked matches with only one player
    if (!isPCBuild() && %this.hosting && XBLiveIsRanked() && ServerConnection.ready && ClientGroup.getCount() == 1)
    {
       XMessagePopupDlg.show(0, $Text::ErrorTooFewPlayers, $Text::OK);
@@ -992,21 +996,15 @@ function LobbyGuiPlayerList::onSelect( %this, %id, %text )
    // If we can't kick this person, change the Y action to "Show Gamercard"
    // that will take care of friend invites and all that other jazz
    if( !%showKick && !%showPlayerReview )
-      RootGui.setY( "" );//$Text::GamerCard );
+      RootGui.setY( $Text::Spectate );//$Text::GamerCard );
    else
       RootGui.setY( $Text::SelectPlayer );
 }
 
 function LobbyGui::onX(%this)
 {
-    $pref::Lobby::InviteVisibility = !$pref::Lobby::InviteVisibility;
-
-   if ($pref::Lobby::InviteVisibility)
-       LobbyGuiHostGameInfo.setText(LobbyGuiHostGameInfo.beforeText @ 
-                ($Server::Hosting ? ($Text::Comma SPC $Text::LobbyHostInviteCode @ $Text::Colon SPC
-                $Server::InviteCode @ "<font:Arial Bold:20> ") : ""));
-   else
-   	   LobbyGuiHostGameInfo.setText(LobbyGuiHostGameInfo.beforeText);
+   sfxPlay(AudioButtonDown);
+   RootGui.setContent(ServerSettingsGui);
 }
 
 function LobbyGui::onY(%this)
@@ -1015,31 +1013,34 @@ function LobbyGui::onY(%this)
       return;
       
    %id = LobbyGuiPlayerList.getSelectedId();
-   
    if (%id == -1)
       return;
-      
    sfxPlay( AudioButtonDown );
    
    // have we selected ourselves?
-   %isSelf = $Player::ClientId $= %id;
-   
-   // get the name of the target
-   %name = getField(LobbyGuiPlayerList.getRowTextById(%id), 1);
-   // get the live id of the target
-   %otherXbliveid = %this.findXBLiveIdByClientId(%id);
-   // see if the target is a friend
-   //%otherFriend = XBLiveIsFriend(XBLiveGetSignInPort(), %otherXbliveid);
-   
-   %showPlayerReview = !%isSelf;
-   %showKick = !%isSelf && %this.hosting;
-   %showInviteFriend = false; //!%isSelf && !%otherFriend;
-   %showGamerCard = true;
-
-   if( !%isSelf )
+   if($Player::ClientId $= %id)
+   {
+      XMessagePopupDlg.show(0, $Text::Spectate @ "?",
+         $Text::Yes, "clientSetReadyStatus(ServerConnection.ready, true);",
+         $Text::No,  "clientSetReadyStatus(ServerConnection.ready, false);");
+      //XBLiveShowGamercardUI(XBLiveGetSignInPort(), %otherXbliveid);
+   }
+   else
+   {
+      // get the name of the target
+      %name = getField(LobbyGuiPlayerList.getRowTextById(%id), 1);
+      // get the live id of the target
+      %otherXbliveid = %this.findXBLiveIdByClientId(%id);
+      // see if the target is a friend
+      //%otherFriend = XBLiveIsFriend(XBLiveGetSignInPort(), %otherXbliveid);
+      
+      %showPlayerReview = !%isSelf;
+      %showKick = !%isSelf && %this.hosting;
+      %showInviteFriend = false; //!%isSelf && !%otherFriend;
+      %showGamerCard = true;
+      
       LobbyPopupDlg.show(%name,%id,%showPlayerReview,%showKick,%showInviteFriend,%showGamerCard);
-   //else
-   //   XBLiveShowGamercardUI(XBLiveGetSignInPort(), %otherXbliveid);
+   }
 }
 
 function LobbyGuiPlayerList::test(%this)
@@ -1108,4 +1109,10 @@ function lbg_test()
 function lbg_reload()
 {
    rGui(LobbyGui);
+}
+
+function checkInviteVisibility()
+{
+   if ($Server::Hosting) return serverConnection.inviteVisibility != 0;
+   else                  return serverConnection.inviteVisibility == 2;
 }

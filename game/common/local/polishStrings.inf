@@ -257,12 +257,13 @@ $Text::FGG_NumPlayers = "Num Players";
 $Text::FGG_Players = "Graczy";
 
 ;-------------------------------------------------------------------------------
-; Create Game Gui
+; Create Game Gui & Server Settings
 ;-------------------------------------------------------------------------------
 $Text::Mission = "Poziom";
 $Text::MaxPlayers = "Maksymalna liczba graczy";
 $Text::PrivateSlots = "Prywatne miejsca";
 $Text::IsPrivate = "Prywatna gra";
+$Text::InviteVisibility = "Widoczność zaproszeń";
 
 ;-------------------------------------------------------------------------------
 ; Leaderboard Select Menu
@@ -278,7 +279,6 @@ $Text::LobbyHostLevel = "Poziom:";
 $Text::LobbyHostPrivateSlots = "Prywatne miejsca"; 
 $Text::LobbyHostPublicSlots = "Publiczne miejsca"; 
 $Text::LobbyHostInviteCode = "Kod zaproszenia";
-$Text::LobbyHostInviteVisibility = "Widoczność zaproszeń";
 
 ; separators
 $Text::Colon  = ":";
