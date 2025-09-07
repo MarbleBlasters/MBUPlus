@@ -505,6 +505,8 @@ void Marble::updatePowerUpParams()
                 F32 modRepulse;
                 if (i == 0)
                     modRepulse = getBlastPercent(); // PowerUp 0 is always blast
+                    if (mBlastEnergy != mDataBlock->blastRechargeTime >> 5 && Con::getBoolVariable("$Pref::CompetitiveMode") && Con::getBoolVariable("$Client::connectedMultiplayer"))
+                        modRepulse = 0.0f;
                 else
                     modRepulse = 1.0f;
                     
@@ -1098,8 +1100,6 @@ Point3F Marble::getVelocity() const
     return mSinglePrecision.mVelocity;
 }
 
-//
-
 Point3F Marble::getShadowScale() const
 {
 #ifdef MB_FORCE_MARBLE_SIZE
@@ -1306,7 +1306,10 @@ void Marble::doPowerUpPower(S32 powerUpId)
     if (this->mDataBlock->powerUps)
     {
         mPowerUpState[powerUpId].active = true;
-        mPowerUpState[powerUpId].ticksLeft = mDataBlock->powerUps->duration[powerUpId] >> 5;
+        U32 ticks = mDataBlock->powerUps->duration[powerUpId];
+        if (powerUpId == 7 && Con::getBoolVariable("$Pref::CompetitiveMode") && Con::getBoolVariable("$Client::connectedMultiplayer"))
+            ticks = 5000;
+        mPowerUpState[powerUpId].ticksLeft = ticks >> 5;
 
         updatePowerUpParams();
 #ifdef MB_ULTRA_PREVIEWS

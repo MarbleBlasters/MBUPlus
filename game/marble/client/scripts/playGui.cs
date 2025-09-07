@@ -103,13 +103,6 @@ function PlayGui::onWake(%this)
    }
 
    sendAutosplitterData("loading finished");
-
-   // Part of Spectator Mode
-   // When a Control Object is changed, PlayGui::onWake is called. This is why this is here. ~Connie
-   if ($Client::connectedMultiplayer)
-   {
-      SpectatorHudTog($Client::isspectating);
-   }
 }
 
 function PlayGui::show(%this)
@@ -150,6 +143,8 @@ function PlayGui::onSleep(%this)
    
    // Fix inputs getting stuck
    clearInputs();
+
+   %this.cancelSecondaryCountdown();
 }
 
 //-----------------------------------------------------------------------------
@@ -521,6 +516,8 @@ function PlayGui::updateControls(%this)
    	TimeBox.animBitmap("timebackdrop");
    	%this.lastHundredth = %hundredth;
 	}
+
+   %this.updateSecondaryCountdown();
 }
 
 function PlayGui::scaleGemArrows(%this)
@@ -567,3 +564,56 @@ function refreshCenterTextCtrl()
    CenterPrintText.position = "0 0";
 }
 
+//-----------------------------------------------------------------------------
+
+function clientCmdSetSecondaryCountdown(%time)
+{
+   PlayGui.startSecondaryCountdown(%time);
+}
+
+function clientCmdStopSecondaryCountdown(%time)
+{
+   PlayGui.cancelSecondaryCountdown(%time);
+}
+
+function PlayGui::startSecondaryCountdown(%this, %time)
+{
+   %this.secondaryCountdownStart = %this.elapsedTime;
+	%this.secondaryCountdownTime = %time;
+	%this.runningSecondaryCountdown = true;
+}
+
+function PlayGui::cancelSecondaryCountdown(%this)
+{
+   %this.runningSecondaryCountdown = false;
+   %this.secondaryCountdownTime = "";
+   SecondaryCountdown.setVisible(false);
+}
+
+function PlayGui::updateSecondaryCountdown(%this)
+{
+	SecondaryCountdown.setVisible(%this.runningSecondaryCountdown && SecondaryCountdown.show);
+	if (!%this.runningSecondaryCountdown)
+		return;
+	%this.secondaryCountdownTime -= %this.elapsedTime - %this.secondaryCountdownStart;
+   %this.secondaryCountdownStart = %this.elapsedTime;
+
+   if (%this.secondaryCountdownTime <= 0)
+   {
+      %this.cancelSecondaryCountdown();
+      return;
+   }
+
+	%time = %this.secondaryCountdownTime + 9;
+   %left = mFloor(%time/100);
+
+	%one = mFloor(%left) % 10;
+	%ten = mFloor(%left / 10) % 10;
+	%hun = mFloor(%left / 100);
+
+   SecondaryCountdownFirstDigit.setNumber(%hun);
+	SecondaryCountdownSecondDigit.setNumber(%ten);
+   SecondaryCountdownThirdDigit.setNumber(%one);
+
+	SecondaryCountdownFirstDigit.setVisible(%left >= 100);
+}
