@@ -91,7 +91,7 @@ function onServerCreated()
 {
    // Server::GameType is sent to the master server.
    // This variable should uniquely identify your game and/or mod.
-   $Server::GameType = "UltraRebirth";
+   $Server::GameType = "OpenMBU";
 
    // Server::MissionType sent to the master server.  Clients can
    // filter servers based on mission type.
@@ -320,9 +320,6 @@ function pauseGame()
             $saveTimescale = $timescale;
 
          $timescale = $pauseTimescale;
-
-		 //Stop the Discord Timer since the actual in-game Timer isn't running. ~Connie
-         XBLivePresenceStopTimer();
       }
    }
 }
@@ -345,12 +342,6 @@ function resumeGame()
          $saveTimescale = 1.0;
       $timescale = $saveTimescale;
    }
-
-	//Resume the Discord Timer if it's a Singleplayer game. ~Connie
-   if ($Server::ServerType $= "SinglePlayer" && $Game::Running && serverGetGameMode() $= "scrum" && ($Game::State $= "play" || $Game::State $= "go")) {
-      XBLivePresenceStartTimer(($Game::Duration - PlayGui.elapsedTime) / 1000);
-   }
-	
 }
 
 function destroyGame()
@@ -375,6 +366,12 @@ function destroyGame()
       
    if (isObject(FreeGemGroups))
       FreeGemGroups.delete();
+
+   if ($Pref::CompetitiveMode && $Client::connectedMultiplayer)
+   {
+      cancel($Competitive::AutoRespawnTimer);
+      $Competitive::AutoRespawnTime = 0;
+   }
 
    // Perform cleanup to reset the game.
    if (isEventPending($Game::cycleSchedule))
@@ -554,6 +551,12 @@ function freeGem(%gem)
 
 function removeGem(%gem)
 {
+   if ($Pref::CompetitiveMode && $Client::connectedMultiplayer && serverGetGameMode() $= "scrum")
+   {
+      competitiveRefillGemGroups(false, %gem);
+      return;
+   }
+
    freeGem(%gem);
    
    // refill gem groups if necessary
@@ -1685,12 +1688,6 @@ function GameConnection::getMarbleChoice( %this )
          return MarbleThirtySix;
       case 36:
          return MarbleThirtySeven;
-      case 37:
-         return MarbleThirtyEight;
-      case 38:
-         return MarbleThirtyNine;
-      case 39:
-         return MarbleFourty;
    }
    
    return MarbleOne;
@@ -1937,6 +1934,8 @@ function pickSpawnPointRandom(%randFunction)
          for (%i = 0; %i < %count; %i++)
          {
             %index = call(%randFunction, %count-1);
+            if ($Pref::CompetitiveMode && $Client::connectedMultiplayer)
+               %index = 0;
             %spawn = %group.getObject(%index);
             %spawnpos = %spawn.getPosition();
 
@@ -1950,6 +1949,8 @@ function pickSpawnPointRandom(%randFunction)
 
          // Unable to find an empty pad so spawn at a random one
          %index = call(%randFunction, %count-1);
+         if ($Pref::CompetitiveMode && $Client::connectedMultiplayer)
+            %index = 0;
          %spawn = %group.getObject(%index);
 
          return %spawn;
@@ -1997,6 +1998,9 @@ function setStartState(%client)
    if (%help !$= "")
       commandToClient(%client, 'setHelpLine', %help);
    commandToClient(%client, 'setMessage',"");
+
+   if ($Pref::CompetitiveMode && $Client::connectedMultiplayer)
+      messageClient(%client, 'MsgItemPickup', "Competitive Mode is on.");
 
    commandToClient(%client, 'setTimer', "reset");
    if ($Game::Duration)
@@ -2444,4 +2448,120 @@ function simLag(%loss,%lag)
          ServerConnection.setSimulatedNetParams(%loss,%lag/2);
    }
    error("simLag called with loss" SPC %loss SPC "and lag" SPC %lag);
+}
+
+//-----------------------------------------------------------------------------
+
+function competitiveRefillGemGroups(%force, %gem)
+{  
+   if (!$Pref::CompetitiveMode || !$Client::connectedMultiplayer)
+      return;
+
+   if (!isObject(ActiveGemGroups))
+   {
+      error("ActiveGemGroups does not exist, can't refill gem groups");
+      return;
+   }
+
+   if (!isObject(FreeGemGroups))
+      new SimGroup(FreeGemGroups);
+
+   if (!isObject(LeftBehindGems))
+      FreeGemGroups.add(new SimGroup(LeftBehindGems));
+
+   %time = getSimTime();
+   
+   if (isObject(%gem))
+   {
+      if (LeftBehindGems.isMember(%gem))
+      {
+         if ($Competitive::AutoRespawnTime != 0)
+         {
+            cancel($Competitive::AutoRespawnTimer);
+            $Competitive::AutoRespawnTime = $Competitive::AutoRespawnTime + 1000;
+            %timer = $Competitive::AutoRespawnTime - %time;
+            $Competitive::AutoRespawnTimer = schedule(%timer, 0, competitiveRefillGemGroups, true);
+            for (%i = 0; %i < ClientGroup.getCount(); %i ++)
+            {
+               commandToClient(ClientGroup.getObject(%i), 'SetSecondaryCountdown', %timer);
+            }
+         }
+         freeGem(%gem);
+         return;
+      }
+      freeGem(%gem);
+   }
+
+   %gemGroup = ActiveGemGroups.getObject(0);
+   %count = %gemGroup.getCount();
+   
+   if (%force || %count == 0)
+   {
+      if ($Server::CurrentGemGroup != 0)
+         messageAll('MsgGemGroupCollected', "Gem Group " @ $Server::CurrentGemGroup @ " completed!");
+      $Server::CurrentGemGroup++;
+
+      while (%gemGroup.getCount())
+      {
+         %oldGem = %gemGroup.getObject(0);
+         %gemGroup.remove(%oldGem);
+         LeftBehindGems.add(%oldGem);
+      }
+      
+      %spawnGroup = pickGemSpawnGroup();
+      %gemGroup.spawnGroup = %spawnGroup;
+      fillGemGroup(%gemGroup);
+
+      cancel($Competitive::AutoRespawnTimer);
+      $Competitive::AutoRespawnTime = 0;
+      for (%i = 0; %i < ClientGroup.getCount(); %i ++)
+      {
+         commandToClient(ClientGroup.getObject(%i), 'StopSecondaryCountdown');
+      }
+   }
+
+   else if ($Competitive::AutoRespawnTime == 0)
+   {
+      cancel($Competitive::AutoRespawnTimer);
+      $Competitive::AutoRespawnTime = %time + 20000;
+      $Competitive::AutoRespawnTimer = schedule(20000, 0, competitiveRefillGemGroups, true);
+      for (%i = 0; %i < ClientGroup.getCount(); %i ++)
+      {
+         commandToClient(ClientGroup.getObject(%i), 'SetSecondaryCountdown', 20000);
+      }
+   }
+
+   if ($Competitive::AutoRespawnTime != 0)
+   {
+      if (%count == 3 && %time < $Competitive::AutoRespawnTime - 15000) 
+      {
+         cancel($Competitive::AutoRespawnTimer);
+         $Competitive::AutoRespawnTime = %time + 15000;
+         $Competitive::AutoRespawnTimer = schedule(15000, 0, competitiveRefillGemGroups, true);
+         for (%i = 0; %i < ClientGroup.getCount(); %i ++)
+         {
+            commandToClient(ClientGroup.getObject(%i), 'SetSecondaryCountdown', 15000);
+         }
+      }
+      else if (%count == 2 && %time < $Competitive::AutoRespawnTime - 10000) 
+      {
+         cancel($Competitive::AutoRespawnTimer);
+         $Competitive::AutoRespawnTime = %time + 10000;
+         $Competitive::AutoRespawnTimer = schedule(10000, 0, competitiveRefillGemGroups, true);
+         for (%i = 0; %i < ClientGroup.getCount(); %i ++)
+         {
+            commandToClient(ClientGroup.getObject(%i), 'SetSecondaryCountdown', 10000);
+         }
+      }
+      else if (%count == 1 && %time < $Competitive::AutoRespawnTime - 5000) 
+      {
+         cancel($Competitive::AutoRespawnTimer);
+         $Competitive::AutoRespawnTime = %time + 5000;
+         $Competitive::AutoRespawnTimer = schedule(5000, 0, competitiveRefillGemGroups, true);
+         for (%i = 0; %i < ClientGroup.getCount(); %i ++)
+         {
+            commandToClient(ClientGroup.getObject(%i), 'SetSecondaryCountdown', 5000);
+         }
+      }
+   }
 }

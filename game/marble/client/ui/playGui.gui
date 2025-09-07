@@ -618,6 +618,65 @@ new GuiControl(PlayGui) {
             helpTag = "0";
       };
    };
+	new GuiControl(SecondaryCountdown) {
+		profile = "GuiDefaultProfile";
+		horizSizing = "center";
+		vertSizing = "bottom";
+		position = "316 69";
+		extent = "500 41";
+		minExtent = "8 8";
+		visible = "0";
+		helpTag = "0";
+
+		new GuiBitmapCtrl(SecondaryCountdownFirstDigit) {
+			profile = "GuiDefaultProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "375 0";
+			extent = "28 37";
+			minExtent = "8 8";
+			visible = "1";
+			helpTag = "0";
+			bitmap = "./game/numbers/0";
+			wrap = "0";
+		};
+		new GuiBitmapCtrl(SecondaryCountdownSecondDigit) {
+			profile = "GuiDefaultProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "391 0";
+			extent = "28 37";
+			minExtent = "8 8";
+			visible = "1";
+			helpTag = "0";
+			bitmap = "./game/numbers/0";
+			wrap = "0";
+		};
+		new GuiBitmapCtrl(SecondaryCountdownThirdDigit) {
+			profile = "GuiDefaultProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "407 0";
+			extent = "28 37";
+			minExtent = "8 8";
+			visible = "1";
+			helpTag = "0";
+			bitmap = "./game/numbers/0";
+			wrap = "0";
+		};
+		new GuiBitmapCtrl(SecondaryCountdownPoint) {
+			profile = "GuiDefaultProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "399 0";
+			extent = "28 37";
+			minExtent = "8 8";
+			visible = "1";
+			helpTag = "0";
+			bitmap = "./game/numbers/point.png";
+			wrap = "0";
+		};
+	};
    
    new GuiMLTextCtrl(DemoTimerGui) {
       profile = isWideScreen() ? "TextButtonProfile" : "TextHeadingSmallProfile";
@@ -658,6 +717,7 @@ function setHudVisible( %visible )
    BoostBar.setVisible( %visible );
    ChatTextForeground.setVisible( %visible );
    HelpTextForeground.setVisible( %visible );
+   SecondaryCountdown.show = %visible;
    RootBackgroundBitmaps.setVisible( !%visible );
 
    if( %visible == false )
