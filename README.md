@@ -9,7 +9,7 @@
 [![CMake on Linux](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-linux.yml/badge.svg)](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-linux.yml)
 [![CMake on MacOS](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-mac.yml/badge.svg)](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-mac.yml)
 
-UltreRebirth is a reverse-engineered version of Marble Blast Ultra based on Torque Shader Engine 0.9 (MS4). The game is a puzzle-platformer originally developed by GarageGames and released on January 25, 2006 for the Xbox 360 via Xbox Live Arcade.
+MBU+ (formerly UltreRebirth) is a reverse-engineered version of Marble Blast Ultra based on Torque Shader Engine 0.9 (MS4). The game is a puzzle-platformer originally developed by GarageGames and released on January 25, 2006 for the Xbox 360 via Xbox Live Arcade.
 
 =======
 
