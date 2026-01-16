@@ -166,7 +166,7 @@ void DiscordGame::update()
         if (mDetails == nullptr)
             mDetails = "";
         discordPresence.details = mDetails;
-        discordPresence.largeImageText = "UltraRebirth";
+        discordPresence.largeImageText = "MBU+";
 
 		discordPresence.partySize = mPlayerCount;
 		discordPresence.partyMax = mMaxPlayers;

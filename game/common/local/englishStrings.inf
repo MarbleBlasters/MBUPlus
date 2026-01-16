@@ -201,6 +201,7 @@ $Text::OptimatchTitle = "CUSTOM GAME";
 $Text::AboutMenu = "ABOUT MARBLE BLAST";
 $Text::SelectLeaderboard = "SELECT LEADERBOARD";
 $Text::AchievementsScreen = "ACHIEVEMENTS";
+$Text::ProfileScreen = "PROFILE";
 
 ;-------------------------------------------------------------------------------
 ; Menu Options
@@ -208,6 +209,7 @@ $Text::AchievementsScreen = "ACHIEVEMENTS";
 $Text::SinglePlayer = "Single Player Game";
 $Text::Multiplayer = "Multiplayer Game";
 $Text::Achievements = "Achievements";
+$Text::Profile = "Profile";
 $Text::Play = "Play";
 ;$Text::XbLiveOptions = "Xbox Live Options";
 ;$Text::Options = "Options";

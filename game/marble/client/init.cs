@@ -45,7 +45,7 @@ function initClient()
    // Make sure this variable reflects the correct state.
    $Server::Dedicated = false;
    // Game information used to query the master server
-   $Client::GameTypeQuery = "UltraRebirth";
+   $Client::GameTypeQuery = "MBUPlus";
    $Client::MissionTypeQuery = "Any";
    // Default level qualification
    if (!$pref::QualifiedLevel["Beginner"])
@@ -176,6 +176,7 @@ function initClient()
    exec("./ui/AchievementDlg.gui");
    exec("./ui/AchievementListGui.gui");
    exec("./ui/AchievementsGui.gui");
+   exec("./ui/MyProfileGui.gui");
    exec("./ui/JoinGameInviteDlg.gui");
 
    exec("./scripts/xbLive.cs");

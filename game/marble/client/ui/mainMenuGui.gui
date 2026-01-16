@@ -85,8 +85,10 @@ function mainMenuGui::onA(%this)
       case 3:
          XBLiveShowAchievementsUINew();
       case 4:
+         ShowMyProfile();
+      case 5:
          RootGui.setContent(HelpAndOptionsGui, MainMenuGui);
-      case 5: // upsell
+      case 6: // upsell
          if ($secretMode)
          {
             XMessagePopupDlg.show(0, "Sorry, the clowns are sleeping, please try again later...", "lulz", "clientShowMarketplaceUI();", ":(", "clientShowMarketplaceUI();");
@@ -94,7 +96,7 @@ function mainMenuGui::onA(%this)
          {
             clientShowMarketplaceUI();
          }
-      case 6: // exit game in demo
+      case 7: // exit game in demo
          %this.exitGame();
    }
       
@@ -157,6 +159,10 @@ function MainMenuGui::show(%this)
    else
       MainMenu.addRow($Text::Achievements, "", 0, 6);
    
+   if ($secretMode)
+      MainMenu.addRow("Krusty Krab", "", 0, 6);
+   else
+      MainMenu.addRow($Text::Profile, "", 0, 6);
       
    if ($secretMode)
       MainMenu.addRow("Help & Op- HELP CLOWNS", "", 0, 8);

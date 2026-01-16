@@ -1,0 +1,288 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(MyProfileGui) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "width";
+   vertSizing = "height";
+   extent = "640 480";
+   minExtent = "8 8";
+   position = "0 0";
+   
+   new GuiBitmapCtrl(achievementpic) {
+      profile = "GuiDefaultProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = isWidescreen() ? "730 430" : "360 270";
+      extent = "255 119";
+      minExtent = "8 8";
+      visible = "1";
+      bitmap = "./xbox/achievement.png";
+      wrap = "0";
+         helpTag = "0";
+   };
+
+    
+
+   new GuiWindowCtrl(AchivementGenericBG) {
+      profile = "bgBoxProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = isWidescreen() ? "257 104" : "17 61";
+      extent = isWidescreen() ? "750 467" : "610 347";
+      maxLength = "255";
+      resizeWidth = "1";
+      resizeHeight = "1";
+      canClose = "0";
+      canMinimize = "0";
+      canMaximize = "0";
+      canMove = "0";
+      minSize = "50 50";
+
+       new GuiBitmapCtrl(MyProfileIcon) {
+         profile = "GuiDefaultProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = isWidescreen()? "32 32" : "32 32";
+         extent = isWidescreen()? "96 96" : "72 72";
+         minExtent = "8 8";
+         bitmap = "./menu/profile/profile_icon";
+         visible = "1";
+      };
+
+      new GuiMLTextCtrl(MyProfileName) {
+			profile = "TextHeadingSmallProfile";
+			horizSizing = "width";
+			vertSizing = "bottom";
+			position = "140 32";
+			extent = "600 30";
+			minExtent = "8 8";
+			visible = "1";
+			lineSpacing = "2";
+			allowColorChars = "1";
+			maxChars = "-1";
+		};
+
+      new GuiMLTextCtrl(MyProfileLevel) {
+			profile = "TextHeadingSmallProfile";
+			horizSizing = "width";
+			vertSizing = "bottom";
+			position = "140 60";
+			extent = "600 30";
+			minExtent = "8 8";
+			visible = "1";
+			lineSpacing = "2";
+			allowColorChars = "1";
+			maxChars = "-1";
+		};
+
+      new GuiMLTextCtrl(MyProfileStatisticsHeading) {
+			profile = "TextHeadingSmallProfile";
+			horizSizing = "width";
+			vertSizing = "bottom";
+			position = "32 140";
+			extent = "600 30";
+			minExtent = "8 8";
+			visible = "1";
+			lineSpacing = "2";
+			allowColorChars = "1";
+			maxChars = "-1";
+         text = "My Statistics";
+		};
+
+		new GuiMLTextCtrl(AchievementGenericText)
+		{
+         profile = isWidescreen() ? "LargeInfoTextProfile" : "InfoTextProfile";
+         position = "30 28";
+         extent = isWidescreen() ? "685 404" : "547 297";
+			lineSpacing = "2";
+			maxChars = "-1";
+			lineCount = 0;
+			visible = 1;
+		};
+	};           	
+};
+//--- OBJECT WRITE END ---
+
+//function AchievementList::onClick(%this)
+//{
+//	MyProfileGui.onA();
+//}
+
+function MyProfileGui::show(%this, %backgui)
+{     
+
+	if (%backGui !$= "")
+	   %this.backGui = %backGui;
+   
+   //AchievementCountText.setText(%num @ "/14 Total Achievements Unlocked");
+   
+   RootGui.setTitle($Text::ProfileScreen);
+   RootGui.setB($Text::Back);
+   RootGui.setX("Logout");
+
+   MyProfileName.setText("MBU+ Player");
+   MyProfileLevel.setText("Level 0");
+
+   //AchievScroll.setProfile("GameScrollProfile");
+   //AchievScroll.setTop(14);
+   //AchievScroll.setTop(16);
+}
+
+function MyProfileGui::hide(%this)
+{
+   //endPreviewMission();
+}
+
+function MyProfileGui::addAchievement(%this, %catId, %id, %earned, %achName, %achDesc, %achPoint) {
+   //echo(%earned);
+	%w = getWord(AchievList.getExtent(), 0);
+	%h = 64;
+	%x = 0;
+	%y = getWord(AchievList.getExtent(), 1);
+
+	%boxName = "AchievBox_" @ %catId @ "_" @ %id;
+	%imgName = "AchievImg_" @ %catId @ "_" @ %id;
+	%textNameTitle = "AchievTextTitle_" @ %catId @ "_" @ %id;
+   %textNameDesc = "AchievTextDesc_" @ %catId @ "_" @ %id;
+   %textPoints = "AchievPoints_" @ %catId @ "_" @ %id;
+
+	%box = new GuiControl(%boxName) {
+		profile = "GuiDefaultProfile";
+		horizSizing = "width";
+		vertSizing = "bottom";
+		position = "0" SPC %y;
+		extent = %w SPC %h;
+		minExtent = "8 8";
+		visible = "1";
+
+		new GuiBitmapCtrl(%imgName) {
+			profile = "GuiDefaultProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "4 4";
+			extent = (%h - 8) SPC(%h - 8);
+			minExtent = "8 8";
+			visible = "1";
+		};
+		new GuiMLTextCtrl(%textNameTitle) {
+			profile = "TextHeadingSmallProfile";
+			horizSizing = "width";
+			vertSizing = "bottom";
+			position = "72 2";
+			extent = (%w - 8) SPC(%h - 4);
+			minExtent = "8 8";
+			visible = "1";
+			lineSpacing = "2";
+			allowColorChars = "1";
+			maxChars = "-1";
+		};
+      new GuiMLTextCtrl(%textNameDesc) {
+			profile = "BigInfoTextProfile";
+			horizSizing = "width";
+			vertSizing = "bottom";
+			position = "72 24";
+			extent = (%w - 8) SPC(%h - 4);
+			minExtent = "8 8";
+			visible = "1";
+			lineSpacing = "2";
+			allowColorChars = "1";
+			maxChars = "-1";
+		};
+      //new GuiMLTextCtrl(%textPoints) {
+		//	profile = "BigInfoTextProfile";
+		//	horizSizing = "width";
+		//	vertSizing = "bottom";
+		//	position = "72 42";
+		//	extent = (%w - 8) SPC(%h - 4);
+		//	minExtent = "8 8";
+		//	visible = "1";
+		//	lineSpacing = "2";
+		//	allowColorChars = "1";
+		//	maxChars = "-1";
+		//};
+	};
+
+	%text = %achName;
+   %desc = %achDesc;
+   %points = %achPoint;
+	%textNameTitle.setText(%text);
+   %textNameDesc.setText(%desc @ " • " @ %points @ "G");
+   //%textPoints.setText(%points @ "G");
+
+   %iconId = %id;
+   if(%earned){
+      %imgName.setBitmap("marble/client/ui/achievement/" @ %iconId @ ".png");
+   } else {
+      %imgName.setBitmap("marble/client/ui/achievement/" @ %iconId @ "_l.png");
+   }
+
+	AchievList.add(%box);
+	AchievList.setHeight(%y + %h);
+}
+
+function MyProfileGui::onA(%this)
+{
+   if (AchievementList.getSelectedId() != -1)
+   {
+      sfxPlay( AudioButtonDown );
+      %id = AchievementList.getSelectedId();
+      %desc = "Select an achievement from the list.";
+      switch$ (%id)
+      {
+         case 0: %desc = $Text::AchievementDescription01;
+         case 1: %desc = $Text::AchievementDescription02;
+         case 2: %desc = $Text::AchievementDescription03;
+         case 3: %desc = $Text::AchievementDescription04;
+         case 4: %desc = $Text::AchievementDescription05;
+         case 5: %desc = $Text::AchievementDescription06;
+         case 6: %desc = $Text::AchievementDescription07;
+         case 7: %desc = $Text::AchievementDescription08;
+         case 8: %desc = $Text::AchievementDescription09;
+         case 9: %desc = $Text::AchievementDescription10;
+         case 10: %desc = $Text::AchievementDescription11;
+         case 11: %desc = $Text::AchievementDescription12;
+         case 12: %desc = $Text::AchievementDescription13;
+         case 13: %desc = $Text::AchievementDescription14;
+         case 14: %desc = $Text::AchievementDescription15;
+      }
+      %name = getField(AchievementList.getRowTextById(%id), 1);
+      //LobbyPopupDlg.show(%name,%id,true,false,false,true);
+      XMessagePopupDlg.show(0, %name @ "\n\n" @ %desc, "Ok", "","", "");
+   }
+}
+
+function MyProfileGui::onUp(%this)
+{
+   %selected = AchievementList.getSelectedId();
+   
+   %selected = %selected - 1;
+   
+   if (%selected < 0)
+      %selected = AchievementList.rowCount() - 1;
+      
+   AchievementList.setSelectedById(%selected);
+   
+   sfxPlay( AudioButtonOver );
+}
+
+function MyProfileGui::onDown(%this)
+{
+   %selected = AchievementList.getSelectedId();
+   
+   %selected = %selected + 1;
+   
+   if (%selected >= AchievementList.rowCount())
+      %selected = 0;
+      
+   AchievementList.setSelectedById(%selected);
+   
+   sfxPlay( AudioButtonOver );
+}
+
+function MyProfileGui::onB(%this)
+{
+	//sfxPlay( AudioButtonDown );
+	if (%this.backGui !$= "")
+	   RootGui.setContent(%this.backGui);
+   else
+	   RootGui.setContent(MainMenuGui);
+}

@@ -362,7 +362,7 @@ function initVideo()
    $pref::Video::VSync = 1;
    $pref::Video::monitorNum = 0;
    $pref::Video::fullScreen = "0";
-   $GameClientVersion = "1.0.0 Beta 3";
+   $GameClientVersion = "1.0.0 Beta 4";
 
    if (!$vidAlreadySet)
    {
@@ -379,7 +379,7 @@ function initVideo()
          $pref::Video::FSAALevel = 0;
    }
 
-   $canvasCreated = createCanvas("UltraRebirth - " @ $GameClientVersion);
+   $canvasCreated = createCanvas("MBU+ - " @ $GameClientVersion);
    
    // We need to set up Gamma Ramp here so that the splash screens are affected.
    
