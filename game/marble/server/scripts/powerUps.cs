@@ -188,6 +188,37 @@ datablock ParticleEmitterData(MarbleSuperSpeedEmitter)
 //-----------------------------------------------------------------------------
 
 // Unused
+
+datablock ParticleData(SuperBounceParticle)
+{
+   textureName          = "~/data/particles/twirl";
+   dragCoefficient      = 0.25;
+   gravityCoefficient   = 0;
+   inheritedVelFactor   = 0.1;
+   constantAcceleration = 0;
+   lifetimeMS           = 1000;
+   lifetimeVarianceMS   = 150;
+   spinSpeed     = 90;
+   spinRandomMin = -90.0;
+   spinRandomMax =  90.0;
+
+   //colors[0]     = "0 0.5 1 0";
+   //colors[1]     = "0 0.6 1 1.0";
+   //colors[2]     = "0 0.6 1 0.0";
+
+   colors[0]     = "0.38 0.2 0.88 1";
+   colors[1]     = "0.34 0.2 0.64 1";
+   colors[2]     = "0.30 0.2 0.30 1";
+
+   sizes[0]      = 0.25;
+   sizes[1]      = 0.25;
+   sizes[2]      = 0.5;
+
+   times[0]      = 0;
+   times[1]      = 0.75;
+   times[2]      = 1.0;
+};
+
 datablock ParticleEmitterData(MarbleSuperBounceEmitter)
 {
    ejectionPeriodMS = 20;
@@ -196,8 +227,8 @@ datablock ParticleEmitterData(MarbleSuperBounceEmitter)
    velocityVariance = 0.25;
    thetaMin         = 80.0;
    thetaMax         = 90.0;
-   lifetimeMS       = 250;
-   particles = "SuperJumpParticle";
+   lifetimeMS       = 5000;
+   particles = "SuperBounceParticle";
 };
 
 //-----------------------------------------------------------------------------
