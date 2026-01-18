@@ -292,6 +292,7 @@ datablock MarbleData(DefaultMarble)
 
    // Allowable Inventory Items
    maxInv[SuperJumpItem] = 20;
+   maxInv[SuperBounceItem] = 20;
    maxInv[SuperSpeedItem] = 20;
    maxInv[SuperBounceItem] = 20;
    maxInv[IndestructibleItem] = 20;

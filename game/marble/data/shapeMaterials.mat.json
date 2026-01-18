@@ -305,6 +305,62 @@
             "pixelSpecular": [true],
             "specularPower": [32]
         },
+        "Material_SuperBoundBottom": {
+            "baseTex": ["marble/data/shapes/items/superbounce_bottom"],
+            "custom": false,
+            "mapTo": "SuperBounceBottom",
+            "pixelSpecular": [true],
+            "specularPower": [32]
+        },
+        "Material_SuperBoundPad": {
+            "baseTex": ["marble/data/shapes/items/superbounce_pad"],
+            "custom": false,
+            "mapTo": "SuperBouncePad",
+            "pixelSpecular": [true],
+            "specularPower": [32]
+        },
+        "Material_SuperBoundFrame": {
+            "baseTex": ["marble/data/shapes/items/superbounce_frame"],
+            "custom": false,
+            "mapTo": "SuperBounceFrame5",
+            "pixelSpecular": [true],
+            "specularPower": [32]
+        },
+        "Material_SuperBoundFrameLeg1": {
+            "baseTex": ["marble/data/shapes/items/superbounce_legs"],
+            "custom": false,
+            "mapTo": "SuperBounceFrame",
+            "pixelSpecular": [true],
+            "specularPower": [32]
+        },
+        "Material_SuperBoundFrameLeg2": {
+            "baseTex": ["marble/data/shapes/items/superbounce_legs"],
+            "custom": false,
+            "mapTo": "SuperBounceFrame2",
+            "pixelSpecular": [true],
+            "specularPower": [32]
+        },
+        "Material_SuperBoundFrameLeg3": {
+            "baseTex": ["marble/data/shapes/items/superbounce_legs"],
+            "custom": false,
+            "mapTo": "SuperBounceFrame3",
+            "pixelSpecular": [true],
+            "specularPower": [32]
+        },
+        "Material_SuperBoundFrameLeg4": {
+            "baseTex": ["marble/data/shapes/items/superbounce_legs"],
+            "custom": false,
+            "mapTo": "SuperBounceFrame4",
+            "pixelSpecular": [true],
+            "specularPower": [32]
+        },
+        "Material_SuperBoundGlow": {
+            "baseTex": ["marble/data/shapes/items/superbounce_glow"],
+            "custom": false,
+            "mapTo": "SuperBounce_Glow",
+            "emissive": [true],
+            "glow": [true]
+        },
         "Material_Trapdoor": {
             "baseTex": ["marble/data/shapes/hazards/trapdoor"],
             "custom": false,

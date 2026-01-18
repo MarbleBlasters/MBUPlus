@@ -188,17 +188,17 @@ datablock ParticleEmitterData(MarbleSuperSpeedEmitter)
 //-----------------------------------------------------------------------------
 
 // Unused
-//datablock ParticleEmitterData(MarbleSuperBounceEmitter)
-//{
-   //ejectionPeriodMS = 20;
-   //periodVarianceMS = 0;
-   //ejectionVelocity = 3.0;
-   //velocityVariance = 0.25;
-   //thetaMin         = 80.0;
-   //thetaMax         = 90.0;
-   //lifetimeMS       = 250;
-   //particles = "MarbleStar";
-//};
+datablock ParticleEmitterData(MarbleSuperBounceEmitter)
+{
+   ejectionPeriodMS = 20;
+   periodVarianceMS = 0;
+   ejectionVelocity = 3.0;
+   velocityVariance = 0.25;
+   thetaMin         = 80.0;
+   thetaMax         = 90.0;
+   lifetimeMS       = 250;
+   particles = "SuperJumpParticle";
+};
 
 //-----------------------------------------------------------------------------
 
@@ -488,6 +488,72 @@ function MegaMarbleItem::onAdd(%this, %obj)
    %obj.playThread(0,"ambient");
 }   
 
+//-----------------------------------------------------------------------------
+// SuperBOUNCE powerUp
+//-----------------------------------------------------------------------------
+
+datablock SFXProfile(doSuperBounceSfx)
+{
+   filename    = "~/data/sound/superbounceactive.wav";
+   description = AudioClosestLooping3d;
+   preload = true;
+};
+
+datablock SFXProfile(PuSuperBoundVoiceSfx)
+{
+   filename    = "~/data/sound/puSuperBounce.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock ItemData(SuperBounceItem)
+{
+   // Mission editor category
+   category = "Powerups";
+   className = "PowerUp";
+   powerUpId = 9;
+
+   pickupAudio = PuSuperBoundVoiceSfx;
+
+   // Basic Item properties
+   shapeFile = "~/data/shapes/items/MBUSuperBounce.dts";
+   bmpFile = "powerup_bounce.png";
+   mass = 1;
+   friction = 1;
+   elasticity = 0.3;
+   emap = false;
+
+   // Dynamic properties defined by the scripts
+   pickupText = $Text::ASuperBounce;
+   useName = $Text::UseSuperBounce;
+   maxInventory = 1;
+};
+
+datablock ShapeBaseImageData(SuperBounceImage)
+{
+   // Basic Item properties
+   shapeFile = "~/data/shapes/images/glow_bounce.dts";
+   emap = false;
+   mountPoint = 0;
+   offset = "0 0 0";
+   stateName[0]                     = "Blah";
+   //stateSequence[0]                 = "grow";
+   stateSound[0] = doSuperBounceSfx;
+   ignoreMountRotation = true;
+};
+
+// datablock ShapeBaseImageData(SuperBounceImage)
+// {
+//    // Basic Item properties
+//    // shapeFile = "~/data/shapes/images/helicopter_image.dts";
+//    // emap = true;
+//    // mountPoint = 0;
+//    // offset = "0 0 0";
+//    stateName[0]                     = "Rotate";
+//    stateSequence[0]                 = "rotate";
+//    stateSound[0] = doSuperBounceSfx;
+//    ignoreMountRotation = true;
+// };
 
 //-----------------------------------------------------------------------------
 // Special non-inventory power ups
@@ -691,11 +757,12 @@ datablock PowerUpData(PowerUpDefs)
    boostMassless[2] = 0.7;
    activateTime[2] = 100;
 
-   // Super Bounce
-   //image[3] = SuperBounceImage;
-   //duration[3] = 5000;
-   //bounce[3] = 0.9;
-   //activateTime[3] = 0;
+   //Super Bounce
+   emitter[9] = MarbleSuperBounceEmitter;
+   image[9] = SuperBounceImage;
+   duration[9] = 5000;
+   bounce[9] = 0.9;
+   activateTime[9] = 0;
 
    // Shock Absorber
    //image[4] = ShockAbsorberImage;
