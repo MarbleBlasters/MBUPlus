@@ -39,7 +39,7 @@ function marblePickerGui::onWake( %this )
 function marblePickerGui::show(%this, %backGui)
 {
    // Change THIS variable to add/remove marbles
-   %numMarbles = 40;
+   %numMarbles = 44;
    
    %marbleString = "";
    for( %i = 0; %i < %numMarbles; %i++ )

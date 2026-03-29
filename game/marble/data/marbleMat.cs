@@ -177,9 +177,13 @@ defineBasicMarbleMaterial("34", "ClassicMarb2", "marble.normal",   "marble34.ski
 defineBasicMarbleMaterial("35", "ClassicMarb3", "marble.normal",   "marble35.skin", "marble35.skin", "0.6 0.6 0.6 0.6", 12 );
 defineBasicMarbleMaterial("36", "ClassicMarb3", "marble36.normal",   "marble36.skin", "marble36.skin", "0.6 0.6 0.6 0.6", 12 );
 defineBasicMarbleMaterial("37", "ClassicMarbGlassPureSphere", "marble01.normal",   "marble37.skin", "marble37.skin", "0.6 0.6 0.6 0.6", 12 );
-defineBasicMarbleMaterial("38", "ClassicMarb", "marblefx.normal", "marble38.skin", "marble38.skin", "0.6 0.6 0.6 0.6", 12 );
-defineBasicMarbleMaterial("39", "ClassicMarb", "marblefx.normal", "marble39.skin", "marble39.skin", "0.6 0.6 0.6 0.6", 12 );
-defineBasicMarbleMaterial("40", "ClassicMarb", "marblefx.normal", "marble40.skin", "marble40.skin", "0.6 0.6 0.6 0.6", 12 );
+defineBasicMarbleMaterial("38", "ClassicMarbGlassPureSphere", "marble01.normal",   "marble38.skin", "marble38.skin", "0.6 0.6 0.6 0.6", 12 );
+defineBasicMarbleMaterial("39", "ClassicMarbGlassPureSphere", "marble01.normal",   "marble39.skin", "marble39.skin", "0.6 0.6 0.6 0.6", 12 );
+defineBasicMarbleMaterial("40", "ClassicMarbGlassPureSphere", "marble01.normal",   "marble40.skin", "marble40.skin", "0.6 0.6 0.6 0.6", 12 );
+defineBasicMarbleMaterial("41", "ClassicMarb", "marblefx.normal", "marble41.skin", "marble41.skin", "0.6 0.6 0.6 0.6", 12 );
+defineBasicMarbleMaterial("42", "ClassicMarb", "marblefx.normal", "marble42.skin", "marble42.skin", "0.6 0.6 0.6 0.6", 12 );
+defineBasicMarbleMaterial("43", "ClassicMarb", "marblefx.normal", "marble43.skin", "marble43.skin", "0.6 0.6 0.6 0.6", 12 );
+defineBasicMarbleMaterial("44", "ClassicMarb", "marblefx.normal", "marble44.skin", "marble44.skin", "0.6 0.6 0.6 0.6", 12 );
 
 //-----------------------------------------------------------------------------------------------------------------------
 // CUSTOM MARBLES

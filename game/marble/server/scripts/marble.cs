@@ -499,6 +499,23 @@ datablock MarbleData(MarbleFourty : DefaultMarble)
 {
    shapeFile = "~/data/shapes/balls/marble40.dts";
 };
+datablock MarbleData(MarbleFourtyOne : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble41.dts";
+};
+datablock MarbleData(MarbleFourtyTwo : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble42.dts";
+};
+
+datablock MarbleData(MarbleFourtyThree : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble43.dts";
+};
+datablock MarbleData(MarbleFourtyFour : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble44.dts";
+};
 
 
 //-----------------------------------------------------------------------------
