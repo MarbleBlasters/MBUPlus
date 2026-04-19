@@ -24,7 +24,7 @@ new GuiControl(helpGui) {
       minSize = "50 50";
       
       new GuiAutoScrollCtrl(helpScroller) {
-         profile = "HelpScrollProfile";
+         profile = "GuiScrollProfile";
 	      horizSizing = "right";
 	      vertSizing = "bottom";
          position = "30 28";
@@ -99,7 +99,8 @@ function helpGui::show(%this, %backGui, %whichPage)
          %smallTitleSize = isWideScreen() ? 30 : 24;
          %text = "<just:center>" @ avar( $Text::GGCredits, %bigTitleSize, %smallTitleSize ) @ "\n\n" @ 
                  avar( $Text::MSCredits, %bigTitleSize, %smallTitleSize ) @ "\n\n" @ 
-                 avar( $Text::LocCredits, %bigTitleSize, %smallTitleSize );
+                 avar( $Text::LocCredits, %bigTitleSize, %smallTitleSize ) @ "\n\n" @ 
+                 avar( $Text::ForkCredits, %bigTitleSize, %smallTitleSize );
    }
             
 	helpText.clear();
@@ -107,6 +108,8 @@ function helpGui::show(%this, %backGui, %whichPage)
    
    RootGui.setA( $Text::OK );
    RootGui.setTitle( %title );
+
+   helpScroller.setProfile("GameScrollProfile");
 }
 
 function helpGui::onA(%this)

@@ -103,6 +103,13 @@ new GuiControlProfile ("TextHeadingSmallNoShadeProfile" : TextHeadingSmallProfil
    shadow = 0;
 };
 
+new GuiControlProfile ("TextFPSSmallNoShade" : TextHeadingSmallProfile)
+{
+   fontSize = 18;
+   fontColor = "235 235 235 250";
+   shadow = 0;
+};
+
 new GuiControlProfile ("TextHeadingSmallerProfile" : TextHeadingProfile)
 {
    fontSize = 22;

@@ -82,29 +82,51 @@ new GuiControl(RootGui) {
       horizSizing = "right";
       vertSizing = "bottom";
       position = "0 -10";
-      extent = "200 128";
+      extent = "200 44";
       minExtent = "8 8";
       visible = "0";
       bitmap = "./fpsbg.png";
       wrap = "0";
       helpTag = "0";
 
-         new GuiTextCtrl(FPSDisplay) {
-            Profile = "TextHeadingSmallNoShadeProfile";
+         new GuiTextCtrl(FPSLabel) {
+            Profile = "TextFPSSmallNoShade";
             horizSizing = "relative";
             vertSizing = "relative";
-            position = "40 -15";
+            position = "5 -17";
             extent = "1120 80";
+            minExtent = "8 8";
+            text = "FPS: ";
+            Visible = "1";
+         };
+
+         new GuiTextCtrl(PingLabel) {
+            Profile = "TextFPSSmallNoShade";
+            horizSizing = "relative";
+            vertSizing = "relative";
+            position = "95 -17";
+            extent = "1120 80";
+            minExtent = "8 8";
+            text = "/ PING: ";
+            Visible = "1";
+         };
+
+         new GuiTextCtrl(FPSDisplay) {
+            Profile = "TextFPSSmallNoShade";
+            horizSizing = "relative";
+            vertSizing = "relative";
+            position = "45 -17";
+            extent = "50 80";
             minExtent = "8 8";
             text = "FPS: ";
             Visible = "0";
          };
          new GuiTextCtrl(PingDisplay) {
-            Profile = "TextHeadingSmallNoShadeProfile";
+            Profile = "TextFPSSmallNoShade";
             horizSizing = "relative";
             vertSizing = "relative";
-            position = "40 25";
-            extent = "1120 80";
+            position = "150 -17";
+            extent = "35 80";
             minExtent = "8 8";
             text = "Ping: ";
             Visible = "0";
