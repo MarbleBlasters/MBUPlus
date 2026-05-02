@@ -21,7 +21,7 @@
 /// Version number is major * 1000 + minor * 100 + revision * 10.
 /// Different engines (TGE, T2D, etc.) will have different version numbers.
 /// Change Torque Version for every released build to ensure people do not crash when online
-#define TORQUE_VERSION              9903 // version 1.0.0 Beta 4
+#define TORQUE_VERSION              9904 // version 1.0.0 Beta 5
 #define TORQUE_PROTOCOL_VERSION     14  // increment this when we change the protocol
 
 /// What engine are we running? The presence and value of this define are

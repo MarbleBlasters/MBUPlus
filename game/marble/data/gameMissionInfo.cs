@@ -204,7 +204,7 @@ function GameMissionInfo::setCurrentIndex(%this,%index)
       %this.currentSPIndex = %index;
       
    //$Server::GameType = GameMissionInfo.getCurrentMission().gameMode;
-   $Server::MissionType = GameMissionInfo.getCurrentMission().guid;
+   $Server::MissionType = GameMissionInfo.getCurrentMission().guid @ "|" @ GameMissionInfo.getMissionDisplayNameByGuid(GameMissionInfo.getCurrentMission().guid);
 }
 
 function GameMissionInfo::getCurrentIndex(%this)
