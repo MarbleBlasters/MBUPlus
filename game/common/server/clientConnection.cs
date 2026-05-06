@@ -135,6 +135,58 @@ function onDiscordJoinRequest(%userId, %username, %avatar)
 // populate client data fields, send join messages and server param updates, update xblive records.
 // this is pulled out from onConnect() so that the host can update his data after he starts a server
 // without needing to reconnect.
+
+function serverCmdHandleOpenMBUConnectionFail(%client)
+{
+   // Just clear out the session token for now. ~ Connie
+   %client.sessiontoken = "";
+}
+
+function clientCmdSessionTokenHeartbeat()
+{
+   cancel($sessiontokenheartbeat);
+
+   if (isObject(SessionTokenHeartbeat))
+      SessionTokenHeartbeat.delete();
+   %http = new HTTPObject(SessionTokenHeartbeat);
+   %http.post($Online::PlatformLink, "/api/account/SessionLenghtenValidity.php", "", "seshtoken=" @ $Account::SessionToken @ "&uniquetoken=" @ $Account::UserToken);
+
+   $sessiontokenheartbeat = schedule(300000, 0, "commandtoServer", 'CheckSeshValidity', $Account::SessionToken);
+}
+
+function serverCmdCheckSeshValidity(%client, %seshtoken)
+{
+   if (isObject(SessionValidityCheck))
+      SessionValidityCheck.delete();
+   %http = new HTTPObject(SessionValidityCheck);
+   %http.client = %client;
+   %http.seshtoken = %seshtoken;
+   %http.post($Online::PlatformLink, "/api/account/SessionValidityCheck.php", "", "seshtoken=" @ $Account::SessionToken);
+}
+
+function clientCmdSessionTokenHandler()
+{
+   if ($Account::UserToken !$= "" && $OnlineSession)
+   {
+      if ($Account::SessionToken !$= "")
+      {
+         commandtoServer('CheckSeshValidity', $Account::SessionToken);
+      }
+      else
+      {
+         clientCmdCreateSeshToken();
+      }
+   }
+}
+
+function clientCmdCreateSeshToken()
+{
+   if (isObject(SessionCreation))
+      SessionCreation.delete();
+   %http = new HTTPObject(SessionCreation);
+   %http.post($Online::PlatformLink, "/api/account/SessionTokenGenerator.php", "", "usertoken=" @ $Account::UserToken);  
+}
+
 function GameConnection::updateClientData(%client, %name, %xbLiveId, %xbLiveVoice, %invited)
 {
    // make sure %client is an Id, in case someone called us using name "LocalClientConnection"
@@ -158,6 +210,12 @@ function GameConnection::updateClientData(%client, %name, %xbLiveId, %xbLiveVoic
    // Save client preferences on the connection object for later use.
    %client.setPlayerName(%name);
    %client.score = 0;
+
+   for (%i = 0; %i < 11; %i++)
+   {
+      %client.points[%i] = 0;
+   }
+
    %client.xbLiveId = %xbLiveId;
    %client.xbLiveSkill = 0;
    %client.xbLiveVoice = %xbLiveVoice;
@@ -306,6 +364,9 @@ function buildClientJoinData(%client)
       %message = %message @ %client.demoOutOfTime @ "\n";
       %message = %message @ %client.joinTime @ "\n";
       %message = %message @ %client.joinInProgress @ "\n";
+      %message = %message @ %client.points1 @ "\n";
+      %message = %message @ %client.points2 @ "\n";
+      %message = %message @ %client.points5 @ "\n";
    }
    
    return %message;

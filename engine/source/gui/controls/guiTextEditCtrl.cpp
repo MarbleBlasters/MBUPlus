@@ -78,7 +78,6 @@ void GuiTextEditCtrl::initPersistFields()
     addField("tabComplete", TypeBool, Offset(mTabComplete, GuiTextEditCtrl));
     addField("deniedSound", TypeSFXProfilePtr, Offset(mDeniedSound, GuiTextEditCtrl));
     addField("sinkAllKeyEvents", TypeBool, Offset(mSinkAllKeyEvents, GuiTextEditCtrl));
-    addField("password", TypeBool, Offset(mPasswordText, GuiTextEditCtrl));
     addField("passwordMask", TypeString, Offset(mPasswordMask, GuiTextEditCtrl));
 }
 
@@ -1231,7 +1230,7 @@ void GuiTextEditCtrl::drawText(const RectI& drawRect, bool isFocused)
     //draw the hilighted portion
     if (mBlockEnd > 0)
     {
-        StringBuffer highlightBuff = mTextBuffer.substring(mBlockStart, mBlockEnd - mBlockStart);
+        StringBuffer highlightBuff = textBuffer.substring(mBlockStart, mBlockEnd - mBlockStart);
 
         FrameTemp<UTF8> highlightTemp(highlightBuff.length() * 3 + 1);
         highlightBuff.get(highlightTemp, highlightBuff.length() * 3 + 1);
@@ -1250,7 +1249,7 @@ void GuiTextEditCtrl::drawText(const RectI& drawRect, bool isFocused)
     //draw the portion after the highlite
     if (mBlockEnd < mTextBuffer.length())
     {
-        StringBuffer finalBuff = mTextBuffer.substring(mBlockEnd, mTextBuffer.length() - mBlockEnd);
+        StringBuffer finalBuff = textBuffer.substring(mBlockEnd, textBuffer.length() - mBlockEnd);
         FrameTemp<UTF8> finalTemp(finalBuff.length() * 3 + 1);
         finalBuff.get(finalTemp, finalBuff.length() * 3 + 1);
 

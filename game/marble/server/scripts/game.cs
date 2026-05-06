@@ -997,11 +997,19 @@ function GameConnection::onClientEnterGame(%this)
    // Setup game parameters and create the player
    %this.resetStats();
 
+   // Only do Sessions for Multiplayer games. ~ Connie
+   if ($Client::connectedMultiplayer)
+   {
+      commandtoClient(%this, 'SessionTokenHandler');
+      echo(">>> HANDLING SESSION TOKEN");
+      //TODOCONNIE CONNIETODO: See if this works properly, then check everything else.
+   }
+
    // tell the client whether we are in the lobby   
    messageClient(%this, 'MsgClientUpdateLobbyStatus', "", serverIsInLobby() );
    
    // tell him his score 
-   messageClient(%this, 'MsgClientScoreChanged', "", %this, true, %this.points, %this.points);
+   messageClient(%this, 'MsgClientScoreChanged', "", %this, true, %this.points, %this.points, %this.points1, %this.points2, %this.points5);
    // tell him about everyone else's score
    for ( %clientIndex = 0; %clientIndex < ClientGroup.getCount(); %clientIndex++ )
    {
@@ -1009,7 +1017,7 @@ function GameConnection::onClientEnterGame(%this)
       if (%cl == %this)
          continue;
          
-      messageClient(%this, 'MsgClientScoreChanged', "", %cl, false, %cl.points, %cl.points);
+      messageClient(%this, 'MsgClientScoreChanged', "", %cl, false, %cl.points, %cl.points, %cl.points1, %cl.points2, %cl.points5);
    }
 
    if ($Game::packetLoss || $Game::packetLag)
@@ -1094,6 +1102,8 @@ function GameConnection::enterWaitState(%this)
 
 function GameConnection::onClientLeaveGame(%this)
 {
+   commandtoClient(%this, 'CancelSessionHeartbeat');
+   
    %this.isReady = true;
    // Check to see if we need to set a new $timeKeeper
    if (%this == $timeKeeper && ClientGroup.getCount() > 1)
@@ -1143,11 +1153,23 @@ function GameConnection::onClientLeaveGame(%this)
    $Server::PlayerCount++;
 }
 
+function clientCmdCancelSessionHeartbeat()
+{
+   cancel($sessiontokenheartbeat);
+}
+
 function GameConnection::resetStats(%this)
 {
    // Reset game stats
    %this.gemCount = 0;
    %this.points = 0;
+
+   // Currently, only 1, 2, and 5 exist, but in case more are added, just handle them like this.
+   for (%i = 0; %i < 11; %i++)
+   {
+      %this.points[%i] = 0;
+   }
+
    %this.rank = 0;
    %this.finishTime = 0;
    if (isObject(%this.player) && serverGetGameMode() $= "race")
@@ -1395,9 +1417,12 @@ function GameConnection::onFoundGem(%this,%amount,%gem,%points)
             %recipient.play3D(OpponentGotGemSfx, %this.getControlObject().getTransform());
       }
       
-      messageClient(%this, 'MsgClientScoreChanged', "", %this, true, %this.points, %oldPoints);
+      // Keep track of the specific gems we're getting.
+      %this.points[%points] += 1;
+
+      messageClient(%this, 'MsgClientScoreChanged', "", %this, true, %this.points, %oldPoints, %this.points1, %this.points2, %this.points5);
       // send message to everybody except client telling them that he scored
-      messageAllExcept(%this, -1, 'MsgClientScoreChanged', "", %this, false, %this.points, %oldPoints);
+      messageAllExcept(%this, -1, 'MsgClientScoreChanged', "", %this, false, %this.points, %oldPoints, %this.points1, %this.points2, %this.points5);
       
       commandToClient(%this, 'setPoints', %this, %this.points);
       //if (%points == 1)
@@ -2452,4 +2477,43 @@ function simLag(%loss,%lag)
          ServerConnection.setSimulatedNetParams(%loss,%lag/2);
    }
    error("simLag called with loss" SPC %loss SPC "and lag" SPC %lag);
+}
+
+//-----------------------------------------------------------------------------
+function clientCmdgetonlineprofile(%clientseshtoken)
+{
+   ProfileDialog.showProfile("sessiontoken", %clientseshtoken);
+}
+
+function serverCmdGetPseudoProfile(%client, %clientid)
+{
+   if (%clientid.sessiontoken $= "")
+   {
+      commandtoClient(%clientid, 'RequestPseudoProfile', %client);
+   }
+   else
+   {
+      commandtoClient(%client, 'getonlineprofile', %clientid.sessiontoken);
+   }
+}
+
+function clientCmdRequestPseudoProfile(%clientwhoreq)
+{
+   %wins = $pref::Player::Wins;
+   %secondplaces = $pref::Player::SecondPlaces;
+   %thirdplaces = $pref::Player::ThirdPlaces;
+   %fourthplaces = $pref::Player::FourthPlaces;
+   %firstplayed = $pref::Player::FirstPlayed;
+   %name = XBLiveGetUserName();
+   commandToServer('ReceivePseudoProfile', %name, %wins, %secondplaces, %thirdplaces, %fourthplaces, %firstplayed, %clientwhoreq);
+}
+
+function serverCmdReceivePseudoProfile(%client, %name, %wins, %secondplaces, %thirdplaces, %fourthplaces, %firstplayed, %requestingclient)
+{
+   commandtoClient(%requestingclient, 'FinalShowPseudoProfile', %name, %wins, %secondplaces, %thirdplaces, %fourthplaces, %firstplayed);
+}
+
+function clientCmdFinalShowPseudoProfile(%name, %wins, %secondplaces, %thirdplaces, %fourthplaces, %firstplayed)
+{
+   XMessagePopupDlg.show(0, "<spush><font:Arial Bold:28>" @ %name @ "\n\n<font:Arial Bold:18>First Played: " @ %firstplayed @ "\n\nWins: " @ %wins @ "\n2nd Places: " @ %secondplaces @ "\n3rd Places: " @ %thirdplaces @ "\n4th+ Places: " @ %fourthplaces @ "<spop>", $Text::OK, "","", "");  
 }

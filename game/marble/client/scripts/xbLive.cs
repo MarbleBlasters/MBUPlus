@@ -953,6 +953,7 @@ function savePCUserProfile()
    else
       deletePrefs("old_scores.cs");
    export("$UserAchievements*", "achievements.cs");
+   export("$Account*", "account.cs");
 }
 
 function loadPCUserProfile()
@@ -961,6 +962,7 @@ function loadPCUserProfile()
    execPrefs("scores.cs");
    execPrefs("old_scores.cs");
    execPrefs("achievements.cs");
+   execPrefs("account.cs");
    
    convertScores(); // Update from old index/path format to new guid format
    
@@ -1314,6 +1316,10 @@ function XBLiveShowAchievementsUI() {
 
 function XBLiveShowGamercardUI(%name, %gamerscore) {
 	XMessagePopupDlg.show(0, %name @ "\n\n" @ %gamerscore @ " Gamer Score",$Text::OK, "","", "");
+}
+
+function ShowPseudoProfile(%clientid) {
+   commandToServer('GetPseudoProfile', %clientid);
 }
 
 //-----------------------------------------------------------------------------

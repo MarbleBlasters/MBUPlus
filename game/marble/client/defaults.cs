@@ -140,6 +140,13 @@ $Client::gracePeroidMS = 45 * 1000; // 45 seconds?
 
 $pref::DoNewHighScoreSFX = false;
 
+// MP PseudoProfile defaults
+$pref::Player::Wins = 0;
+$pref::Player::SecondPlaces = 0;
+$pref::Player::ThirdPlaces = 0;
+$pref::Player::FourthPlaces = 0;
+$pref::Player::FirstPlayed = "Haven\'t joined a lobby yet";
+
 if (!isPCBuild() && !$Client::UseXBLiveMatchMaking)
 {
    // if we aren't using live matchmaking, force the live sign in functions to return true 

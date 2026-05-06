@@ -39,6 +39,7 @@ function initClient()
    exec("./myprefs.cs"); 
    exec("./prefs.cs"); 
    execPrefs("prefs.cs"); 
+   execPrefs("account.cs");
    
    initLanguage();
    
@@ -143,6 +144,7 @@ function initClient()
    exec("./ui/controlerDisplayGui.gui");
    exec("./ui/joinGameGui.gui");
    exec("./ui/enterNameGui.gui");
+   exec("./ui/enterNameCreateProfile.gui");
    
    //exec("./ui/AboutGui.gui");   
    //exec("./ui/LevelScoresGui.gui");
@@ -177,6 +179,7 @@ function initClient()
    exec("./ui/AchievementListGui.gui");
    exec("./ui/AchievementsGui.gui");
    exec("./ui/MyProfileGui.gui");
+   exec("./ui/ProfileDialogDlg.gui");
    exec("./ui/JoinGameInviteDlg.gui");
 
    exec("./scripts/xbLive.cs");

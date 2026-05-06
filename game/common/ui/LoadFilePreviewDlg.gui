@@ -1,0 +1,151 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(LoadFilePreviewDlg) {
+	profile = "GuiDefaultProfile";
+	horizSizing = "right";
+	vertSizing = "bottom";
+	position = "0 0";
+	extent = "640 480";
+	minExtent = "8 8";
+	visible = "1";
+	helpTag = "0";
+
+	new GuiWindowCtrl() {
+		profile = "GuiWindowProfile";
+		horizSizing = "right";
+		vertSizing = "bottom";
+		position = "86 78";
+		extent = "388 326";
+		minExtent = "8 8";
+		visible = "1";
+		helpTag = "0";
+		text = "Load File...";
+		maxLength = "255";
+		resizeWidth = "1";
+		resizeHeight = "1";
+		canMove = "1";
+		canClose = "1";
+		canMinimize = "1";
+		canMaximize = "1";
+		minSize = "50 50";
+		closeCommand = "Canvas.popDialog(LoadFilePreviewDlg);";
+
+		new GuiScrollCtrl() {
+			profile = "GuiScrollProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "9 26";
+			extent = "282 289";
+			minExtent = "8 8";
+			visible = "1";
+			helpTag = "0";
+			willFirstRespond = "1";
+			hScrollBar = "dynamic";
+			vScrollBar = "alwaysOn";
+			constantThumbHeight = "0";
+			defaultLineHeight = "15";
+			childMargin = "0 0";
+
+			new GuiTextListCtrl(loadFileListsecond) {
+				profile = "GuiTextArrayProfile";
+				horizSizing = "right";
+				vertSizing = "bottom";
+				position = "0 0";
+				extent = "161 8";
+				minExtent = "8 8";
+				visible = "1";
+				altCommand = "eval($loadFileCommand); Canvas.popDialog(LoadFilePreviewDlg);";
+				helpTag = "0";
+				enumerate = "0";
+				resizeCell = "1";
+				columns = "0";
+				fitParentWidth = "1";
+				clipColumnText = "0";
+					noDuplicates = "false";
+			};
+		};
+		new GuiButtonCtrl() {
+			profile = "GuiButtonProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "303 268";
+			extent = "60 20";
+			minExtent = "8 8";
+			visible = "1";
+			command = "eval($loadFileCommand); Canvas.popDialog(LoadFilePreviewDlg);";
+			helpTag = "0";
+			text = "Load";
+		};
+		new GuiButtonCtrl() {
+			profile = "GuiButtonProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "303 294";
+			extent = "60 20";
+			minExtent = "8 8";
+			visible = "1";
+			command = "Canvas.popDialog(LoadFilePreviewDlg);";
+			helpTag = "0";
+			text = "Cancel";
+		};
+		new GuiTextCtrl()
+		{
+			profile = "GuiTextProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "303 113";
+			extent = "55 20";
+			minExtent = "8 8";
+			visible = "1";
+			helpTag = "0";
+			text = "Image Chosen:";
+			maxLength = "255";
+		};
+		new GuiBitmapCtrl(ImagePreviewSelected)
+		{
+			profile = "GuiDefaultProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "303 142";
+			extent = "72 72";
+			minExtent = "8 8";
+			visible = "1";
+			helpTag = "0";
+			bitmap = "";
+			wrap = "0";
+		};
+	};
+};
+//--- OBJECT WRITE END ---
+
+
+function fillFileListPrev(%filespec, %ctrl)
+{
+   %ctrl.clear();
+   %i = 0;
+   %f = 0;
+   for(%fld = getField(%filespec, 0); %fld !$= ""; %fld = getField(%filespec, %f++))
+   {
+      for(%file = findFirstFile(%fld); %file !$= ""; %file = findNextFile(%fld))  
+         if (getSubStr(%file, 0, 4) !$= "CVS/")
+            %ctrl.addRow(%i++, %file);
+   }
+   %ctrl.sort(0);
+}
+
+function loadFileListsecond::onSelect(%this, %id)
+{
+	%selectedfile = %this.getRowTextById(%id);
+	ImagePreviewSelected.setBitmap(%selectedfile);
+}
+
+//------------------------------------------------------------------------------
+// ex: getLoadFilename("stuff\*.*", loadStuff);
+//     -- calls 'loadStuff(%filename)' on dblclick or ok
+//------------------------------------------------------------------------------
+function getLoadFilenamewithPrev(%filespec, %callback)
+{  
+   $loadFileCommand = "if(loadFileListsecond.getSelectedId() >= 0)" @ %callback @ "(loadFileListsecond.getValue());";
+   Canvas.pushDialog(LoadFilePreviewDlg, 99);
+   fillFileListPrev(%filespec, loadFileListsecond);
+}
+

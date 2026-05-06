@@ -42,6 +42,17 @@ new GuiControl(ESRBGui) {
       text = "<just:center>" @ $Text::ESRBWarning @ "\n";
       maxLength = "255";
    };
+   new GuiMLTextCtrl(OMBUPlusStatus) {
+      profile = "TextHeadingSmallProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = isWidescreen()? "420 475" : "120 305";
+      extent = "440 250";
+      minExtent = "50 34";
+      visible = 1;
+      text = "<just:center>Checking MBU+ Online Connectivity...";
+      maxLength = "255";
+   };
 };
 //--- OBJECT WRITE END ---
 
@@ -49,9 +60,15 @@ function ESRBGui::show(%this)
 {
    RootGui.setTitle("");
    if ($pref::UI::LegacyUI)
+   {
       RootGui.setA($Text::PressAToStart);
+      RootGui.setB("Press B to Start Online");
+   }
    else
+   {
       RootGui.setA($Text::Start);
+      RootGui.setB("Start Online");
+   }
    
    if (getRegion() $= "na_all")
       ESRBText.visible = true;
@@ -79,6 +96,8 @@ function ESRBGui::show(%this)
      
    // Update the sign-in state here
    XBLiveUpdateSigninState();
+
+   CheckIfMBUOnline("", false);
    
    %this.doMissionCleanup();
 }
@@ -117,6 +136,8 @@ function ESRBGui::doMissionCleanup(%this)
 function ESRBGui::onA(%this)
 {
    sfxPlay( AudioButtonDown );
+
+   $OnlineSession = false;
    
    // we now know what controller they are using, require them to be signed in on it
    %port = Canvas.getLastDeviceInst();
@@ -137,6 +158,34 @@ function ESRBGui::onA(%this)
    return true;
 }
 
+function ESRBGui::onB(%this)
+{
+   sfxPlay( AudioButtonDown );
+
+   if ($Account::UserToken $= "")
+   {
+      CheckIfMBUOnline("XMessagePopupDlg.show(0, \"You don't have a profile linked to the game. Do you wish to make a new one?\", $Text::OK, \"ESRBGui.makeNewAcc();\", \"Log In\", \"ESRBGui.loginAcc();\");", true);
+   }
+   else
+   {
+      CheckIfMBUOnline("ValidateLogin();", true);
+   }
+      
+   return true;
+}
+
+function ESRBGui::makeNewAcc(%this)
+{
+   EnterNameCreateProfileGui.mode = "CREATE";
+   Canvas.pushDialog(EnterNameCreateProfileGui);
+}
+
+function ESRBGui::loginAcc(%this)
+{
+   EnterNameCreateProfileGui.mode = "LOGIN";
+   Canvas.pushDialog(EnterNameCreateProfileGui);
+}
+
 function ESRBGui::onSignInComplete(%this)
 {
    %port = XBLiveGetSignInPort();
@@ -150,4 +199,22 @@ function ESRBGui::onSignInComplete(%this)
       // for the specified port
       XBLiveCheckForInvite(%port);
    }
+}
+
+// CONNIETODO TODOCONNIE: ~~Write CheckAccountValidity.php~~ and check if this works.
+function ValidateLogin()
+{
+   if (!$OnlineSession && $Account::UserToken !$= "")
+   {
+      if (isObject(CheckifAccExists))
+         CheckifAccExists.delete();
+      %http = new HTTPObject(CheckifAccExists);
+      %http.post($Online::PlatformLink, "/api/account/CheckAccountValidity.php", "", "usertoken=" @ $Account::UserToken);
+   }
+}
+
+function ESRBGui::finishOnlineSignIn(%this)
+{
+   $OnlineSession = true;
+   %this.onSignInComplete();  
 }

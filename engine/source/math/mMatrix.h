@@ -94,11 +94,13 @@ public:
 
     /// Copy the requested column into a Point4F.
     void getColumn(S32 col, Point4F* cptr) const;
+    Point4F getColumn4F(S32 col) const { Point4F ret; getColumn(col,&ret); return ret; }
 
     /// Copy the requested column into a Point3F.
     ///
     /// This drops the bottom-most row.
     void getColumn(S32 col, Point3F* cptr) const;
+    Point3F getColumn3F(S32 col) const { Point3F ret; getColumn(col,&ret); return ret; }
 
     /// Set the specified column from a Point4F.
     void setColumn(S32 col, const Point4F& cptr);

@@ -413,7 +413,7 @@ void HTTPObject::onDownloadFailed(const std::string& path)
 
 void HTTPObject::onDisconnect()
 {
-   Con::executef(this, 1, "onDisconncted");
+   Con::executef(this, 1, "onDisconnected");
 }
 
 //--------------------------------------

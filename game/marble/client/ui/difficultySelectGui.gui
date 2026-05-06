@@ -55,6 +55,13 @@ function DifficultySelectGui::onA(%this)
          $Game::SPGemHunt = true;
          $Game::SPGemHuntSeeded = false;
          RootGui.setContent(LevelPreviewGui);
+      case 6:
+         %totalofficialrating = $CachedUserScore::TotalOfficialRating $= "" ? "0" : $CachedUserScore::TotalOfficialRating;
+         %totalbeginnerrating = $CachedUserScore::BeginnerRating $= "" ? "0" : $CachedUserScore::BeginnerRating;
+         %totalintermediaterating = $CachedUserScore::IntermediateRating $= "" ? "0" : $CachedUserScore::IntermediateRating;
+         %totaladvancedrating = $CachedUserScore::AdvancedRating $= "" ? "0" : $CachedUserScore::AdvancedRating;
+         %totalcustomsrating = $CachedUserScore::TotalCustomsRating $= "" ? "0" : $CachedUserScore::TotalCustomsRating;
+         XMessagePopupDlg.show(0, "<spush><font:Arial Bold:28>My Statistics (Singleplayer)\n\n<font:Arial Bold:18>Beginner Rating: <just:right>" @ %totalbeginnerrating @ "\n<just:left>Intermediate Rating: <just:right>" @ %totalintermediaterating @ "\n<just:left>Advanced Rating: <just:right>" @ %totaladvancedrating @ "\n\n<color:FFF478><just:left>Total Official Rating: <just:right>" @ %totalofficialrating @ "\n<color:FFFFFF><just:left>Customs Rating: <just:right>" @ %totalcustomsrating @ "<spop>", $Text::OK, "","", "");
    }
       
    return true;
@@ -84,6 +91,7 @@ function DifficultySelectGui::show(%this, %fromGui)
       DifficultyMenu.addRow($Text::LevelsCustom, 3, 20, 2);
    DifficultyMenu.addRow($Text::SPGemHunt SPC "(Seeded)", 4, 0, 2);
    DifficultyMenu.addRow($Text::SPGemHunt SPC "(Random)", 5, 0, 2);
+   DifficultyMenu.addRow("My Statistics", 6, 0, 6);
                 
    RootGui.setTitle($Text::DifficultyMenu);
    if ($pref::UI::LegacyUI)

@@ -19,9 +19,6 @@ new GuiControl(MyProfileGui) {
       wrap = "0";
          helpTag = "0";
    };
-
-    
-
    new GuiWindowCtrl(AchivementGenericBG) {
       profile = "bgBoxProfile";
       horizSizing = "right";
@@ -34,7 +31,6 @@ new GuiControl(MyProfileGui) {
       canClose = "0";
       canMinimize = "0";
       canMaximize = "0";
-      canMove = "0";
       minSize = "50 50";
 
        new GuiBitmapCtrl(MyProfileIcon) {
@@ -44,10 +40,9 @@ new GuiControl(MyProfileGui) {
          position = isWidescreen()? "32 32" : "32 32";
          extent = isWidescreen()? "96 96" : "72 72";
          minExtent = "8 8";
-         bitmap = "./menu/profile/profile_icon";
+         bitmap = "./menu/avatars/profile_icon";
          visible = "1";
       };
-
       new GuiMLTextCtrl(MyProfileName) {
 			profile = "TextHeadingSmallProfile";
 			horizSizing = "width";
@@ -61,7 +56,7 @@ new GuiControl(MyProfileGui) {
 			maxChars = "-1";
 		};
 
-      new GuiMLTextCtrl(MyProfileLevel) {
+      new GuiMLTextCtrl(MyProfileStatus) {
 			profile = "TextHeadingSmallProfile";
 			horizSizing = "width";
 			vertSizing = "bottom";
@@ -98,7 +93,34 @@ new GuiControl(MyProfileGui) {
 			lineCount = 0;
 			visible = 1;
 		};
-	};           	
+      new GuiMLTextCtrl(MyProfileJoinDate) {
+         Profile = "TextHeadingSmallProfile";
+         HorizSizing = "width";
+         VertSizing = "bottom";
+         position = "140 89";
+         Extent = "600 24";
+         MinExtent = "8 8";
+         Visible = "1";
+         UIMode = "AlwaysShow";
+         lineSpacing = "2";
+         allowColorChars = "1";
+         maxChars = "-1";
+      };
+      new GuiMLTextCtrl(MyProfileStatisticsText) {
+         Profile = "TextHeadingSmallProfile";
+         HorizSizing = "width";
+         VertSizing = "bottom";
+         position = "32 170";
+         Extent = "600 24";
+         MinExtent = "8 8";
+         Visible = "1";
+         UIMode = "AlwaysShow";
+         lineSpacing = "2";
+         allowColorChars = "1";
+         maxChars = "-1";
+         text = "Loading...";
+      };
+   };
 };
 //--- OBJECT WRITE END ---
 
@@ -109,7 +131,6 @@ new GuiControl(MyProfileGui) {
 
 function MyProfileGui::show(%this, %backgui)
 {     
-
 	if (%backGui !$= "")
 	   %this.backGui = %backGui;
    
@@ -117,14 +138,58 @@ function MyProfileGui::show(%this, %backgui)
    
    RootGui.setTitle($Text::ProfileScreen);
    RootGui.setB($Text::Back);
-   RootGui.setX("Logout");
+   
+   if ($OnlineSession && $Account::UserToken !$= "")
+   {
+      RootGui.setA("Change Profile Picture");
+   }
 
-   MyProfileName.setText("MBU+ Player");
-   MyProfileLevel.setText("Level 0");
+   if ($OnlineSession)
+   {
+      MyProfileGui.onlineaccprotocol();
+   }
+   else
+   {
+      MyProfileGui.offlineaccprotocol();
+   }
+}
 
-   //AchievScroll.setProfile("GameScrollProfile");
-   //AchievScroll.setTop(14);
-   //AchievScroll.setTop(16);
+function MyProfileGui::offlineaccprotocol(%this)
+{
+   MyProfileName.setText(XBLiveGetUserName() @ " (offline profile)");
+   MyProfileStatus.setText("-- Offline Profile --");
+
+   %beg = $CachedUserScore::BeginnerRating;
+   %interm = $CachedUserScore::IntermediateRating;
+   %adv = $CachedUserScore::AdvancedRating;
+   %overall = $CachedUserScore::TotalOfficialRating;
+   %wins = $pref::Player::Wins;
+   %secondplaces = $pref::Player::SecondPlaces;
+   %thirdplaces = $pref::Player::ThirdPlaces;
+   %fourthplaces = $pref::Player::FourthPlaces;
+   %firstplayed = $pref::Player::FirstPlayed;
+
+   MyProfileJoinDate.setText("<spush><font:Arial Bold:18>Create your very own online profile to appear on the Leaderboards!<spop>");
+   MyProfileStatisticsText.setText("<spush><font:Arial Bold:20>Singleplayer Statistics:" @
+                                       "\n<font:Arial Bold:18>Beginner Rating: " @ %beg @
+                                       "\nIntermediate Rating: " @ %interm @
+                                       "\nAdvanced Rating: " @ %adv @
+                                       "\nTotal Official Rating: " @ %overall @
+                                       "\n" @
+                                       "\n<font:Arial Bold:20>Multiplayer Statistics:" @
+                                       "\n<font:Arial Bold:18>First Played: " @ %firstplayed @
+                                       "\nWins: " @ %wins @
+                                       "\n2nd places: " @ %secondplaces @
+                                       "\n3rd places: " @ %thirdplaces @
+                                       "\n4th+ places: " @ %fourthplaces);
+}
+
+function MyProfileGui::onlineaccprotocol(%this)
+{
+   if (isObject(GetAccDetails))
+      GetAccDetails.delete();
+   new HTTPObject(GetAccDetails);
+   GetAccDetails.post($Online::PlatformLink, "/api/account/GetAccountInformation.php", "", "method=uniquetoken&accidentify=" @ $Account::UserToken);
 }
 
 function MyProfileGui::hide(%this)
@@ -132,150 +197,9 @@ function MyProfileGui::hide(%this)
    //endPreviewMission();
 }
 
-function MyProfileGui::addAchievement(%this, %catId, %id, %earned, %achName, %achDesc, %achPoint) {
-   //echo(%earned);
-	%w = getWord(AchievList.getExtent(), 0);
-	%h = 64;
-	%x = 0;
-	%y = getWord(AchievList.getExtent(), 1);
-
-	%boxName = "AchievBox_" @ %catId @ "_" @ %id;
-	%imgName = "AchievImg_" @ %catId @ "_" @ %id;
-	%textNameTitle = "AchievTextTitle_" @ %catId @ "_" @ %id;
-   %textNameDesc = "AchievTextDesc_" @ %catId @ "_" @ %id;
-   %textPoints = "AchievPoints_" @ %catId @ "_" @ %id;
-
-	%box = new GuiControl(%boxName) {
-		profile = "GuiDefaultProfile";
-		horizSizing = "width";
-		vertSizing = "bottom";
-		position = "0" SPC %y;
-		extent = %w SPC %h;
-		minExtent = "8 8";
-		visible = "1";
-
-		new GuiBitmapCtrl(%imgName) {
-			profile = "GuiDefaultProfile";
-			horizSizing = "right";
-			vertSizing = "bottom";
-			position = "4 4";
-			extent = (%h - 8) SPC(%h - 8);
-			minExtent = "8 8";
-			visible = "1";
-		};
-		new GuiMLTextCtrl(%textNameTitle) {
-			profile = "TextHeadingSmallProfile";
-			horizSizing = "width";
-			vertSizing = "bottom";
-			position = "72 2";
-			extent = (%w - 8) SPC(%h - 4);
-			minExtent = "8 8";
-			visible = "1";
-			lineSpacing = "2";
-			allowColorChars = "1";
-			maxChars = "-1";
-		};
-      new GuiMLTextCtrl(%textNameDesc) {
-			profile = "BigInfoTextProfile";
-			horizSizing = "width";
-			vertSizing = "bottom";
-			position = "72 24";
-			extent = (%w - 8) SPC(%h - 4);
-			minExtent = "8 8";
-			visible = "1";
-			lineSpacing = "2";
-			allowColorChars = "1";
-			maxChars = "-1";
-		};
-      //new GuiMLTextCtrl(%textPoints) {
-		//	profile = "BigInfoTextProfile";
-		//	horizSizing = "width";
-		//	vertSizing = "bottom";
-		//	position = "72 42";
-		//	extent = (%w - 8) SPC(%h - 4);
-		//	minExtent = "8 8";
-		//	visible = "1";
-		//	lineSpacing = "2";
-		//	allowColorChars = "1";
-		//	maxChars = "-1";
-		//};
-	};
-
-	%text = %achName;
-   %desc = %achDesc;
-   %points = %achPoint;
-	%textNameTitle.setText(%text);
-   %textNameDesc.setText(%desc @ " • " @ %points @ "G");
-   //%textPoints.setText(%points @ "G");
-
-   %iconId = %id;
-   if(%earned){
-      %imgName.setBitmap("marble/client/ui/achievement/" @ %iconId @ ".png");
-   } else {
-      %imgName.setBitmap("marble/client/ui/achievement/" @ %iconId @ "_l.png");
-   }
-
-	AchievList.add(%box);
-	AchievList.setHeight(%y + %h);
-}
-
 function MyProfileGui::onA(%this)
 {
-   if (AchievementList.getSelectedId() != -1)
-   {
-      sfxPlay( AudioButtonDown );
-      %id = AchievementList.getSelectedId();
-      %desc = "Select an achievement from the list.";
-      switch$ (%id)
-      {
-         case 0: %desc = $Text::AchievementDescription01;
-         case 1: %desc = $Text::AchievementDescription02;
-         case 2: %desc = $Text::AchievementDescription03;
-         case 3: %desc = $Text::AchievementDescription04;
-         case 4: %desc = $Text::AchievementDescription05;
-         case 5: %desc = $Text::AchievementDescription06;
-         case 6: %desc = $Text::AchievementDescription07;
-         case 7: %desc = $Text::AchievementDescription08;
-         case 8: %desc = $Text::AchievementDescription09;
-         case 9: %desc = $Text::AchievementDescription10;
-         case 10: %desc = $Text::AchievementDescription11;
-         case 11: %desc = $Text::AchievementDescription12;
-         case 12: %desc = $Text::AchievementDescription13;
-         case 13: %desc = $Text::AchievementDescription14;
-         case 14: %desc = $Text::AchievementDescription15;
-      }
-      %name = getField(AchievementList.getRowTextById(%id), 1);
-      //LobbyPopupDlg.show(%name,%id,true,false,false,true);
-      XMessagePopupDlg.show(0, %name @ "\n\n" @ %desc, "Ok", "","", "");
-   }
-}
-
-function MyProfileGui::onUp(%this)
-{
-   %selected = AchievementList.getSelectedId();
-   
-   %selected = %selected - 1;
-   
-   if (%selected < 0)
-      %selected = AchievementList.rowCount() - 1;
-      
-   AchievementList.setSelectedById(%selected);
-   
-   sfxPlay( AudioButtonOver );
-}
-
-function MyProfileGui::onDown(%this)
-{
-   %selected = AchievementList.getSelectedId();
-   
-   %selected = %selected + 1;
-   
-   if (%selected >= AchievementList.rowCount())
-      %selected = 0;
-      
-   AchievementList.setSelectedById(%selected);
-   
-   sfxPlay( AudioButtonOver );
+   AvatarUploader();
 }
 
 function MyProfileGui::onB(%this)
@@ -285,4 +209,59 @@ function MyProfileGui::onB(%this)
 	   RootGui.setContent(%this.backGui);
    else
 	   RootGui.setContent(MainMenuGui);
+}
+
+function getAvatar(%username)
+{
+   if (isObject(AvatarGetter))
+      AvatarGetter.delete();
+   new HTTPObject(AvatarGetter);
+   AvatarGetter.post($Online::PlatformLink, "/api/avatars/FetchAvatar.php", "", "username=" @ %username);
+}
+
+function AvatarUploader()
+{
+   if ($OnlineSession && $Account::UserToken !$= "")
+   {
+      XMessagePopupDlg.show(0, "Make sure the Avatar you want is somewhere in the game files!", $Text::OK, "getLoadFilenamewithPrev(\"*.png\t*.jpg\", \"AvatarUploader2\");");
+   }
+}
+
+function AvatarUploader2(%filename)
+{
+   %filenameextension = strreplace(%filename, ".", " ");
+   %filenameextension = getWord(%filenameextension, getWordCount(%filenameextension) - 1);
+
+   // Check if its a PNG or JPG file
+   if (%filenameextension $= "png" || %filenameextension $= "jpg")
+   {
+      %file = new FileObject();
+
+      if (!%file.openForRead(%filename))
+      {
+         XMessagePopupDlg.show(0, "Upload failed at the encoding step.", $Text::OK, "");
+         return;
+      }
+
+      %base64data = strReplace(%file.readBase64(), "+", "%2B");
+      %len = strlen(%base64data);
+
+      %file.close();
+      %file.delete();
+
+      if (%len > $MaxPostLength)
+      {
+         XMessagePopupDlg.show(0, "The file is too large to be uploaded.", $Text::OK, "");
+         return;
+      }
+
+      if (isObject(UploadAvatar))
+         UploadAvatar.delete();
+      new HTTPObject(UploadAvatar);
+      UploadAvatar.post($Online::PlatformLink, "/api/avatars/UploadAvatar.php", "", "uniquetoken=" @ $Account::UserToken @ "&avatar=" @ %base64data);
+   }
+   else
+   {
+      XMessagePopupDlg.show(0, "This file is not an image file.", $Text::OK, "");
+   }
 }

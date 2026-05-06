@@ -18,7 +18,7 @@ function initLBText()
    // titles for the overall leaderboards
    $LeaderboardTitles[$Leaderboard::SPOverall] = $Text::LB_SPOverall;
    // not displayed --> //$LeaderboardTitles[$Leaderboard::SPCompletion]  = $Text::LB_SPCompletion; 
-   $LeaderboardTitles[$Leaderboard::MPScrumOverall] = $Text::Standard;
+   $LeaderboardTitles[$Leaderboard::MPScrumOverall] = "Multi Player Total"; //$Text::Standard;
    $LeaderboardTitles[$Leaderboard::MPScrumSkill] = $Text::Ranked;
 }
 
@@ -791,9 +791,15 @@ function buildLeaderboardList()
    CustomSinglePlayMissionGroup.lbList = %spcustomList;
    CustomSinglePlayMissionGroup.lbListCount = getFieldCount(%spcustomList);
    
-   // start mp list with overall leaderboards
-   %mpList = 
-      $Leaderboard::MPScrumOverall TAB $Leaderboard::MPScrumSkill;
+   // start mp list with ... not what it was before. we care about the scores.
+   %mpList = $Leaderboard::MPScrumOverall;
+
+   // append all of the mp missions
+   for (%i = 0; %i < MultiPlayMissionGroup.getCount(); %i++)
+   {
+      %mis = MultiPlayMissionGroup.getObject(%i);
+      %mpList = %mpList TAB %mis.guid;//%mis.level;
+   }
       
       // JMQ: disable MP level leaderboards
    // append all of the mp missions

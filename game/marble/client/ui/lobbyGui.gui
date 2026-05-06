@@ -63,12 +63,12 @@ new GuiControl(LobbyGui)
 	      //hAlign = "width";
 	      enumerate = "0";
 	      resizeCell = "1";
-	      // readyicon, player, score last game, tankicon, skillicon, voiceicon
-	      columns = "0 26 315 367 423 490";  
-	      columnAligns = "0 0 0 0 0 0";
-	      columnBmps = "1 0 0 1 1 1";
+	      // readyicon, player, score last game, hosticon, reds, yellows, blues
+	      columns = "0 26 315 0 409 459 509";
+	      columnAligns = "0 0 0 1 1 1 1";
+	      columnBmps = "1 0 0 1 0 0 0";
 	      clipColumnText = "1";
-	      fitParentWidth = "0";
+	      fitParentWidth = "1";
 	      noDuplicates = "false";
 	      iconPath = "marble/client/ui/xbox/";
 	      hostIcon = "BrainIcon";
@@ -179,6 +179,37 @@ function LobbyGui::show(%this)
    %this.checkDemoTime();
 }
 
+function MonthtoText(%monthnum)
+{
+   switch (%monthnum)
+   {
+      case 1:
+      return "January";
+      case 2:
+      return "February";
+      case 3:
+      return "March";
+      case 4:
+      return "April";
+      case 5:
+      return "May";
+      case 6:
+      return "June";
+      case 7:
+      return "July";
+      case 8:
+      return "August";
+      case 9:
+      return "September";
+      case 10:
+      return "October";
+      case 11:
+      return "November";
+      case 12:
+      return "December";
+   }
+}
+
 function LobbyGui::onWake( %this )
 {
    LobbyMap.push();
@@ -191,6 +222,12 @@ function LobbyGui::onWake( %this )
    );
    RootGui.add(newChatHud);
    RootGui.pushToBack(RootCenterCtrl);
+
+   // For MP PseudoProfile
+   if ($pref::Player::FirstPlayed $= "" || $pref::Player::FirstPlayed $= "Haven\'t joined a lobby yet")
+   {
+      $pref::Player::FirstPlayed = getDayNum() @ " " @ MonthtoText(getMonthNum()) @ " " @ getYearNum();
+   }
 }
 
 function LobbyGui::onSleep( %this )
@@ -327,12 +364,17 @@ function LobbyGui::getReadyIcon(%this, %ready, %demoOutOfTime)
       return "";
 }
 
-function LobbyGui::update(%this,%clientId,%name,%xbLiveId,%xbLiveSkill,%xbLiveVoice,%address,%rating,%ready,%invited,%demoOutOfTime)
+function LobbyGui::update(%this,%clientId,%name,%xbLiveId,%xbLiveSkill,%xbLiveVoice,%isAdmin,%rating,%ready,%invited,%demoOutOfTime,%score,%points1,%points2,%points5)
 {
    if (!$Client::connectedMultiplayer)
       return;
 
-   %tankIcon = "";
+   %hostIcon = "";
+   
+   if (%isAdmin)
+   {
+      %hostIcon = "common/ui/fxsunlight.png";
+   }
 	  
 	// %JMQ: lobby skill icon
 	//%skillIcon = LeaderboardGui.getXBLiveStars(%xbLiveSkill);
@@ -345,37 +387,34 @@ function LobbyGui::update(%this,%clientId,%name,%xbLiveId,%xbLiveSkill,%xbLiveVo
 	   
  	if (isPCBuild()) %xbLiveVoice = getRandom(1) + 1; 
 	
-    %sanitizedText = %name;
-    if ($pref::Lobby::StreamerMode)
-    {
-       %sanitizedText = getSubStr(%name, 0, 1) @ "...";
-    }
+   %sanitizedText = %name;
+   if ($pref::Lobby::StreamerMode)
+   {
+      %sanitizedText = getSubStr(%name, 0, 1) @ "...";
+   }
 
 	%text = %readyIcon TAB
 	   %sanitizedText TAB
-	   "" TAB // no score is set in this function
-	   %tankIcon TAB
-	   %skillIcon TAB
-	   %voiceIcon TAB // everything after this should be invisible
-	   %xbLiveId TAB 
-	   %xbLiveVoice; // 0 = no communicator, 1 = communicator, 2 = no communicator but voice through speakers enabled
-	
+	   %score TAB 
+	   %hostIcon TAB
+	   "\c2" @ %points1 TAB // reds
+	   "\c4" @ %points2 TAB // yellows
+	   "\c3" @ %points5; // blues
+
    // Update or add the player to the control
    if (LobbyGuiPlayerList.getRowNumById(%clientId) == -1)
    {
       LobbyGuiPlayerList.addRow(%clientId, %text);
-      %this.registerXBLivePlayer(%name,%xbLiveId,%address,%xbLiveVoice,%invited);
    }
    else
+   {
       LobbyGuiPlayerList.setRowById(%clientId, %text);
+   }
       
    if ($Player::ClientId $= %clientId) 
    {
       LobbyGuiPlayerList.setSelectedById(%clientId);
    }
-      
-   %this.updateVoiceStatus(%clientId, %xbLiveVoice, %xbLiveId);
-   %this.updateRating(%clientId, %xbLiveSkill);
         
    // once we have at least one player we are no longer loading
    if (LobbyGuiPlayerList.rowCount() > 0)
@@ -487,12 +526,18 @@ function LobbyGui::updateScores(%this)
       {
          %clid = ClientRanks.getRowId(%i);
          %row = ClientRanks.getRowText(%i);
-         %score = getWord(%row, 1);  
+         %score = getWord(%row, 1);
+         %reds = "\c2" @ getWord(%row, 4);
+         %yellows = "\c4" @ getWord(%row, 5);
+         %blues = "\c3" @ getWord(%row, 6);
          
          %lobbyRow = LobbyGuiPlayerList.getRowTextById(%clid);
          if (%lobbyRow !$= "")
          {
             %lobbyRow = setField(%lobbyRow, 2, %score);
+            %lobbyRow = setField(%lobbyRow, 4, %reds);
+            %lobbyRow = setField(%lobbyRow, 5, %yellows);
+            %lobbyRow = setField(%lobbyRow, 6, %blues);
             LobbyGuiPlayerList.setRowById(%clid, %lobbyRow);
          }
       }  
@@ -1031,7 +1076,7 @@ function LobbyGui::onY(%this)
    // see if the target is a friend
    //%otherFriend = XBLiveIsFriend(XBLiveGetSignInPort(), %otherXbliveid);
    
-   %showPlayerReview = !%isSelf;
+   %showPlayerReview = false;
    %showKick = !%isSelf && %this.hosting;
    %showInviteFriend = false; //!%isSelf && !%otherFriend;
    %showGamerCard = true;

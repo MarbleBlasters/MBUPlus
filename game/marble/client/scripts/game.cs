@@ -304,9 +304,12 @@ function buildClientRanks(%allowScoreExtrapolation)
       
       %rowText = PlayerListGuiList.getRowText(%i);
       %clientScore = getField(%rowText, 2);
+      %clientReds = getField(%rowText, 4);
+      %clientYellows = getField(%rowText, 5);
+      %clientBlues = getField(%rowText, 6);
 
       // Add it to ClientRanks
-      ClientRanks.setRowById(%clientId, %clientScore);
+      ClientRanks.setRowById(%clientId, %clientScore TAB %clientReds TAB %clientYellows TAB %clientBlues);
    }
    
    ClientRanks.numFinishers = ClientRanks.rowCount();
@@ -427,6 +430,45 @@ function clientWriteMultiplayerScores()
    }
 }
 
+// Record the rankings for our pseudo-profiles. ~ Connie
+function clientCmdRecordRanking(%rank)
+{
+   switch(%rank)
+   {
+      case 1:
+      $pref::Player::Wins += 1;
+      case 2:
+      $pref::Player::SecondPlaces += 1;
+      case 3:
+      $pref::Player::ThirdPlaces += 1;
+      default:
+      $pref::Player::FourthPlaces += 1;
+   }
+}
+
+function serverCmdOnlineRecordMatchRecordsteptwo(%client, %sessiontoken, %rank, %score, %dorecordwins)
+{
+   %curatedid = strreplace(MissionInfo.guid, "{", "");
+   %curateduid = strreplace(%curatedid, "}", "");
+
+   if (isObject(RecordMatchRanks))
+      RecordMatchRanks.delete();
+   new HTTPObject(RecordMatchRanks);
+   RecordMatchRanks.post($Online::PlatformLink, "/api/multiplayer/RecordMatchScores.php", "", "sessiontoken=" @ %sessiontoken @ "&rank=" @ %rank @ "&score=" @ %score @ "&luid=" @ %curateduid @ "&dorecordwins=" @ %dorecordwins);
+}
+
+function clientCmdOnlineRecordMatchRecord(%rank, %score, %dorecordwins)
+{
+   if (%dorecordwins $= "")
+   {
+      %dorecordwins = 0;
+   }
+
+   if ($Account::SessionToken !$= "") {
+      commandToServer('OnlineRecordMatchRecordsteptwo', $Account::SessionToken, %rank, %score, %dorecordwins);
+   }
+}
+
 function clientWriteRelativeRanks()
 {
    // make sure we have clientranks
@@ -462,7 +504,19 @@ function clientWriteRelativeRanks()
       %rank = getWord(%row, 0);
       %score = getWord(%row, 1);
       
-      echo("   client:" SPC %clid SPC "rank:" SPC %rank SPC "score:" SPC %score);
+      echo(" >>> client:" SPC %clid SPC "rank:" SPC %rank SPC "score:" SPC %score);
+
+      // Are you actually playing with more people? ~ Connie
+      %dorecordwins = 0;
+
+      if (ClientRanks.rowCount() > 1)
+      {
+         commandtoClient(%clid, 'RecordRanking', ClientRanks.rowCount() - %rank); 
+         %dorecordwins = 1;
+      }
+
+      commandToClient(%clid, 'OnlineRecordMatchRecord', ClientRanks.rowCount() - %rank, %score, %dorecordwins);
+      // ^^^ - doing it separated like this so scores can still register even if you play by yourself, although idk why youd do this if you can just play SP ~ Connie
            
       // find the xblive for the client
       %xbLiveId = LobbyGui.findXBLiveIdByClientId(%clid);
@@ -786,6 +840,10 @@ function clientCmdSPRestarting(%restarting)
    error("SP restarting:" SPC $Client::SPRestarting);
 }
 
+$BeginnerGUIDs = "{D7DD1833-2929-4D0F-B05F-E2BB4C410408} {4340C070-D0C3-464D-BC4A-E5AB6F63BEE9} {39F047AB-B2C6-46D1-8243-6C2A5E8EBE86} {0AB4B5D7-7B42-46D1-9257-33E68942F0EC} {28CA2E65-E718-4ED0-A0A6-D3C289DBB326} {E4538A09-5ACA-4012-B32C-5631C83A6A40} {68E77476-1DEF-4A6A-B80B-12D7D5E3AA83} {4FAE738C-7565-41D9-9EAD-93F9EA107720} {DCFACD70-A1F1-48D8-8F79-6F7AB83D8717} {1DF4EDE4-39DB-4604-B656-A5B990CE70B6} {42A49D1B-D64A-419A-8D18-A947DF0996A4} {10C05077-25FA-42CA-8D85-9D1A7A55CD8E} {706F5ABB-04FD-4C95-A71E-802D59277329} {84402A6C-C9DE-44F4-A025-A229A736FA27} {69B70D35-6D43-45B2-98C6-FEC7A6D71CC2} {1682115C-88F2-44B1-8DC1-0E28A000DEB2} {D339DF52-9388-4615-933F-E6BB9E1FCD9F} {FE60AB24-C91E-4BB0-A3E2-21256BE1627E} {05500723-A9D7-4D74-9BD6-8199A864422A} {2BFE62B4-D91A-4C9B-B81B-55EABB01C311}";
+$IntermediateGUIDs = "{AF781BFC-B941-4335-86C6-B7CE542AA4CE} {8AC4C432-8A5C-4ADE-9B38-08B462EB1354} {8F284E76-0C97-4D44-93A6-287DC35F4DD2} {E0E23377-0DAD-4B2A-9F9F-7DAF1BD18CBF} {BED8DF2C-4F41-4FE5-B253-27FBDEF3F68A} {9648B38D-880B-4EAD-8443-E9DFBE17B273} {129746F6-F695-4DCE-89A6-817AF582EA3A} {8BAAA76E-ADF2-4337-BB89-8885D8E4188F} {C375FCB5-1203-4BDC-AFDA-F8C22B463DA9} {A356C0DA-9F6E-4A7E-9D69-E8B91EC013BB} {05EFFBDF-75CA-4107-AB93-7865F4383107} {5FDB0AE3-A9E5-45F2-B43B-0969E7809FA7} {802D17DF-0168-4A17-B8A6-EF62D0ED5D7B} {AE6F5499-652A-43A7-BADE-4561EFD2859A} {62329829-CB12-403D-A0DD-CC6B5D2B70D0} {8E02E49C-1465-473D-BE60-990AC25753CE} {958557D1-641F-474C-BB27-AAA1E90925FD} {40D18ABA-D319-4D37-ACDD-239DC8B9D0B8} {435771D3-BC67-4B48-B353-1D8C280DD7CF} {7A7BF863-D4E5-471D-91C3-B4DD7041AA4B}";
+$AdvancedGUIDs = "{BA97253E-1B1D-40BF-9F4E-938FCC1DCDAC} {427A70F3-DFB3-4A85-BF21-8E6373B58AAE} {25193471-D1F7-4A31-B30F-792891C35558} {0CD63D0D-D29B-4F2A-A8D8-2B8B5AB85635} {AD4C4328-BAE3-427F-9DFA-2B0294855D48} {834F4547-B534-4B2C-A9C0-11AFA87DC633} {777E5EA8-8A92-4BA9-B0F1-2E4CE2CE9F1A} {FC86DD0D-3646-4565-BCCC-ED24BDAFFCA2} {BB8FA1E2-C6E4-4981-821F-55AD5BBB587A} {268C3D5D-37B4-4386-8FCD-C91EA984AC8A} {60552BB6-BDCC-4E77-971F-C55065A69887} {694E35EF-D063-4852-8453-39DB8EFDE292} {2E115F91-3CD4-49F9-B36E-5901B95D4107} {A57A2C49-DE68-41B8-B01E-4A6776990F32} {76487562-ACEC-46BE-9C22-5D2F7AD572C1} {38FD3570-6217-4FE1-8C79-C0A8D4B45068} {35D90D68-7FFA-4EB8-967D-7373B5EFC718} {6AD733E7-A256-4ECF-A9ED-ED98AB9B832A} {989F14E6-8F25-4AE1-B216-3A1FA3073370} {7E67B719-0465-4CB4-BC05-0E7766AAB1AE}";
+
 function clientCmdSetGameState(%state, %data)
 {
    //echo("@@@@@@@@@@@@ got" SPC %state SPC "state");
@@ -886,6 +944,39 @@ function clientCmdSetGameState(%state, %data)
          //   %theCachedTime = $CachedUserTime::levelTime[%mission.level];
          //}
          
+         %ratingimprovement = 0;
+
+         if (%rating && %mission.guid !$= "")
+         {
+            %theCachedRating = $CachedUserScore::LevelRating[%mission.guid];
+
+            if (%rating > %theCachedRating)
+            {
+               $CachedUserScore::LevelRating[%mission.guid] = %rating;
+               %ratingimprovement = %rating - %theCachedRating;
+
+               if (strstr($BeginnerGUIDs, %mission.guid) != -1)
+               {
+                  $CachedUserScore::BeginnerRating += %ratingimprovement;
+                  $CachedUserScore::TotalOfficialRating += %ratingimprovement;
+               }
+               else if (strstr($IntermediateGUIDs, %mission.guid) != -1)
+               {
+                  $CachedUserScore::IntermediateRating += %ratingimprovement;
+                  $CachedUserScore::TotalOfficialRating += %ratingimprovement;
+               }
+               else if (strstr($AdvancedGUIDs, %mission.guid) != -1)
+               {
+                  $CachedUserScore::AdvancedRating += %ratingimprovement;
+                  $CachedUserScore::TotalOfficialRating += %ratingimprovement;
+               }
+               else
+               {
+                  $CachedUserScore::TotalCustomsRating += %ratingimprovement;
+               }
+            }
+         }
+
          %theCachedTime = $CachedUserScore::LevelScore[%mission.guid];
          
          %cachedBestTime = %theCachedTime;
@@ -917,14 +1008,38 @@ function clientCmdSetGameState(%state, %data)
          else if (%elapsed == %mission.time) %elapColor = "\c3";
          else %elapColor = "\c2";
          
+         // This is just for Gem Hunt. 
+         additionalgebox.setVisible(false);
+
          GE_Stats.clear();
          // Format: "Centered `yay` column for `New Best Time!`" TAB "Time Column" TAB "Tag Column" 
          GE_Stats.addRow(-1, " " TAB %elapColor @ formatTime( %elapsed ) TAB $Text::EndTime );
          GE_Stats.addRow(-1, " " TAB "\c3" @ formatTime( %mission.time ) TAB $Text::ParTime );
+
          GE_Stats.addRow(-1, " " TAB %rating TAB $Text::EndScore );
+
+         gebox.extent = "344 154";
+
+         if (%ratingimprovement > 0)
+         {
+            GE_Stats.addRow(-1, "\c1(" @ "+" @ %ratingimprovement @ ")");
+            gebox.extent = "344 184";
+         }
+
          if (%isNewBestTime)
             GE_Stats.addRow(-1, $Text::NewBestTime SPC " ");
          else GE_Stats.addRow(-1, " " TAB formatTime( %bestTime ) TAB $Text::BestTime );
+
+         %curateduid = strreplace(%mission.guid, "{", "");
+         %curateduid = strreplace(%curateduid, "}", "");
+
+         if ($OnlineSession && $Account::UserToken !$= "")
+         {
+            if (isObject(SubmitTime))
+               SubmitTime.delete();
+            new HTTPObject(SubmitTime);
+            SubmitTime.post($Online::PlatformLink, "/api/scores/SubmitScore.php", "", "usertoken=" @ $Account::UserToken @ "&uid=" @ %curateduid @ "&score=" @ %elapsed @ "&rating=" @ %rating @ "&scoretype=time&difficulty=" @ %mission.difficultySet);
+         }
       }
       else
       {
@@ -976,6 +1091,30 @@ function clientCmdSetGameState(%state, %data)
             GE_Stats.addRow(-1, $Text::NewHighScore SPC " ");
          else
             GE_Stats.addRow(-1, " " TAB %bestTime TAB $Text::BestScore );
+
+         additionalgebox.setVisible(true);
+
+         // Handle the additional stats
+         %points1txt = "\c2" @ LocalClientConnection.points1;
+         %points2txt = "\c4" @ LocalClientConnection.points2;
+         %points5txt = "\c3" @ LocalClientConnection.points5;
+
+         RedGemsTxt.setText("<spush><just:center><color:EE4B2B>" @ %points1txt @ "<spop>");
+         YellowGemsTxt.setText("<spush><just:center><color:F5F227>" @ %points2txt @ "<spop>");
+         BlueGemsTxt.setText("<spush><just:center><color:2750F5>" @ %points5txt @ "<spop>");
+
+         %curateduid = strreplace(%mission.guid, "{", "");
+         %curateduid = strreplace(%curateduid, "}", "");
+
+         %seeded = $Game::SPGemHuntSeeded ? 1 : 0;
+
+         if ($OnlineSession && $Account::UserToken !$= "")
+         {
+            if (isObject(SubmitTime))
+               SubmitTime.delete();
+            new HTTPObject(SubmitTime);
+            SubmitTime.post($Online::PlatformLink, "/api/scores/SubmitScore.php", "", "usertoken=" @ $Account::UserToken @ "&uid=" @ %curateduid @ "&score=" @ %elapsed @ "&rating=" @ %rating @ "&scoretype=score&difficulty=multiplayer&seeded=" @ %seeded);
+         }
       }
 
       if (%isNewBestTime)

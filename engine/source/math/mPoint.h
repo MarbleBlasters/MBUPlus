@@ -283,9 +283,11 @@ public:
     Point3F(const Point3F&);
     Point3F(const Point3D&);
     Point3F(const F32 _x, const F32 _y, const F32 _z);
+    explicit Point3F(const F32 xyz);
 
     //-------------------------------------- Non-math mutators and misc functions
 public:
+    void set(const F32 xyz);
     void set(const F32 _x, const F32 _y, const F32 _z);
     void set(const Point3F&);
 
@@ -1230,13 +1232,22 @@ inline Point3F::Point3F(const Point3D& _copy)
     //
 }
 
-
 inline Point3F::Point3F(const F32 _x, const F32 _y, const F32 _z)
     : x(_x), y(_y), z(_z)
 {
     //
 }
 
+inline Point3F::Point3F(const F32 xyz)
+    : x(xyz), y(xyz), z(xyz)
+{
+   //
+}
+
+inline void Point3F::set(const F32 xyz)
+{
+   x = y = z = xyz;
+}
 
 inline void Point3F::set(const F32 _x, const F32 _y, const F32 _z)
 {

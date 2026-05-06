@@ -24,6 +24,7 @@ function initCanvas(%windowName)
    // Common GUI's
    exec("~/ui/ConsoleDlg.gui");
    exec("~/ui/LoadFileDlg.gui");
+   exec("~/ui/LoadFilePreviewDlg.gui");
    exec("~/ui/SaveFileDlg.gui");
    exec("~/ui/MessageBoxOkDlg.gui");
    exec("~/ui/MessageBoxYesNoDlg.gui");

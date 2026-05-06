@@ -99,6 +99,9 @@ function handleClientJoin(%msgType, %msgString, %clientName, %joinData, %isMe)
    %demoOutOfTime = getRecord(%joinData, %recordIndex++);
    %joinTime = getRecord(%joinData, %recordIndex++);
    %joinInProgress = getRecord(%joinData, %recordIndex++);
+   %points1 = getRecord(%joinData, %recordIndex++);
+   %points2 = getRecord(%joinData, %recordIndex++);
+   %points5 = getRecord(%joinData, %recordIndex++);
    
    //error(%joinData);
    error("@@@@@ handleClientJoin parsed:" SPC detag(%clientName) SPC %clientId SPC %isAI SPC %isAdmin SPC %isSuperAdmin SPC %xbLiveId SPC %xbLiveSkill SPC %xbLiveVoice SPC %address SPC %rating);
@@ -123,7 +126,7 @@ function handleClientJoin(%msgType, %msgString, %clientName, %joinData, %isMe)
    if (!%isAI)
    {
       LobbyGui.update(%clientId,detag(%clientName),%xbLiveId,%xbLiveSkill,
-         %xbLiveVoice,%address,%rating,%ready,%invited,%demoOutOfTime);
+         %xbLiveVoice,%isAdmin,%rating,%ready,%invited,%demoOutOfTime,%score,%points1,%points2,%points5);
    }
    
    if (ServerConnection.isMultiplayer && %joinInProgress)
@@ -144,7 +147,7 @@ function handleClientJoin(%msgType, %msgString, %clientName, %joinData, %isMe)
    }
    
    PlayerListGui.update(%clientId,detag(%clientName),%isSuperAdmin,
-      %isAdmin,%isAI,0,0,"");
+      %isAdmin,%isAI,0,0,"",%score,%points1,%points2,%points5);
       
    if (%isMe) PlayerListGui.initShortPlayerList(%clientId);
 }
@@ -216,10 +219,10 @@ function handleMPGameOver(%msgType, %msgString, %tied, %leaderName, %leaderPoint
 function zeroMyClientScoreCuzICheat()
 {
    echo( "[Client " @ $Player::ClientId @ "]: ZEROING SCORE FOR CALCULATIONS CUZ I AM A JERK WHO QUITS EARLY!" );
-   PlayerListGui.updateScore( $Player::ClientId, 0, 0 );
+   PlayerListGui.updateScore( $Player::ClientId, 0, 0, 0, 0, 0);
 }
 
-function handleClientScoreChanged(%msgType, %msgString, %clientId, %isMe, %newScore, %oldScore)
+function handleClientScoreChanged(%msgType, %msgString, %clientId, %isMe, %newScore, %oldScore, %reds, %yellows, %blues)
 {
 //    if (%isMe)
 //       PlayGui.setPoints(%newScore);
@@ -228,7 +231,7 @@ function handleClientScoreChanged(%msgType, %msgString, %clientId, %isMe, %newSc
    {
       RootScoreCountHud.addScore(%newScore - %oldScore, RootScoreCountHud.pointColor[%delta], "0 0 0 1");
    }
-   PlayerListGui.updateScore(%clientId,%newScore,%newScore);
+   PlayerListGui.updateScore(%clientId,%newScore,%newScore,%reds,%yellows,%blues);
 }
 
 function handleVoiceStatus(%msgType, %msgString, %client, %status, %xbLiveId)

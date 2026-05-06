@@ -14,6 +14,11 @@ exec("./client/defaults.cs");
 exec("./server/defaults.cs");
 
 //-----------------------------------------------------------------------------
+// Load up what is needed for online support.
+
+exec("./online/onlineSupport.cs");
+
+//-----------------------------------------------------------------------------
 // Package overrides to initialize the mod.
 package marble {
 

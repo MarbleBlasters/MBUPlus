@@ -1,0 +1,256 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(ProfileDialog) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "width";
+   vertSizing = "height";
+   position = "0 0";
+   extent = "640 480";
+   minExtent = "8 8";
+   
+   new GuiBitmapCtrl(XNMessageBGFrame) {
+    profile = "GuiDefaultProfile";
+    alpha = "0";
+	horizSizing = "width";
+	vertSizing = "height";
+   	position = "0 0";
+	extent = "640 480";
+    bitmap = "./xbox/fade_black";
+    wrap = "1";
+	visible = "1";
+   
+	new GuiControl(ProfileDialogUnder) {
+		profile = "GuiDefaultProfile";
+		horizSizing = "center";
+		vertSizing = "center";
+		position = "0 0";
+		extent = isWidescreen() ? "750 467" : "610 347";
+		minExtent = "8 8";
+   
+		   new GuiBitmapCtrl(achievementpic) {
+			  profile = "GuiDefaultProfile";
+			  horizSizing = "right";
+			  vertSizing = "bottom";
+			  position = isWidescreen() ? "730 430" : "360 270";
+			  extent = "255 119";
+			  minExtent = "8 8";
+			  visible = "1";
+			  bitmap = "./xbox/achievement.png";
+			  wrap = "0";
+				 helpTag = "0";
+		   };
+		   new GuiWindowCtrl(AchivementGenericBG) {
+			  profile = "bgBoxProfile";
+			  horizSizing = "right";
+			  vertSizing = "bottom";
+			  position = isWidescreen() ? "0 0" : "0 0";
+			  extent = isWidescreen() ? "750 467" : "610 347";
+			  maxLength = "255";
+			  resizeWidth = "1";
+			  resizeHeight = "1";
+			  canClose = "0";
+			  canMinimize = "0";
+			  canMaximize = "0";
+			  minSize = "50 50";
+
+			   new GuiBitmapCtrl(ProfileDlgIcon) {
+				 profile = "GuiDefaultProfile";
+				 horizSizing = "right";
+				 vertSizing = "bottom";
+				 position = isWidescreen()? "32 32" : "32 32";
+				 extent = isWidescreen()? "96 96" : "72 72";
+				 minExtent = "8 8";
+				 bitmap = "./menu/avatars/profile_icon";
+				 visible = "1";
+			  };
+			  new GuiMLTextCtrl(ProfileDlgName) {
+					profile = "TextHeadingSmallProfile";
+					horizSizing = "width";
+					vertSizing = "bottom";
+					position = "140 32";
+					extent = "600 30";
+					minExtent = "8 8";
+					visible = "1";
+					lineSpacing = "2";
+					allowColorChars = "1";
+					maxChars = "-1";
+				};
+
+			  new GuiMLTextCtrl(ProfileDlgStatus) {
+					profile = "TextHeadingSmallProfile";
+					horizSizing = "width";
+					vertSizing = "bottom";
+					position = "140 60";
+					extent = "600 30";
+					minExtent = "8 8";
+					visible = "1";
+					lineSpacing = "2";
+					allowColorChars = "1";
+					maxChars = "-1";
+				};
+
+			  new GuiMLTextCtrl(ProfileDlgStatisticsHeading) {
+					profile = "TextHeadingSmallProfile";
+					horizSizing = "width";
+					vertSizing = "bottom";
+					position = "32 140";
+					extent = "600 30";
+					minExtent = "8 8";
+					visible = "1";
+					lineSpacing = "2";
+					allowColorChars = "1";
+					maxChars = "-1";
+				 text = "My Statistics";
+				};
+
+				new GuiMLTextCtrl(AchievementGenericText)
+				{
+				 profile = isWidescreen() ? "LargeInfoTextProfile" : "InfoTextProfile";
+				 position = "30 28";
+				 extent = isWidescreen() ? "685 404" : "547 297";
+					lineSpacing = "2";
+					maxChars = "-1";
+					lineCount = 0;
+					visible = 1;
+				};
+			  new GuiMLTextCtrl(ProfileDlgJoinDate) {
+				 Profile = "TextHeadingSmallProfile";
+				 HorizSizing = "width";
+				 VertSizing = "bottom";
+				 position = "140 89";
+				 Extent = "600 24";
+				 MinExtent = "8 8";
+				 Visible = "1";
+				 UIMode = "AlwaysShow";
+				 lineSpacing = "2";
+				 allowColorChars = "1";
+				 maxChars = "-1";
+			  };
+			  new GuiMLTextCtrl(ProfileDlgStatisticsText) {
+				 Profile = "TextHeadingSmallProfile";
+				 HorizSizing = "width";
+				 VertSizing = "bottom";
+				 position = "32 170";
+				 Extent = "600 24";
+				 MinExtent = "8 8";
+				 Visible = "1";
+				 UIMode = "AlwaysShow";
+				 lineSpacing = "2";
+				 allowColorChars = "1";
+				 maxChars = "-1";
+				 text = "My Statistics";
+			  };
+				new GuiControl(ProfileDialogBottomNavBarNew) {
+					profile = "GuiDefaultProfile";
+					horizSizing = "right";
+					vertSizing = "bottom";
+					position = "69 258";
+					extent = "640 200";
+					minExtent = "8 2";
+					visible = "1";
+					UIMode = "NewOnly";
+		      
+					new GuiXboxButtonCtrl(ProfileDialogPopupABtnNew) {
+						profile = "TextMenuButtonProfile";
+						horizSizing = "right";
+						vertSizing = "bottom";
+						position = "416 98";
+						extent = "228 94";
+						minExtent = "8 2";
+						bitmap = "./xbox/pad_button_a";
+						bitmapAlign = "right";
+						text = "";
+						command = "Canvas.popDialog(ProfileDialog);";
+						visible = "1";
+						text = "Close";
+					};
+					new GuiXboxButtonCtrl(ProfileDialogPopupBBtnNew) {
+						profile = "TextMenuButtonProfile";
+						horizSizing = "right";
+						vertSizing = "bottom";
+						position = "8 98";
+						extent = "228 94";
+						minExtent = "8 2";
+						bitmap = "./xbox/pad_button_a";
+						bitmapAlign = "right";
+						command = "ProfileDialog.onA();";
+						visible = "0";
+						text = "Ban";
+					};
+				};
+		   };
+		};
+	};
+};
+//--- OBJECT WRITE END ---
+
+function getAvatarDlg(%username)
+{
+   if (isObject(AvatarGetterDlg))
+      AvatarGetterDlg.delete();
+   new HTTPObject(AvatarGetterDlg);
+   AvatarGetterDlg.post($Online::PlatformLink, "/api/avatars/FetchAvatar.php", "", "username=" @ %username);
+}
+
+function ProfileDialog::onWake(%this, %backgui)
+{     
+	if (%backGui !$= "")
+	   %this.backGui = %backGui;
+
+   if (%this.method !$= "" && %this.accidentify !$= "")
+   {
+		if (isObject(GetAccDetailsDLG))
+			GetAccDetailsDLG.delete();
+		new HTTPObject(GetAccDetailsDLG);
+		GetAccDetailsDLG.post($Online::PlatformLink, "/api/account/GetAccountInformation.php", "", "method=" @ %this.method @ "&accidentify=" @ %this.accidentify);
+   }
+
+	if ($Account::ModeratorStatus && $OnlineSession)
+	{
+		ProfileDialogPopupBBtnNew.setVisible(true);
+
+		if (ProfileDlgName.username $= XBLiveGetUserName())
+		{
+			// Do not ban yourself stupid
+			ProfileDialogPopupBBtnNew.setVisible(false);
+		}
+	}
+}
+
+function ProfileDialog::ShowProfile(%this, %method, %accidentify)
+{
+	%this.method = %method;
+	%this.accidentify = %accidentify;
+	Canvas.pushDialog(ProfileDialog);
+
+	RootGui.setB($Text::Back);
+}
+
+function ProfileDialog::onB(%this)
+{
+	Canvas.popDialog(ProfileDialog);
+}
+
+function ProfileDialog::onA(%this)
+{
+	if (ProfileDialogPopupBBtnNew.visible && $Account::ModeratorStatus && $OnlineSession)
+	{
+		if (ProfileDialogPopupBBtnNew.action $= "BAN")
+		{
+			XMessagePopupDlg.show(0, "Are you sure you want to ban this user?", "Yes", "BanConfirm(1);", "No", "");
+		}
+		else
+		{
+			XMessagePopupDlg.show(0, "Are you sure you want to unban this user?", "Yes", "BanConfirm(2);", "No", "");
+		}
+	}
+}
+
+function BanConfirm(%action)
+{
+	echo("Banning " @ ProfileDlgName.getText());
+
+	if (isObject(BanUser))
+		BanUser.delete();
+	%http = new HTTPObject(BanUser);
+	%http.post($Online::PlatformLink, "/api/moderator/DoBanAccount.php", "", "moduniquetoken=" @ $Account::UserToken @ "&usernamevictim=" @ ProfileDlgName.getText() @ "&action=" @ %action);
+}

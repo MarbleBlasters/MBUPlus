@@ -114,6 +114,20 @@ new GuiBitmapCtrl(LevelScoresGui) {
 	            text = "<font:Arial Bold:18><just:right>" @ $Text::Score;
             helpTag = "0";
       };
+      new GuiMLTextCtrl(LS_Seeded_Header) {
+         profile = "TextListProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "270 25";
+         extent = "87 20";
+         minExtent = "8 20";
+         visible = "0";
+         lineSpacing = "23";
+         allowColorChars = "0";
+	            text = "<font:Arial Bold:18><just:left>Seeded";
+         maxChars = "-1";
+            helpTag = "0";
+      };
       new GuiTextListCtrl(ScoreboardList) {
          profile = "ScoreboardListGuiProfile";
          horizSizing = "right";
@@ -126,9 +140,9 @@ new GuiBitmapCtrl(LevelScoresGui) {
          allowUnselectedScroll = "0";
          enumerate = "0";
          resizeCell = "0";
-         columns = "0 65 353 495 530";
-         columnAligns = "0 0 0 2";
-         columnBmps = "0 0 0 0 1";
+         columns = "0 65 150 353 495 530";
+         columnAligns = "0 0 0 0 2";
+         columnBmps = "0 0 1 0 0 1";
          fitParentWidth = "0";
          autoResize = "0";
          clipColumnText = "0";
@@ -206,7 +220,7 @@ if (isJapanese())
    LevelScoresGui.pushToBack(LS_title_front); // I don't know why this gets screwed up, but it does
 }
 
-$MaxLeaderboardIdx = 2;
+$MaxLeaderboardIdx = 0;
 
 //ScoreboardList.addRow( 0, "1" TAB "ZeroStride" TAB "00:00.00" TAB "123456" );
 
@@ -249,11 +263,13 @@ function levelScoresGui::onB(%this)
 function levelScoresGui::onY(%this)
 {
    // Show Gamercard
-   %rowText = ScoreboardList.getRowTextById( ScoreBoardList.getSelectedId() );
-   %xuid = getField( %rowText, getFieldCount( %rowText ) - 1 );
-   
-   if( %xuid )
-      XBLiveShowGamercardUI( XBLiveGetSignInPort(), %xuid );
+   %rowText = ScoreboardList.getRowTextById(ScoreBoardList.getSelectedId());
+   %xuid = getWord(%rowtext, 1);
+
+   if (%xuid !$= "")
+   {
+      ProfileDialog.ShowProfile("username", %xuid);
+   }
    
    return true;
 }
@@ -400,7 +416,8 @@ function levelScoresGui::show(%this,%mode,%missionId,%backGui)
       }
    }
      
-   %this.leaderboard = 2;
+   %this.leaderboard = 0;
+   RootGui.setY("View Profile");
    RootGui.setB($Text::Back);
    RootGui.setX($Text::CLeaderBoard);
    RootGui.setTitle($Text::LeaderBoardScreen);
@@ -416,6 +433,19 @@ function levelScoresGui::show(%this,%mode,%missionId,%backGui)
    %this.updateLeaderboard();
    
   	//if (isPCBuild()) levelScoresGui.schedule(1000, test, 0); 
+
+   if (GameMissionInfo.getCurrentMissionGroup() $= "MultiPlayMissionGroup")
+   {
+      LS_Time_Header.setText("<font:Arial Bold:18><just:left>Score");
+      LS_Seeded_Header.setVisible(true);
+      $MaxLeaderboardIdx = 2;
+   }
+   else
+   {
+      LS_Time_Header.setText("<font:Arial Bold:18><just:left>" @ $Text::Time);
+      LS_Seeded_Header.setVisible(false);
+      $MaxLeaderboardIdx = 0;
+   }
 }
 
 function levelScoresGui::hide(%this)
@@ -511,7 +541,45 @@ function levelScoresGui::doLoad(%this)
    
    ScoreboardList.clear();
    
-   XBLiveLoadLeaderboard(%this.lbId, %this.leaderboard, %this.entryStart, $MaxEntriesOnScreen, "levelScoresGui.setSelected();");
+   // Former function.
+   //XBLiveLoadLeaderboard(%this.lbId, %this.leaderboard, %this.entryStart, $MaxEntriesOnScreen, "levelScoresGui.setSelected();");
+
+   %curateduid = strreplace(%this.lbId, "{", "");
+   %curateduid = strreplace(%curateduid, "}", "");
+
+   %overallsetting = "false";
+   %difficultysetting = "";
+
+   %mission = GameMissionInfo.findMissionByGuid(%this.lbId);
+
+   if (%mission.gameMode $= "Scrum")
+   {
+      %scoretype = "score";
+   }
+   else
+   {
+      %scoretype = "time";
+   }
+
+   if (%this.isOverall)
+   {
+      %overallsetting = "true";
+      %difficultysetting = "overall";
+
+      if (%this.lbId $= "{B7E841BE-AAA7-4054-AE9D-729C13937037}")
+      {
+         %scoretype = "score";
+      }
+      else
+      {
+         %scoretype = "time";
+      }
+   }
+
+   if (isObject(FetchScores))
+      FetchScores.delete();
+   new HTTPObject(FetchScores);
+   FetchScores.post($Online::PlatformLink, "/api/scores/FetchScores.php", "", "uid=" @ %curateduid @ "&scoretype=" @ %scoretype @ "&difficulty=" @ %difficultysetting @ "&cummulated=" @ %overallsetting @ "&seeded=" @ levelScoresGui.leaderboard);
 }
 
 // update the visual indicator of what level is being viewed.  this can be done even if the load for the 
@@ -525,6 +593,7 @@ function levelScoresGui::setSelectedInfo(%this)
    if (isObject(%mission))
    {
       %isOverall = false;
+      %this.isOverall = false;
       levelScoresGui.setTitleText( %mission.level, getMissionNameFromNameVar(%mission) );
    }
    else
@@ -533,6 +602,7 @@ function levelScoresGui::setSelectedInfo(%this)
       //   LS_Score_Header.setText("<font:Arial Bold:18><just:left>" @ $Text::TrueSkillLabel);
       
       %isOverall = true;
+      %this.isOverall = true;
       levelScoresGui.setTitleText( -1, GameMissionInfo.getLeaderboardTitle(%this.lbId) );
    }
    
@@ -606,12 +676,7 @@ function levelScoresGui::setSelected(%this)
    
    if( %rowCount == 0 )
    {
-      if( levelScoresGui.leaderboard == 2 )
-      {
-         // friend board
-         %abnormalMessageText = $Text::FriendNotRanked;
-      }
-      else if( levelScoresGui.leaderboard == 1 )
+      if( levelScoresGui.leaderboard == 1 )
       {
          // my score board
          if( isDemoLaunch() )
@@ -785,9 +850,9 @@ function levelScoresGui::setTitleText( %this, %levelnum, %text )
       case 0:
          %leaderboard = $Text::Overall;
       case 1:
-         %leaderboard = $Text::MyScore;
+         %leaderboard = "Seeded";
       case 2:
-         %leaderboard = $Text::Friends;
+         %leaderboard = "Unseeded";
    }
    
    if (%levelnum != -1) 

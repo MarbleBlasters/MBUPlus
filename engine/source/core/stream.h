@@ -85,7 +85,6 @@ public:
     static const char* getStatusString(const Status in_status);
 
     // Derived classes must override these...
-protected:
     virtual bool _read(const U32 in_numBytes, void* out_pBuffer) = 0;
     virtual bool _write(const U32 in_numBytes, const void* in_pBuffer) = 0;
 public:

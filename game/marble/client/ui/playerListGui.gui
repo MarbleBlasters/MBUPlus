@@ -190,11 +190,14 @@ function PlayerListGui::updateWidths(%this)
    ShortPlayerList.columns = "0 19 " @ %newLastColWidth;
 }
 
-function PlayerListGui::updateScore(%this,%clientId,%score,%cumScore)
+function PlayerListGui::updateScore(%this,%clientId,%score,%cumScore,%reds,%yellows,%blues)
 {
    %text = PlayerListGuiList.getRowTextById(%clientId);
    %text = setField(%text,2,%score SPC " ");
    %text = setField(%text,3,%cumScore);
+   %text = setField(%text,4,%reds);
+   %text = setField(%text,5,%yellows);
+   %text = setField(%text,6,%blues);
    PlayerListGuiList.setRowById(%clientId, %text);
    PlayerListGuiList.sortNumerical(2,false);
    %this.updateShortPlayerList(%clientId);

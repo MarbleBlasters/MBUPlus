@@ -76,6 +76,9 @@ function startMultiplayerMode()
    
    // update the data for the local client connection
    LocalClientConnection.updateClientData($Player::Name, $Player::XBLiveId, XBLiveGetVoiceStatus(), false);
+
+   // Handle our own Session Token. 
+   commandtoClient(LocalClientConnection, 'SessionTokenHandler');
 }
 
 function stopMultiplayerMode()

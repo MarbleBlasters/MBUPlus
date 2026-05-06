@@ -312,6 +312,10 @@ new GuiControlProfile(LobbyTextArrayProfile : TextArrayProfile)
    fontSize = 24;
    textOffset = "0 2";
    rowHeight = "26";
+
+	fontColors[2] = "255 117 117 255"; // reds
+	fontColors[3] = "136 188 238 255"; // blues
+	fontColors[4] = "251 210 0 255"; // yellows
 };
 
 new GuiControlProfile(FindGamesTextArrayProfile : TextArrayProfile)

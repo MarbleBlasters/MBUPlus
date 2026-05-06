@@ -36,6 +36,36 @@ public:
     void writeLine(const U8* line);
     void close();
 
+    bool _read(U32 size, void* dst, U32* bytesRead = NULL) {
+        //Torque just caches all of this in ram. Bad Torque!
+        U32 position = mCurPos;
+
+        //At least it makes this easy
+        if (size + position > getBufferSize()) {
+            size = getBufferSize() - position;
+        }
+
+        //Ugh, copy from memory to memory
+        memcpy(dst, mFileBuffer + position, size);
+
+        //*audible groan*
+        mCurPos = position + size;
+        if (bytesRead != NULL)
+            *bytesRead = size;
+        return true;
+    }
+    bool _write(U32 size, const void* src) {
+        return mStream->_write(size, src);
+    }
+
+    inline U32 getCurPos() const {
+        return mCurPos;
+    }
+
+    //Luma:  ccess to the buffer and the size
+    U8 *getBuffer(void)     { return mFileBuffer; }
+    U32 getBufferSize(void) { return mBufferSize; }
+
     DECLARE_CONOBJECT(FileObject);
 };
 
