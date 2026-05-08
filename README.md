@@ -63,4 +63,4 @@ To Be Populated Later
 
 You may use this to make mods, but your mods must be released for free.
 
-New Code/Assets/Levels found in this project is not to be used in https://github.com/MBU-Team/OpenMBU or by https://github.com/HaileyEira.
+New Code/Assets/Levels found in this project is not to be used in projects by https://github.com/HaileyEira.
