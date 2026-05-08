@@ -830,7 +830,7 @@ function levelScoresGui::test(%this)
    LS_uparrow.setVisible( 1 );
    LS_Rank_Header.setVisible( 0 );
    
-   RootGui.setTitle("FAKE PC" SPC $Text::LeaderBoardScreen);
+   RootGui.setTitle($Text::LeaderBoardScreen SPC "Coming Soon");
    levelScoresGui.setTitleText( -1, GameMissionInfo.getLeaderboardTitle(%this.lbId) );
 }
 
