@@ -1,13 +1,13 @@
 <img  src="https://raw.githubusercontent.com/MarbleBlasters/OpenMBUPlus/refs/heads/master/assets/GitReadmeBanner.png"></img>
 &nbsp;
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/MarbleBlasters/OpenMBUPlus?include_prereleases&label=Release)](https://github.com/MarbleBlasters/OpenMBUPlus/releases)
-[![Github all releases](https://img.shields.io/github/downloads/MarbleBlasters/OpenMBUPlus/total?color=blue&label=Downloads)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/releases/)
-[![GitHub forks](https://img.shields.io/github/forks/MarbleBlasters/OpenMBUPlus?label=Forks)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/network/)
-[![GitHub stars](https://img.shields.io/github/stars/MarbleBlasters/OpenMBUPlus?label=Stars)](https://GitHub.com/MarbleBlasters/OpenMBUPlus/stargazers/)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/MarbleBlasters/MBUPlusReleases?include_prereleases&label=Release)](https://github.com/MarbleBlasters/MBUPlusReleases/releases)
+[![Github all releases](https://img.shields.io/github/downloads/MarbleBlasters/MBUPlusReleases/total?color=blue&label=Downloads)](https://GitHub.com/MarbleBlasters/MBUPlusReleases/releases/)
+[![GitHub forks](https://img.shields.io/github/forks/MarbleBlasters/MBUPlusReleases?label=Forks)](https://GitHub.com/MarbleBlasters/MBUPlusReleases/network/)
+[![GitHub stars](https://img.shields.io/github/stars/MarbleBlasters/MBUPlusReleases?label=Stars)](https://GitHub.com/MarbleBlasters/MBUPlusReleases/stargazers/)
 <!--[![Discord](https://img.shields.io/discord/265605947144142848?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/SBqT5AxBaY)-->
-[![CMake on Windows](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-windows.yml/badge.svg)](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-windows.yml)
-[![CMake on Linux](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-linux.yml/badge.svg)](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-linux.yml)
-[![CMake on MacOS](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-mac.yml/badge.svg)](https://github.com/MarbleBlasters/OpenMBUPlus/actions/workflows/cmake-mac.yml)
+[![CMake on Windows](https://github.com/MarbleBlasters/MBUPlus/actions/workflows/cmake-windows.yml/badge.svg)](https://github.com/MarbleBlasters/MBUPlus/actions/workflows/cmake-windows.yml)
+[![CMake on Linux](https://github.com/MarbleBlasters/MBUPlus/actions/workflows/cmake-linux.yml/badge.svg)](https://github.com/MarbleBlasters/MBUPlus/actions/workflows/cmake-linux.yml)
+[![CMake on MacOS](https://github.com/MarbleBlasters/MBUPlus/actions/workflows/cmake-mac.yml/badge.svg)](https://github.com/MarbleBlasters/MBUPlus/actions/workflows/cmake-mac.yml)
 
 MBU+ (formerly UltreRebirth) is a reverse-engineered version of Marble Blast Ultra based on Torque Shader Engine 0.9 (MS4). The game is a puzzle-platformer originally developed by GarageGames and released on January 25, 2006 for the Xbox 360 via Xbox Live Arcade.
 
