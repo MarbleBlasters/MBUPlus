@@ -120,7 +120,7 @@ function MyProfileGui::show(%this, %backgui)
    RootGui.setX("Logout");
 
    MyProfileName.setText("MBU+ Player");
-   MyProfileLevel.setText("Level 0");
+   MyProfileLevel.setText("Level 999999");
 
    //AchievScroll.setProfile("GameScrollProfile");
    //AchievScroll.setTop(14);
