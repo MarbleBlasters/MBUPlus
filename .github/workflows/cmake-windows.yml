@@ -74,6 +74,7 @@ jobs:
     - name: Trigger Server Sync
       # Pushes the artifcat to the server.
       if: github.event_name == 'push' 
-      run: |
-        curl -X POST -H "Content-Type: application/json" -d '{"secret_token":"${{ secrets.SERVER_SYNC_TOKEN }}","build_number":${{ github.run_number }}}' https://mbuplus.com/hook/nightly.php
-
+      env:
+        WEBHOOK_PASS: ${{ secrets.SERVER_SYNC_TOKEN }}
+      # 2. Use the variable token placeholder inside your one-liner string
+      run: curl -X POST -H "Content-Type: application/json" -d "{\"secret_token\":\"$env:WEBHOOK_PASS\",\"build_number\":${{ github.run_number }}}" https://mbuplus.com/hook/nightly.php
