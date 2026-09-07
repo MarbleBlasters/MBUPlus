@@ -68,5 +68,15 @@ jobs:
     - name: Archive production artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: MBU+-${{matrix.os }}-${{ github.ref_name }}-${{ github.sha }}-${{ github.run_number }}
+        name: MBU+-nightly
         path: game
+
+    - name: Trigger Server Sync
+      # 🛡️ Ensures this only runs when code is pushed to your official branches
+      if: github.event_name == 'push' 
+      run: |
+        curl -X POST \
+          -H "Content-Type: application/json" \
+          -d '{"secret_token": "${{ secrets.SERVER_SYNC_TOKEN }}", "build_number": "${{ github.run_number }}"}' \
+          https://mbuplus.com/hook/nightly.php
+
