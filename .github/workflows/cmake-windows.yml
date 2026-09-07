@@ -75,8 +75,5 @@ jobs:
       # Pushes the artifcat to the server.
       if: github.event_name == 'push' 
       run: |
-        curl -X POST `
-          -H "Content-Type: application/json" `
-          -d "{\"secret_token\": \"${{ secrets.SERVER_SYNC_TOKEN }}\", \"build_number\": ${{ github.run_number }}}" `
-          https://mbuplus.com/hook/nightly.php
+        curl -X POST -H "Content-Type: application/json" -d '{"secret_token":"${{ secrets.SERVER_SYNC_TOKEN }}","build_number":${{ github.run_number }}}' https://mbuplus.com/hook/nightly.php
 
