@@ -42,17 +42,32 @@ new GuiControl(ESRBGui) {
       text = "<just:center>" @ $Text::ESRBWarning @ "\n";
       maxLength = "255";
    };
+
+   new GuiMLTextCtrl(OMBUPlusStatus) {
+      profile = "TextHeadingSmallProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = isWidescreen()? "420 475" : "120 305";
+      extent = "440 250";
+      minExtent = "50 34";
+      visible = 1;
+      text = "<just:center>Checking MBU+ Online Connectivity...";
+      maxLength = "255";
+   };
 };
 //--- OBJECT WRITE END ---
 
 function ESRBGui::show(%this)
 {
    RootGui.setTitle("");
-   if ($pref::UI::LegacyUI)
+   if ($pref::UI::LegacyUI) {
       RootGui.setA($Text::PressAToStart);
-   else
+      RootGui.setB("Press B to Start Online");
+   }
+   else {
       RootGui.setA($Text::Start);
-   
+      RootGui.setB("Start Online");
+   }
    if (getRegion() $= "na_all")
       ESRBText.visible = true;
    else
@@ -80,6 +95,8 @@ function ESRBGui::show(%this)
    // Update the sign-in state here
    XBLiveUpdateSigninState();
    
+   CheckIfMBUOnline("", false);
+
    %this.doMissionCleanup();
 }
 
@@ -133,6 +150,22 @@ function ESRBGui::onA(%this)
    
    // signed in
    %this.onSignInComplete();
+      
+   return true;
+}
+
+function ESRBGui::onB(%this)
+{
+   sfxPlay( AudioButtonDown );
+
+   if ($Account::UserToken $= "")
+   {
+      CheckIfMBUOnline("XMessagePopupDlg.show(0, \"You don't have a profile linked to the game. Do you wish to make a new one?\", $Text::OK, \"ESRBGui.makeNewAcc();\", \"Log In\", \"ESRBGui.loginAcc();\");", true);
+   }
+   else
+   {
+      CheckIfMBUOnline("ValidateLogin();", true);
+   }
       
    return true;
 }

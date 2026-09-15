@@ -1613,6 +1613,8 @@ function GameConnection::getMarbleChoice( %this )
 {
    switch( %this.marbleIndex )
    {
+      case -1:
+         return MarbleCustom;
       case 1:
          return MarbleTwo;
       case 2:

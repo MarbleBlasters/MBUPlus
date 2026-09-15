@@ -129,13 +129,80 @@ function marbleSelectionGui::show(%this, %backGui)
 
    // Change THIS variable to add/remove marbles
    %numMarbles = $totalMarbles;
-   
+   if($toggleDev){
+      %customMarbleIndex = -1;//%numMarbles + 1;
+
+      %boxName = "MarbleSelection_1_" @ %customMarbleIndex;
+      %boxNameButton = "MarbleSelectionButton_1_" @ %customMarbleIndex;
+      %imgName = "MarbleSelectionImg_1_" @ %customMarbleIndex;
+      %marbleButtonPreviewName = "Marble_1_" @ %customMarbleIndex;
+
+      %box = new GuiControl(%boxName) {
+         profile = "GuiDefaultProfile";
+         horizSizing = "width";
+         vertSizing = "bottom";
+         position = "0 0";
+         extent = "86 86";
+         minExtent = "8 8";
+         visible = "1";
+
+         new GuiObjectView(%marbleButtonPreviewName) {
+               profile = "GuiDefaultProfile";
+               horizSizing = "right";
+               vertSizing = "bottom";
+               position = "0 0";
+               extent = "86 86";
+               minExtent = "8 8";
+               visible = "1";
+               helpTag = "0";
+               cameraZRot = "0";
+               forceFOV = "0";
+               model = "~/data/shapes/balls/marble00.dts";
+               skin = "base";
+               cameraRotX = "0.5";
+               cameraZRotSpeed = "0.001";
+               orbitDistance = "0.65";
+               autoSize = "1";
+               cubeMap = "sky_picker";
+            };
+
+            new GuiBitmapCtrl(%imgName) {
+            profile = "GuiDefaultProfile";
+            horizSizing = "relativeHeight";
+            vertSizing = "relativeHeight";
+            position = "12 12";
+            extent = "64 64";
+            minExtent = "8 8";
+            visible = "1";
+            bitmap = "./menu/marblepicker/special_marble.png";
+            wrap = "0";
+               helpTag = "0";
+
+            };
+
+            new GuiButtonBaseCtrl(%boxNameButton) {
+               profile = "GuiDefaultProfile";
+               horizSizing = "width";
+               vertSizing = "bottom";
+               position = "0 0";
+               extent = "86 86";
+               minExtent = "8 8";
+               visible = "1";
+               command = "ChooseThisMarble(" @ %customMarbleIndex @ ");";
+
+            };
+      };
+
+      MarbleSelectionArray.add(%box);
+   }
    %marbleString = "";
    for( %i = 0; %i < %numMarbles; %i++ )
    {
       %this.addMarble(1, %i, $pref::marbleIndex);
    }
    
+   
+
 	if (%backGui !$= "")
       %this.backGui = %backGui;    
    
@@ -244,6 +311,7 @@ function marbleSelectionGui::addMarble(%this, %catId, %marbleId, %selectedMarble
 }
 
 function ChooseThisMarble(%number){
+   echo("Selecting Marble: " @ %number);
    $pref::marbleIndex = %number;
    commandToServer('SetMarble', $pref::marbleIndex);
    commandToServer('SpawnMarblePickerMarble');

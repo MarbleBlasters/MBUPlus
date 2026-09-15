@@ -1,6 +1,18 @@
 {
     "$schema": "./materials.schema.json",
     "materials": {
+        "Material_Marble00": {
+            "baseTex": ["marble/data/shapes/balls/marble00.skin"],
+            "custom": true,
+            "dynamicCubemap": true,
+            "mapTo": "marble00.skin",
+            "renderBin": "Marble",
+            "shader": "ClassicMarbGlassPureSphere",
+            "specular": ["0.6 0.6 0.6 0.6"],
+            "specularPower": [12],
+            "texture": ["marble/data/shapes/balls/marble01.normal", "marble/data/shapes/balls/marble00.skin", "$dynamicCubemap"],
+            "version": 2
+        },
         "Material_Marble01": {
             "baseTex": ["marble/data/shapes/balls/marble01.skin"],
             "custom": true,

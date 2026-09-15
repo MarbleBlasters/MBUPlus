@@ -126,6 +126,9 @@
 // Define me to not render all six faces of marble cubemap in a single frame
 #define MB_CUBEMAP_FAST
 
+/// Define me to enable machine ID
+#define TORQUE_MACHINE_ID
+
 //-----------------------------------------------------------------------------
 // Here we specify the build configuration defines.  These are usually 
 // defined by the build system (makefiles, visual studio, etc) and not 

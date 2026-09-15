@@ -139,7 +139,7 @@ function defineBasicMarbleMaterial(%id, %shader, %bump, %diff, %mapTo, %specular
 
 
 // Shaders with PureSphere after them do their own normal calculations and won't have seams.
-
+defineBasicMarbleMaterial("00", "ClassicMarbGlassPureSphere", "marble01.normal",   "marble00.skin", "marble00.skin", "0.6 0.6 0.6 0.6", 12 );
 defineBasicMarbleMaterial("01", "ClassicMarbGlassPureSphere", "marble01.normal",   "marble01.skin", "marble01.skin", "0.6 0.6 0.6 0.6", 12 );
 defineBasicMarbleMaterial("02", "CrystalMarb", "marble02.normal",   "marble02.skin", "marble02.skin", "0.6 0.6 0.6 0.6", 12 );
 defineBasicMarbleMaterial("03", "ClassicMarbGlassPureSphere", "marble01.normal",   "marble03.skin", "marble03.skin", "0.6 0.6 0.6 0.6", 12 );

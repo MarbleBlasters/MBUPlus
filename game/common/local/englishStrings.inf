@@ -704,6 +704,7 @@ $Text::MultiplayerStartup = "Collect the most gems to win!";
 ; Marble Name Strings
 ;-------------------------------------------------------------------------------
 
+$MarbleName[-1] = "Custom";
 $MarbleName[0] = "Blue Swirls";
 $MarbleName[1] = "Clear Water";
 $MarbleName[2] = "Orange Swirls";

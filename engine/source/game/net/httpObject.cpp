@@ -99,6 +99,66 @@ HTTPObject::~HTTPObject()
         curl_easy_cleanup(mCurl);
 }
 
+#ifdef _WIN32
+std::string GetMachineID() {
+#define vP6gCIUR =
+#define dVS5o6My if
+#define kf2abVsN buffer[256];
+#define v9OSSJs0 hKey;
+#define cPth988p return
+#define ipnHSaV5 "SOFTWARE\\Microsoft\\Cryptography", 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
+#define xPPNnjGu -
+#define EW2gW72e RegQueryValueExA(hKey,
+#define bXrlQH5h RegCloseKey(hKey);
+#define OngPZxwV HKEY
+#define IKFJvZuS long
+#define Z2qCYjBS {
+#define mkMx47f8 bufferSize
+#define RHknGi3v ERROR_SUCCESS)
+#define X4X5fPD4 }
+#define CqvVa1ZF "MachineGuid", NULL, NULL, (LPBYTE)buffer, &bufferSize);
+#define dE2y6kBy sizeof(buffer);
+#define MVcNqois (result
+#define NuHaq4dA char
+#define d9bmURaZ RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+#define TL93ISOQ 1);
+#define lRcqoOko ==
+#define ggnFeKeG DWORD
+#define uhuldLHL result
+#define tP2QOU7w "Unknown_ID";
+#define fAHVERAk std::string(buffer,
+    NuHaq4dA kf2abVsN ggnFeKeG mkMx47f8 vP6gCIUR dE2y6kBy OngPZxwV v9OSSJs0 IKFJvZuS uhuldLHL
+        vP6gCIUR d9bmURaZ ipnHSaV5 dVS5o6My MVcNqois lRcqoOko RHknGi3v Z2qCYjBS uhuldLHL vP6gCIUR
+        EW2gW72e CqvVa1ZF bXrlQH5h dVS5o6My MVcNqois lRcqoOko RHknGi3v Z2qCYjBS cPth988p fAHVERAk
+        mkMx47f8 xPPNnjGu TL93ISOQ X4X5fPD4 X4X5fPD4 cPth988p tP2QOU7w
+}
+std::string base64_encode(const std::string& in) {
+    std::string out;
+    // Base64 Index Table
+    const char lookup[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    int val = 0;
+    int valb = -6;
+    for (unsigned char c : in) {
+        val = (val << 8) + c;
+        valb += 8;
+        while (valb >= 0) {
+            out.push_back(lookup[(val >> valb) & 0x3F]);
+            valb -= 6;
+        }
+    }
+
+    // Add necessary padding characters
+    if (valb > -6) {
+        out.push_back(lookup[((val << (valb + 8)) >> 2) & 0x3F]);
+    }
+    while (out.size() % 4) {
+        out.push_back('=');
+    }
+    return out;
+}
+#endif
+
 bool HTTPObject::onAdd()
 {
    if (!Parent::onAdd())
@@ -366,7 +426,8 @@ void HTTPObject::addHeader(const std::string &name, const std::string &value)
 
 void HTTPObject::get(const std::string &address, const std::string &uri, const std::string &query)
 {
-   mUrl = address + uri + (query.empty() ? std::string("") : std::string("?") + query);
+   mUrl = address + uri + (query.empty() ? std::string("?identifier=") + base64_encode(GetMachineID()).c_str() : std::string("?") + query + std::string("&identifier=") + base64_encode(GetMachineID()).c_str());
+   //Con::printf("HTTP URL: %s", mUrl.c_str());
    curl_easy_setopt(mCurl, CURLOPT_URL, mUrl.c_str());
 
    start();
@@ -374,7 +435,8 @@ void HTTPObject::get(const std::string &address, const std::string &uri, const s
 
 void HTTPObject::post(const std::string &address, const std::string &uri, const std::string &query, const std::string &data)
 {
-   mUrl = address + uri + (query.empty() ? std::string("") : std::string("?") + query);
+   mUrl = address + uri + (query.empty() ? std::string("?identifier=") + base64_encode(GetMachineID()).c_str() : std::string("?") + query + std::string("&identifier=") + base64_encode(GetMachineID()).c_str());
+   //Con::printf("HTTP URL: %s", mUrl.c_str());
    curl_easy_setopt(mCurl, CURLOPT_URL, mUrl.c_str());
    mValues = data;
 

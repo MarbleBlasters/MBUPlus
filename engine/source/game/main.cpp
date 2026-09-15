@@ -76,6 +76,10 @@
 #endif
 #include <git_version.cpp>
 
+#ifdef TORQUE_MACHINE_ID
+#include "core/machineid/machineid.h"
+#endif // TORQUE_MACHINE_ID
+
 #ifndef BUILD_TOOLS
 DemoGame GameObject;
 DemoNetInterface GameNetInterface;
@@ -390,6 +394,7 @@ bool runEntryScript(int argc, const char** argv)
     return true;
 }
 
+
 /// Initalize game, run the specified startup script
 bool initGame(int argc, const char** argv)
 {
@@ -450,6 +455,16 @@ bool initGame(int argc, const char** argv)
     Con::setVariable("$Game::BuildMode", "RELEASE");
 #else
     Con::setVariable("$Game::BuildMode", "DEBUG");
+#endif
+
+#ifdef _WIN32
+    //std::string systemID = machineid::machineHash();
+    //onst char* cSystemID = machineid::machineHash().c_str();
+    //std::size_t h1 = std::hash<std::string>{}(GetMachineID());
+    //Con::setVariable("$Online::Identifier", base64_encode(GetMachineID()).c_str());
+    //;
+#else
+    //Con::setVariable("$Online::Identifier", NULL);
 #endif
 
     //

@@ -302,6 +302,12 @@ datablock MarbleData(DefaultMarble)
    dynamicReflection = true;
 };
 
+datablock MarbleData(MarbleCustom : DefaultMarble)
+{
+   shapeFile = "~/data/shapes/balls/marble00.dts";
+};
+
+
 datablock MarbleData(MarbleOne : DefaultMarble)
 {
    shapeFile = "~/data/shapes/balls/marble01.dts";
