@@ -132,10 +132,10 @@ function marbleSelectionGui::show(%this, %backGui)
    if($toggleDev){
       %customMarbleIndex = -1;//%numMarbles + 1;
 
-      %boxName = "MarbleSelection_1_" @ %customMarbleIndex;
-      %boxNameButton = "MarbleSelectionButton_1_" @ %customMarbleIndex;
-      %imgName = "MarbleSelectionImg_1_" @ %customMarbleIndex;
-      %marbleButtonPreviewName = "Marble_1_" @ %customMarbleIndex;
+      %boxName = "MarbleSelection_1_c";
+      %boxNameButton = "MarbleSelectionButton_1_c";
+      %imgName = "MarbleSelectionImg_1_c";
+      %marbleButtonPreviewName = "Marble_1_c";
 
       %box = new GuiControl(%boxName) {
          profile = "GuiDefaultProfile";
@@ -217,6 +217,9 @@ function marbleSelectionGui::show(%this, %backGui)
    %textNumber = $pref::marbleIndex + 1;
    Picker_ChosenMarbleNumber.setText(%textNumber @ "/" @ %numMarbles);
    Picker_ChosenMarbleText.setText($MarbleName[$pref::marbleIndex]);
+   if($toggleDev){
+      updateCustomMarbleInMenus("cus2.skin.png");
+   }
 }
 
 function marbleSelectionGui::addMarble(%this, %catId, %marbleId, %selectedMarble) {
@@ -358,3 +361,53 @@ function marbleSelectionGui::onA(%this)
    GameMissionInfo.selectMission( GameMissionInfo.getCurrentIndex() );
    RootGui.setContent(HelpAndOptionsGui, %this.backGui);
 }
+
+function updateCustomMarbleInMenus(%hash)
+{
+    if (%hash $= "" || %hash $= "default")
+        return;
+
+    // Use absolute paths for the check script
+    %modelPath = "marble/data/shapes/balls/marble00.dts";
+    %localPath = "marble/data/shapes/balls/" @ %hash;
+
+    if (isFile(%localPath))
+    {
+        // Clean characters out of the suffix string so it parses as a safe name
+        %uniqueSuffix = strreplace(%hash, ".", "_");
+
+        echo("MBU+ Engine: Re-compiling materials safely via defineBasicMarbleMaterial...");
+
+        // Invoke your exact custom repo function helper
+        defineBasicMarbleMaterial(
+            %uniqueSuffix,
+            "ClassicMarbGlassPureSphere",
+            "marble01.normal",
+            %hash,
+            "marble00.skin",
+            "0.6 0.6 0.6 0.6",
+            12
+        );
+
+        // 1. Refresh the miniature GUI slot container on the right
+        if (isObject(Marble_1_c))
+        {
+            Marble_1_c.setModel(%modelPath, "base");
+        }
+
+        // 2. Refresh the big 3D moving marble platform ball
+        // Target the connection pointer handle we found in serverCmdSpawnMarblePickerMarble
+        %bigWorldMarble = LocalClientConnection.dummyMarble;
+
+        if (isObject(%bigWorldMarble))
+        {
+            echo("MBU+ Engine: Direct target hit on dummyMarble instance.");
+            commandToServer('SpawnMarblePickerMarble');
+        }
+    }
+    else
+    {
+        error("MBU+ Engine Check: Skin file missing on disk at " @ %localPath);
+    }
+}
+
