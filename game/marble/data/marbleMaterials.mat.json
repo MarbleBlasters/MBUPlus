@@ -2,7 +2,7 @@
     "$schema": "./materials.schema.json",
     "materials": {
         "Material_Marble00": {
-            "baseTex": ["marble/data/shapes/balls/cache/marble00.skin"],
+            "baseTex": ["marble/data/shapes/balls/marble00.skin"],
             "custom": true,
             "dynamicCubemap": true,
             "mapTo": "marble00.skin",
