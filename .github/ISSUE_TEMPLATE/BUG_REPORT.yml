@@ -26,7 +26,13 @@ body:
     multiple: false
     options:
       - 1.0.0 Beta 1
+      - 1.0.0 Beta 2
+      - 1.0.0 Beta 3
+      - 1.0.0 Beta 4
+      - 1.0.0 Beta 5
+      - 1.0.0 Beta 6
       - Self-Compiled (please specify branch)
+      - Nightly (Please specify version found in the file name, ex b43)
       - Other (please specify elsewhere)
   validations:
     required: true

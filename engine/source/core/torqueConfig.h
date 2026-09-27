@@ -21,8 +21,25 @@
 /// Version number is major * 1000 + minor * 100 + revision * 10.
 /// Different engines (TGE, T2D, etc.) will have different version numbers.
 /// Change Torque Version for every released build to ensure people do not crash when online
-#define TORQUE_VERSION              9904 // version 1.0.0 Beta 5
-#define TORQUE_PROTOCOL_VERSION     14  // increment this when we change the protocol
+// Your standard manual version bumps happen right here like always
+#define BASE_TORQUE_VERSION          9905 // version 1.0.0 Beta 6
+#define BASE_PROTOCOL_VERSION        14   // increment this when we change the protocol
+
+// --- AUTOMATED NETWORK ISOLATION ENGINE ---
+#if defined(NIGHTLY_BUILD)
+    // Automatically scales regardless of what you manually change your base version to
+#define TORQUE_VERSION          (BASE_TORQUE_VERSION + TORQUE_BUILD_OFFSET)
+#define TORQUE_PROTOCOL_VERSION (BASE_PROTOCOL_VERSION + 1000) 
+
+#elif defined(_DEBUG)
+#define TORQUE_VERSION          BASE_TORQUE_VERSION
+#define TORQUE_PROTOCOL_VERSION (BASE_PROTOCOL_VERSION + 2000) 
+
+#else
+    // Production client deployment
+#define TORQUE_VERSION          BASE_TORQUE_VERSION
+#define TORQUE_PROTOCOL_VERSION BASE_PROTOCOL_VERSION
+#endif
 
 /// What engine are we running? The presence and value of this define are
 /// used to determine what engine (TGE, T2D, etc.) and version thereof we're

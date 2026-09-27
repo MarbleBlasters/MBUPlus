@@ -53,6 +53,8 @@ jobs:
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DENABLE_NIGHTLY_FEATURES=ON
+        -DBUILD_INCREMENT=${{github.run_number}}
         -S ${{ github.workspace }}
 
     - name: Build

@@ -55,6 +55,9 @@ private:
     friend class ShapeBase;
 
 public:
+
+    //StringTableEntry mClientSkinHash;
+
     enum MarbleModeFlags
     {
         MoveMode = 0x1,
