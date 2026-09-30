@@ -231,6 +231,48 @@ datablock ParticleEmitterData(MarbleSuperBounceEmitter)
    particles = "SuperBounceParticle";
 };
 
+datablock ParticleData(ShockAbsorberParticle)
+{
+   textureName          = "~/data/particles/twirl";
+   dragCoefficient      = 0.25;
+   gravityCoefficient   = 0;
+   inheritedVelFactor   = 0.1;
+   constantAcceleration = 0;
+   lifetimeMS           = 1000;
+   lifetimeVarianceMS   = 150;
+   spinSpeed     = 90;
+   spinRandomMin = -90.0;
+   spinRandomMax =  90.0;
+
+   //colors[0]     = "0 0.5 1 0";
+   //colors[1]     = "0 0.6 1 1.0";
+   //colors[2]     = "0 0.6 1 0.0";
+
+   colors[0]     = "0.38 0.2 0.88 1";
+   colors[1]     = "0 0 0 1";
+   colors[2]     = "0 0 0 1";
+
+   sizes[0]      = 0.25;
+   sizes[1]      = 0.25;
+   sizes[2]      = 0.5;
+
+   times[0]      = 0;
+   times[1]      = 0.75;
+   times[2]      = 1.0;
+};
+
+datablock ParticleEmitterData(MarbleShockAbsorberEmitter)
+{
+   ejectionPeriodMS = 20;
+   periodVarianceMS = 0;
+   ejectionVelocity = 3.0;
+   velocityVariance = 0.25;
+   thetaMin         = 80.0;
+   thetaMax         = 90.0;
+   lifetimeMS       = 5000;
+   particles = "ShockAbsorberParticle";
+};
+
 //-----------------------------------------------------------------------------
 
 // Unused
@@ -587,6 +629,60 @@ datablock ShapeBaseImageData(SuperBounceImage)
 // };
 
 //-----------------------------------------------------------------------------
+// ShockAbsorber powerUp
+//-----------------------------------------------------------------------------
+
+datablock SFXProfile(doShockAbsorberSfx)
+{
+   filename    = "~/data/sound/doshockabsorber.wav";
+   description = AudioClosestLooping3d;
+   preload = true;
+};
+
+datablock SFXProfile(PuShockAbsorberVoiceSfx)
+{
+   filename    = "~/data/sound/puShockAbsorber.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock ItemData(ShockAbsorberItem)
+{
+   // Mission editor category
+   category = "Powerups";
+   className = "PowerUp";
+   powerUpId = 4;
+
+   pickupAudio = PuShockAbsorberVoiceSfx;
+
+   // Basic Item properties
+   shapeFile = "~/data/shapes/items/shockabsorber.dts";
+   bmpFile = "powerup_absorber.png";
+   mass = 1;
+   friction = 1;
+   elasticity = 0.3;
+   emap = false;
+
+   // Dynamic properties defined by the scripts
+   pickupText = $Text::AShockAbsorber;
+   useName = $Text::UseShockAbsorber;
+   maxInventory = 1;
+};
+
+datablock ShapeBaseImageData(ShockAbsorberImage)
+{
+   // Basic Item properties
+   shapeFile = "~/data/shapes/images/glow_bounce.dts";
+   emap = false;
+   mountPoint = 0;
+   offset = "0 0 0";
+   stateName[0]                     = "Blah";
+   //stateSequence[0]                 = "grow";
+   stateSound[0] = doShockAbsorberSfx;
+   ignoreMountRotation = true;
+};
+
+//-----------------------------------------------------------------------------
 // Special non-inventory power ups
 //-----------------------------------------------------------------------------
 
@@ -796,10 +892,12 @@ datablock PowerUpData(PowerUpDefs)
    activateTime[9] = 0;
 
    // Shock Absorber
-   //image[4] = ShockAbsorberImage;
-   //duration[4] = 5000;
-   //boost[4] = 0.01;
-   //activateTime[4] = 0;
+   emitter[4] = MarbleShockAbsorberEmitter;
+   image[4] = ShockAbsorberImage;
+   duration[4] = 5000;
+   boost[4] = 0.01;
+   activateTime[4] = 0;
+   bounce[4] = 0.01;
 
    // Helicopter
    image[5] = HelicopterImage;

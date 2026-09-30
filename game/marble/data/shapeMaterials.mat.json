@@ -361,6 +361,23 @@
             "emissive": [true],
             "glow": [true]
         },
+        "Material_ShockAbsorber": {
+            "baseTex": ["marble/data/shapes/items/shockabsorber"],
+            "custom": false,
+            "mapTo": "shockAbsorber"
+        },
+        "Material_ShockAbsorberSpring": {
+            "baseTex": ["marble/data/shapes/items/shockabsorber_glow"],
+            "custom": false,
+            "mapTo": "shockAbsorber_metal",
+            "emissive": [true],
+            "glow": [true]
+        },
+        "Material_ShockAbsorberWire": {
+            "baseTex": ["marble/data/shapes/items/shinysteel"],
+            "custom": false,
+            "mapTo": "shockAbsorber_wire"
+        },
         "Material_Trapdoor": {
             "baseTex": ["marble/data/shapes/hazards/trapdoor"],
             "custom": false,

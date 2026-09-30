@@ -156,6 +156,7 @@ $Text::Tagged::GameOver = '\c0Game over!';
 ;-------------------------------------------------------------------------------
 $Text::ASuperJump = "You picked up a Super Jump powerup!";
 $Text::ASuperBounce = "You picked up a Super Bounce powerup!";
+$Text::AShockAbsorber = "You picked up a Shock Absorber powerup!";
 $Text::ASuperSpeed = "You picked up a Super Speed powerup!";
 $Text::AGyrocopter = "You picked up a Gyrocopter powerup!";
 $Text::AGravityMod = "You picked up a Gravity Modifier!";
@@ -363,6 +364,7 @@ $Text::AlreadyFoundEgg = "You've already found this egg!";
 
 $Text::UseSuperJump = "Super Jump powerup";
 $Text::UseSuperBounce = "Super Bounce powerup";
+$Text::UseShockAbsorber = "Shock Absorber powerup";
 $Text::UseSuperSpeed = "Super Speed powerup";
 $Text::UseGyrocopter = "Gyrocopter powerup";
 $Text::UseMegaMarble = "Mega-Marble powerup";
