@@ -53,6 +53,18 @@ class Trigger : public GameBase
     U32               mLastThink;
     U32               mCurrTick;
 
+    F32               mModGravity;
+    F32               mModMaxRollVelocity;
+    F32               mModAngularAcceleration;
+    F32               mModBrakingAcceleration;
+    F32               mModStaticFriction;
+    F32               mModKineticFriction;
+    F32               mModBounceKineticFriction;
+    F32               mModMaxDotSlide;
+    F32               mModBounceRestitution;
+    F32               mModJumpImpulse;
+    F32               mModMaxForceRadius;
+
 protected:
     bool onAdd();
     void onRemove();

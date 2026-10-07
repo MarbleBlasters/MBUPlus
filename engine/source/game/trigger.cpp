@@ -144,6 +144,17 @@ Trigger::Trigger()
     mCurrTick = 0;
 
     mConvexList = new Convex;
+    mModGravity = 20;
+    mModMaxRollVelocity = 15;
+    mModAngularAcceleration = 75;
+    mModBrakingAcceleration = 30;
+    mModStaticFriction = 1.1;
+    mModKineticFriction = 0.7;
+    mModBounceKineticFriction = 0.2;
+    mModMaxDotSlide = 0.5;
+    mModBounceRestitution = 0.5;
+    mModJumpImpulse = 7.5;
+    mModMaxForceRadius = 50;
 }
 
 Trigger::~Trigger()
@@ -314,6 +325,24 @@ void Trigger::initPersistFields()
     Parent::initPersistFields();
 
     addField("polyhedron", TypeTriggerPolyhedron, Offset(mTriggerPolyhedron, Trigger));
+
+    addGroup("Physics Modifier Settings");
+
+    // By registering these directly via the native engine class, 
+    // they will instantly show up in the Inspector sidebar and write directly to your .mis files!
+    addField("modGravity", TypeF32, Offset(mModGravity, Trigger));
+    addField("modJumpImpulse", TypeF32, Offset(mModJumpImpulse, Trigger));
+    addField("modRollVelocity", TypeF32, Offset(mModMaxRollVelocity, Trigger));
+    addField("modAngularAcceleration", TypeF32, Offset(mModAngularAcceleration, Trigger));
+    addField("modBrakingAcceleration", TypeF32, Offset(mModBrakingAcceleration, Trigger));
+    addField("modDotSlide", TypeF32, Offset(mModMaxDotSlide, Trigger));
+    addField("modBounce", TypeF32, Offset(mModBounceRestitution, Trigger));
+    addField("modStaticFriction", TypeF32, Offset(mModStaticFriction, Trigger));
+    addField("modKineticFriction", TypeF32, Offset(mModKineticFriction, Trigger));
+    addField("modbounceKineticFriction", TypeF32, Offset(mModBounceKineticFriction, Trigger));
+    addField("modForceRadius", TypeF32, Offset(mModMaxForceRadius, Trigger));
+
+    endGroup("Physics Modifier Settings");
 }
 
 
