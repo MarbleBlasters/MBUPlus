@@ -93,6 +93,7 @@ LightInfo::LightInfo()
     mScore = 0;
 
     // default to this for weapon fire, explosions, ...
+    useCustomSun = false;
     sgSupportedFeatures = sgNoSpecCube;
     sgSpotAngle = 90.0;
     sgAssignedToTSObject = false;

@@ -31,6 +31,8 @@ Sun::Sun()
     mLight.sgUseNormals = true;
     mLight.sgZone[0] = 0;
 
+    useCustomSun = false;
+
     useBloom = false;
     useToneMapping = false;
     useDynamicRangeLighting = false;
@@ -93,29 +95,32 @@ struct SunLight
 void Sun::registerLights(LightManager* lightManager, bool relight)
 {
     mRegisteredLight = mLight;
+    mRegisteredLight.useCustomSun = useCustomSun; // We'll need this for marble shadows. ~ Connie
     LightManager::sgGetFilteredLightColor(mRegisteredLight.mColor, mRegisteredLight.mAmbient, 0);
 
 #ifdef MB_ULTRA
     // Color correction to match MBU as close as possible (this took several hours of trial and error, your welcome.)
     mRegisteredLight.mAmbient *= ColorF(1.18f, 1.06f, 0.95f);
 #endif
-
-#ifdef MB_ULTRA_PREVIEWS
-    // This code is not here on MBU x360 but it achieves the same result.
-    // It likely works on x360 just because it uses the old TSE 0.1 render system.
-    static SunLight previewSun = {mRegisteredLight.mPos, mRegisteredLight.mDirection, mRegisteredLight.mColor, mRegisteredLight.mAmbient, mRegisteredLight.mShadowColor};
-
-    if (gSPMode)
-        previewSun = {mRegisteredLight.mPos, mRegisteredLight.mDirection, mRegisteredLight.mColor, mRegisteredLight.mAmbient, mRegisteredLight.mShadowColor};
-    else
+    
+    // Levels which wish for their sun to remain as it normally is in MBU can keep it as it is without any changes. ~ Connie
+    // (because for some reason, this is responsible for the static sun)
+    if (!useCustomSun)
     {
-        mRegisteredLight.mPos = previewSun.mPos;
-        mRegisteredLight.mDirection = previewSun.mDirection;
-        mRegisteredLight.mColor = previewSun.mColor;
-        mRegisteredLight.mAmbient = previewSun.mAmbient;
-        mRegisteredLight.mShadowColor = previewSun.mShadowColor;
+        // This code is not here on MBU x360 but it achieves the same result.
+        // It likely works on x360 just because it uses the old TSE 0.1 render system.
+        mRegisteredLight.mDirection.set(0.573201f, 0.275357f, -0.771764f);
+        mRegisteredLight.mColor.set(1.08f, 1.03f, 0.9f);
+        mRegisteredLight.mAmbient.set(0.4f, 0.4f, 0.5f);
+        mRegisteredLight.mShadowColor.set(0.0f, 0.0f, 0.15f, 0.35f);
+
+        // Values taken from Mega_Sun, which is just the normal MBU sun. ~ Connie
+        //direction = "0.573201 0.275357 -0.771764";
+        //color = "1.080000 1.030000 0.900000 1.000000";
+        //ambient = "0.400000 0.400000 0.500000 1.000000";
+        //shadowColor = "0.000000 0.000000 0.150000 0.350000";
     }
-#endif
+
 
     if (relight)
     {
@@ -147,6 +152,7 @@ void Sun::inspectPostApply()
 {
     conformLight();
     setMaskBits(UpdateMask);
+    Con::executef(4, "schedule", "100", "0", "registerLights");
 }
 
 ConsoleMethod(Sun, apply, void, 2, 2, "")
@@ -177,6 +183,8 @@ void Sun::unpackUpdate(NetConnection*, BitStream* stream)
         stream->read(&mLight.mShadowColor.alpha);
 
         mLight.sgCastsShadows = stream->readFlag();
+
+        stream->read(&useCustomSun);
 
         stream->read(&useBloom);
         stream->read(&useToneMapping);
@@ -218,6 +226,8 @@ U32 Sun::packUpdate(NetConnection*, U32 mask, BitStream* stream)
 
         stream->writeFlag(mLight.sgCastsShadows);
 
+        stream->write(useCustomSun);
+
         stream->write(useBloom);
         stream->write(useToneMapping);
         stream->write(useDynamicRangeLighting);
@@ -251,6 +261,7 @@ void Sun::initPersistFields()
 
 
     addGroup("Scene Lighting");
+    addField("useCustomSun", TypeBool, Offset(useCustomSun, Sun));
     addField("useBloom", TypeBool, Offset(useBloom, Sun));
     addField("useToneMapping", TypeBool, Offset(useToneMapping, Sun));
     addField("useDynamicRangeLighting", TypeBool, Offset(useDynamicRangeLighting, Sun));

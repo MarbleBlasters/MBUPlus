@@ -56,6 +56,8 @@ public:
     };
     sgFeatures sgSupportedFeatures;
 
+    bool useCustomSun;
+
     bool sgCanBeSecondary() { return sgSupportedFeatures >= sgNoSpecCube; }
 
     static bool sgAllowSpecular(sgFeatures features) { return features < sgNoSpecCube; }

@@ -1021,9 +1021,38 @@ void Marble::calcClassRenderData()
     ri->vertBuff = &mVertBuff;
     ri->primBuff = &mPrimBuff;
 
+    MatrixF shadowTransform = this->getShadowTransform();
+
+    const LightInfo* sunLight = getCurrentClientSceneGraph()->getLightManager()->sgGetSpecialLight(LightManager::sgSunLightType);
+
+    if (sunLight->useCustomSun)
+    {
+        Point3F shadowDir = sunLight->mDirection;
+        shadowDir.normalize();
+
+        Point3F zAxis = -shadowDir;
+        Point3F reference(0.0f, 0.0f, 1.0f);
+        if (mFabs(mDot(reference, zAxis)) > 0.99f)
+            reference.set(0.0f, 1.0f, 0.0f);
+
+        Point3F xAxis = mCross(reference, zAxis);
+        Point3F yAxis = mCross(zAxis, xAxis);
+
+        xAxis.normalize();
+        yAxis.normalize();
+
+        shadowTransform.setColumn(0, xAxis);
+        shadowTransform.setColumn(1, yAxis);
+        shadowTransform.setColumn(2, zAxis);
+    }
+    else
+    {
+        shadowTransform = this->getShadowTransform();
+    }
+
     MatrixF mat;
     mat.mul(GFX->getProjectionMatrix(), GFX->getWorldMatrix());
-    mat.mul(this->getShadowTransform());
+    mat.mul(shadowTransform);
     mat.scale(this->getShadowScale());
     mat.transpose();
 

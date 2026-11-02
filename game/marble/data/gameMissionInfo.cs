@@ -385,29 +385,6 @@ function GameMissionInfo::selectMission(%this, %index)
             Cloud_Intermediate.setHidden(false);
          if ($curr_sky $= $sky_advanced)
             Cloud_Advanced.setHidden(false);
-            
-         // Switch our sun properties
-         if ($curr_sky $= $sky_beginner)
-         {
-            Mega_Sun.direction = Beginner_Sun.direction;
-            Mega_Sun.color = Beginner_Sun.color;
-            Mega_Sun.ambient = Beginner_Sun.ambient;
-            Mega_Sun.shadowColor = Beginner_Sun.shadowColor;
-         }
-         if ($curr_sky $= $sky_intermediate)
-         {
-            Mega_Sun.direction = Intermediate_Sun.direction;
-            Mega_Sun.color = Intermediate_Sun.color;
-            Mega_Sun.ambient = Intermediate_Sun.ambient;
-            Mega_Sun.shadowColor = Intermediate_Sun.shadowColor;
-         }
-         if ($curr_sky $= $sky_advanced)
-         {
-            Mega_Sun.direction = Advanced_Sun.direction;
-            Mega_Sun.color = Advanced_Sun.color;
-            Mega_Sun.ambient = Advanced_Sun.ambient;
-            Mega_Sun.shadowColor = Advanced_Sun.shadowColor;
-         }
       }
    }
    else
@@ -415,6 +392,19 @@ function GameMissionInfo::selectMission(%this, %index)
       cancel(%this.loadSched);
       %this.loadSched = schedule(1000, 0, loadMission, %this.getCurrentMission().file);
    }
+
+   %this.setPreviewSun();
+}
+
+function GameMissionInfo::setPreviewSun(%this)
+{
+   for (%i = 0; %i < getWordCount($sunvariables); %i++)
+   {
+      %varName = getWord($sunvariables, %i);
+      eval("Mega_Sun." @ %varName @ " = " @ %this @ ".getCurrentMission().sun[" @ %varName @ "];");
+   }
+
+   Mega_Sun.apply();
 }
 
 function GameMissionInfo::setCamera(%this)
@@ -1001,6 +991,13 @@ function getMissionObject( %missionFile )
    
    %missionInfoObject = "";
    %missionNameVar = "";
+
+   // Clear all Sun Variables
+   for (%i = 0; %i < getWordCount($sunvariables); %i++)
+   {
+      %varName = getWord($sunvariables, %i);
+      $Sun[%varName] = "";
+   }
    
    %isCustom = false;
    if( filePath(filePath(%missionFile)) $= "marble/data/missions/custom" )
@@ -1027,9 +1024,19 @@ function getMissionObject( %missionFile )
 			else if( %inInfoBlock && %line $= "};" ) {
 				%inInfoBlock = false;
 				%missionInfoObject = %missionInfoObject @ %line; 
-				break;
 			}
 			
+			if (strpos(%line, "new Sun(") != -1)
+         {
+				%inSunBlock = true;
+            continue;
+			}
+			else if (%inSunBlock && %line $= "};") 
+         {
+				%inSunBlock = false;
+				break;
+			}
+
 			if( %inInfoBlock )
 			{
 			   %missionInfoObject = %missionInfoObject @ %line @ " "; 	
@@ -1051,6 +1058,28 @@ function getMissionObject( %missionFile )
 			      %missionNameVar = stripTrailingSpaces(%missionNameVar);
 			   }
 			}
+
+         if (%inSunBlock)
+         {
+            if (strpos(%line, "=") != -1)
+            {
+               %varName = getSubStr(%line, 0, strpos(%line, "="));
+               %varName = trim(%varName);
+
+               %varData = getSubStr(%line, strpos(%line, "=") + 1, 99);
+               %varData = strreplace(%varData, ";", "");
+               %varData = strreplace(%varData, "\"", "");
+               %varData = trim(stripTrailingSpaces(%varData));
+
+               $Sun[%varName] = %varData;
+
+               // Register new variable names. ~ Connie
+               if (strpos($sunvariables, %varName) == -1)
+               {
+                  $sunvariables = $sunvariables @ " " @ %varName;
+               }
+            }
+         }
 		}
 		
 		%file.close();
@@ -1137,4 +1166,15 @@ function getMissionObject( %missionFile )
       %missionInfoObject.sky = $sky_intermediate;
    if (%missionInfoObject.customType $= "advanced")
       %missionInfoObject.sky = $sky_advanced;
+
+   for (%i = 0; %i < getWordCount($sunvariables); %i++)
+   {
+      %varName = getWord($sunvariables, %i);
+      %missionInfoObject.sun[%varName] = $Sun[%varName];
+
+      if (%varName $= "useCustomSun")
+      {
+         echo("Mission Sun Variable: " @ %varName @ " = " @ $Sun[%varName]);
+      }
+   }
 }

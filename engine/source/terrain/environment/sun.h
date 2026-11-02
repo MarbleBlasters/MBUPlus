@@ -24,6 +24,8 @@ private:
     LightInfo      mLight;
     LightInfo      mRegisteredLight;
 
+    bool useCustomSun;
+
     bool useBloom;
     bool useToneMapping;
     bool useDynamicRangeLighting;
