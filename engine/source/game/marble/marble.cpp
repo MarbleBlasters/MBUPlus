@@ -99,6 +99,7 @@ Marble::Marble()
     mPosition = Point3D(0, 0, 0);
 
     mControllable = true;
+    mSkinHash = StringTable->insert("default");
 
     mLastContact.position = Point3D(1.0e10, 1.0e10, 1.0e10);
     mLastContact.normal = Point3D(0, 0, 1);
@@ -180,6 +181,7 @@ void Marble::initPersistFields()
 
     addField("Controllable", TypeBool, Offset(mControllable, Marble));
     addField("size", TypeF32, Offset(mSize, Marble));
+    addField("SkinHash", TypeString, Offset(mSkinHash, Marble));
 }
 
 void Marble::consoleInit()
@@ -654,6 +656,11 @@ U32 Marble::packUpdate(NetConnection* conn, U32 mask, BitStream* stream)
         }
     }
 
+    if (stream->writeFlag(mask & SkinMask))
+    {
+        stream->writeString(mSkinHash);
+    }
+
     return 0;
 }
 
@@ -812,6 +819,36 @@ void Marble::unpackUpdate(NetConnection* conn, BitStream* stream)
         delta.pos = pos;
 
         setPosition(pos, doWarp);
+    }
+
+    if (stream->readFlag())
+    {
+        char buf[256];
+        stream->readString(buf);
+        mSkinHash = StringTable->insert(buf);
+
+        if (isClientObject() && mSkinHash && mSkinHash != '\0' && dStricmp(mSkinHash, "default") != 0)
+        {
+            if (getDataBlock() && dStricmp(getDataBlock()->getName(), "MarbleCustom") == 0)
+            {
+                Con::executef(this, 2, "onCustomSkinHash", mSkinHash);
+
+                setSkinName(mSkinHash);
+            }
+        }
+
+        //if (isClientObject() && mSkinHash && mSkinHash != '\0')
+        //{
+        //    // Check if this ghost is using the custom marble datablock
+        //    if (getDataBlock() && dStricmp(getDataBlock()->getName(), "MarbleCustom") == 0)
+        //    {
+        //        // Notify script first so the client can ensure the Material/PNG for mSkinHash exists
+        //        Con::executef(this, 2, "onCustomSkinHash", mSkinHash);
+
+        //        // Apply the skin prefix strictly to THIS ghost's TSShapeInstance
+        //        setSkinName(mSkinHash);
+        //    }
+        //}
     }
 }
 
@@ -2597,6 +2634,23 @@ ConsoleMethod(Marble, setPowerUpId, void, 3, 4, "(id)")
         reset = dAtob(argv[3]);
 
     object->setPowerUpId(dAtoi(argv[2]), reset);
+}
+
+void Marble::setCustomSkinHash(const char* hash)
+{
+    mSkinHash = StringTable->insert(hash ? hash : "");
+    if (isServerObject())
+        setMaskBits(SkinMask);
+}
+
+ConsoleMethod(Marble, setCustomSkinHash, void, 3, 3, "(string hash)")
+{
+    object->setCustomSkinHash(argv[2]);
+}
+
+ConsoleMethod(Marble, getCustomSkinHash, const char*, 2, 2, "()")
+{
+    return object->getCustomSkinHash();
 }
 
 //----------------------------------------------------------------------------

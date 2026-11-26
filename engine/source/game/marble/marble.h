@@ -206,6 +206,7 @@ private:
     F32 mMouseY;
     bool mControllable;
     bool mOOB;
+    StringTableEntry mSkinHash;
     Point3F mOOBCamPos;
     U32 mSuperSpeedDoneTime;
     F32 mLastYaw;
@@ -316,6 +317,8 @@ public:
     void processItemsAndTriggers(const Point3F& startPos, const Point3F& endPos);
     void setPowerUpId(U32 id, bool reset);
     virtual void processTick(const Move* move);
+    void setCustomSkinHash(const char* hash);
+    StringTableEntry getCustomSkinHash() const { return mSkinHash; }
 
 #ifdef MB_CLIENT_PHYSICS_EVERY_FRAME
     virtual void processPhysicsTick(const Move* move, F32 dt);

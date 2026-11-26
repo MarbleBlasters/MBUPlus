@@ -118,3 +118,24 @@ function reCenter(%guiCtl, %axis) // recenter gui in parent container. %axis: 0=
 	if (!%axis) %guiCtl.position = %center SPC getWord(%gPos,1);
 	else %guiCtl.position = getWord(%gPos,0) SPC %center;
 }
+
+function Marble::onCustomSkinHash(%this, %hash)
+{
+
+   if (%hash $= "" || %hash $= "default")
+      return;
+
+   echo("Ghost Marble " @ %this @ " received custom skin hash: " @ %hash);
+
+   // %matName = "Material_Custom_" @ %hash;
+
+   // if (!isObject(%matName))
+   // {
+   //    new Material(%matName)
+   //    {
+   //       mapTo = %hash @ ".marble00.skin";
+   //       baseTex = "platinum/data/shapes/balls/cache/" @ %hash @ ".skin";
+   //       // Copy your shader/cubemap settings from Material_Marble00 here
+   //    };
+   // }
+}
